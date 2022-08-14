@@ -93,8 +93,8 @@ const MenuWrapper = () => {
           <Flex justifyContent="center" alignItems="center">
             <Flex style={{ cursor: 'pointer' }}>
               <Link href="/">
-                <Text mr="15px" bold fontSize="20px">
-                  TestAPP
+                <Text mr="15px" bold fontSize="20px" style={{ fontFamily: 'MapoGoldenPier' }}>
+                  IIDT
                 </Text>
               </Link>
             </Flex>
