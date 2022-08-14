@@ -1,8 +1,8 @@
 import styled, { css, keyframes } from 'styled-components'
 import { ButtonProps } from './types'
 
-import IconSun from '../../../../public/images/theme/sun-solid.svg'
-import IconMoon from '../../../../public/images/theme/moon-solid.svg'
+import IconSun from '../../../../public/images/theme/sun.svg'
+import IconMoon from '../../../../public/images/theme/moon.svg'
 
 interface ToggleButtonProps {
   selected: boolean

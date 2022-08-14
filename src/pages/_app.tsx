@@ -14,6 +14,7 @@ import Providers from '../Providers'
 import GlobalStyle from '../style/Global'
 import useBaseQueryClient from 'hooks/queries/useBaseQueryClient'
 import Menu from 'components/Menu'
+import 'aos/dist/aos.css'
 
 if (process.env.NODE_ENV === 'development') {
   import('mocks')
@@ -40,7 +41,7 @@ function MyApp(props: AppProps) {
         <meta name="twitter:description" content="-" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="" />
-        <title>TEST</title>
+        <title>IIDT</title>
         <script
           type="text/javascript"
           src="https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.0.js"
