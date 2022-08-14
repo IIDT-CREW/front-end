@@ -15,6 +15,10 @@ import GlobalStyle from '../style/Global'
 import useBaseQueryClient from 'hooks/queries/useBaseQueryClient'
 import Menu from 'components/Menu'
 
+if (process.env.NODE_ENV === 'development') {
+  import('mocks')
+}
+
 function GlobalHooks() {
   return null
 }
