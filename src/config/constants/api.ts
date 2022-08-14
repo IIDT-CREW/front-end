@@ -1,6 +1,6 @@
 // localStorage, sessionStorage 이름
 export const STORAGE_NAME = {
-  USER: 'NFT-FRIENDS-USER-INFO',
+  USER: 'IIDT-U-S',
 }
 
 export const API_CODE = {

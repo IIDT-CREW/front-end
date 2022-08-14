@@ -14,10 +14,11 @@ import Providers from '../Providers'
 import GlobalStyle from '../style/Global'
 import useBaseQueryClient from 'hooks/queries/useBaseQueryClient'
 import Menu from 'components/Menu'
-
+import useAuthUserStorage from 'hooks/useAuthUserStorage'
 import 'aos/dist/aos.css'
 
 function GlobalHooks() {
+  useAuthUserStorage()
   return null
 }
 
