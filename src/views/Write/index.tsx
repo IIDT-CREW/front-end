@@ -2,6 +2,7 @@ import { HTMLAttributes, TextareaHTMLAttributes, useState } from 'react'
 import styled from 'styled-components'
 import { fontSize, FontSizeProps } from 'styled-system'
 import axios from 'axios'
+import { getWill, insertWill } from 'api/will'
 
 const Write = () => {
   const [title, setTitle] = useState('')
@@ -18,6 +19,23 @@ const Write = () => {
       return `${contents} ${new Date().toLocaleTimeString([], { timeStyle: 'medium', hour12: false })} `
     })
   }
+
+  const handleInsertWill = async () => {
+    try {
+      const parameter = {
+        title: 'test',
+        content: 'hello',
+        thumbnail: 'title',
+        mem_idx: null,
+        will_id: 'tttt',
+      }
+      const res = await insertWill(parameter)
+      console.log(res)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
   const handleSave = (e) => {
     axios
       .post('/api/write', {
