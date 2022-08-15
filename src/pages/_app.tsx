@@ -17,6 +17,10 @@ import Menu from 'components/Menu'
 import useAuthUserStorage from 'hooks/useAuthUserStorage'
 import 'aos/dist/aos.css'
 
+if (process.env.NODE_ENV === 'development') {
+  import('mocks')
+}
+
 function GlobalHooks() {
   useAuthUserStorage()
   return null
