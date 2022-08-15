@@ -14,8 +14,11 @@ import Providers from '../Providers'
 import GlobalStyle from '../style/Global'
 import useBaseQueryClient from 'hooks/queries/useBaseQueryClient'
 import Menu from 'components/Menu'
-
 import 'aos/dist/aos.css'
+
+if (process.env.NODE_ENV === 'development') {
+  import('mocks')
+}
 
 function GlobalHooks() {
   return null

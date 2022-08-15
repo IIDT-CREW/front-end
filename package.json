@@ -102,6 +102,7 @@
     "eslint": "^7.26.0",
     "eslint-plugin-jsx-a11y": "6.6.0",
     "eslint-plugin-lodash": "^7.4.0",
+    "msw": "^0.44.2",
     "next-transpile-modules": "^9.0.0",
     "postcss-scss": "^4.0.3",
     "postcss-syntax": "^0.36.2",
@@ -114,5 +115,8 @@
     "stylelint-config-styled-components": "^0.1.1",
     "themeprovider-storybook": "1.8.0",
     "ts-node": "^9.1.1"
+  },
+  "msw": {
+    "workerDirectory": "public"
   }
 }
