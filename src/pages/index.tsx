@@ -2,9 +2,7 @@ import Home from 'views/Home'
 // import { withAuthComponent, withAuthServerSideProps } from 'hoc/withAuthServerSide'
 
 declare global {
-  interface Window {
-    web3: any
-  }
+  interface Window {}
 }
 
 const IndexPage = ({ theme }) => {

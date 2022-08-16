@@ -17,7 +17,7 @@ const St = {
   `,
 }
 
-const CountDown = () => {
+const CountDown = ({ height = '550px', isCountDown = true, text = '' }) => {
   let timer: any = null
   const [time, setTime] = useState(moment())
   useEffect(() => {
@@ -31,10 +31,10 @@ const CountDown = () => {
 
   const nextDay = moment(moment().add(1, 'days').format('YYYY-MM-DD'))
   const leftTime = nextDay.unix() - time.unix()
-  const formatted = moment.utc(leftTime * 1000).format('HH:mm:ss')
+  //const formatted = moment.utc(leftTime * 1000).format('HH:mm:ss')
   return (
     <Box paddingTop="">
-      <Box width="100%" height="550px" position="relative">
+      <Box width="100%" height={height} position="relative">
         <img
           src="/images/home/matthew-mendez.jpg"
           alt="road"
@@ -47,11 +47,18 @@ const CountDown = () => {
             filter: 'blur(2px)',
           }}
         />
-        <Box width="100%" height="550px" position="relative">
+        <Box width="100%" height={height} position="relative">
           <Flex justifyContent="center" alignItems="center" height="100%" position="relative">
-            <Text bold fontSize="72px" style={{ fontFamily: 'MapoGoldenPier' }} color="#fff">
-              {moment.utc(leftTime * 1000).format('HH:mm:ss')}
-            </Text>
+            {text === '' && (
+              <Text bold fontSize="72px" style={{ fontFamily: 'MapoGoldenPier' }} color="#fff">
+                {isCountDown ? moment.utc(leftTime * 1000).format('HH:mm:ss') : moment().format('HH:mm:ss')}
+              </Text>
+            )}
+            {text !== '' && (
+              <Text bold fontSize="72px" style={{ fontFamily: 'MapoGoldenPier' }} color="#fff">
+                {text}
+              </Text>
+            )}
           </Flex>
         </Box>
       </Box>

@@ -19,6 +19,7 @@ import AOS from 'aos'
 import { useDispatch, useSelector } from 'react-redux'
 import { useModal } from '../../components/Common'
 import CountDown from './components/CountDown'
+import Link from 'next/link'
 
 const StyledHeroSection = styled(PageSection)`
   padding-top: 16px;
@@ -290,9 +291,11 @@ const Home: React.FC = () => {
             ↓
           </Text>
           <Box border="1px solid grey" data-aos="fade-up" data-aos-duration="3000">
-            <Text bold fontSize="30px" style={{ fontFamily: 'MapoGoldenPier' }}>
-              작성 하러 가기
-            </Text>
+            <Link href="/write">
+              <Text bold fontSize="30px" style={{ fontFamily: 'MapoGoldenPier' }}>
+                작성 하러 가기
+              </Text>
+            </Link>
           </Box>
         </Box>
       </Page>
