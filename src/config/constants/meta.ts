@@ -21,6 +21,13 @@ export const getCustomMeta = (path: string): PageMeta => {
       return {
         title: `${'Home'} | ${'your_home'}`,
       }
+
+    case '/will':
+      return {
+        title: `당신의 유서`,
+        description: '',
+        image: '',
+      }
     default:
       return null
   }

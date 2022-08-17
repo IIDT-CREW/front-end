@@ -15,6 +15,7 @@ declare global {
   }
   const Kakao: any
 }
+
 const St = {
   ImageWrapper: styled.div`
     width: 100%;
