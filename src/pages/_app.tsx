@@ -45,15 +45,6 @@ function MyApp(props: AppProps) {
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="" />
         <title>IIDT</title>
-        <script
-          type="text/javascript"
-          src="https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.0.js"
-          charSet="utf-8"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap"
-          rel="stylesheet"
-        />
       </Head>
       <QueryClientProvider client={queryClient}>
         <Hydrate state={pageProps.dehydratedState}>

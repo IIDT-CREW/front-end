@@ -40,6 +40,15 @@ class MyDocument extends Document {
           <link rel="apple-touch-icon" href="/logo.png" />
           <link rel="manifest" href="/manifest.json" />
           <script type="text/javascript" src="https://developers.kakao.com/sdk/js/kakao.min.js" />
+          <script
+            type="text/javascript"
+            src="https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.0.js"
+            charSet="utf-8"
+          />
+          <link
+            href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap"
+            rel="stylesheet"
+          />
         </Head>
         <body>
           <Main />
