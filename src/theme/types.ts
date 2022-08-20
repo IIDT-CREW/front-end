@@ -75,6 +75,7 @@ export type Colors = {
   bronze: string
 
   // temp colors
+  grayscale0: string
   grayscale1: string
   grayscale2: string
   grayscale4: string
