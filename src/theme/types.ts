@@ -73,6 +73,14 @@ export type Colors = {
   gold: string
   silver: string
   bronze: string
+
+  // temp colors
+  grayscale1: string
+  grayscale2: string
+  grayscale4: string
+  grayscale5: string
+  grayscale6: string
+  grayscale7: string
 }
 
 export type ZIndices = {

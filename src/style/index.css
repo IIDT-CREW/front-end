@@ -1,3 +1,9 @@
+@import url(//fonts.googleapis.com/earlyaccess/nanummyeongjo.css);
+
+.nanummyeongjo * {
+  font-family: 'Nanum Myeongjo', serif;
+}
+
 @font-face {
   font-family: 'ON-여씨향약언해L';
   src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_eleven@1.0/ON-여씨향약언해L.woff') format('woff');

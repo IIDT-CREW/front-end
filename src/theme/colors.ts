@@ -8,6 +8,12 @@ export const baseColors = {
   secondary: '#7645D9',
   success: '#31D0AA',
   warning: '#FFB237',
+  grayscale1: '#ECEEF0',
+  grayscale2: '#E8E9EB',
+  grayscale4: '#D4D4D4',
+  grayscale5: '#A4A2A3',
+  grayscale6: '#2E3237',
+  grayscale7: '#000000',
 }
 
 export const additionalColors = {

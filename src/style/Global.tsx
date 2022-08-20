@@ -8,7 +8,7 @@ declare module 'styled-components' {
 
 const GlobalStyle = createGlobalStyle`
   * {
-    font-family: 'Noto Sans KR','Spoqa Han Sans Neo', 'sans-serif'; 
+    font-family: 'Nanum Myeongjo', 'Noto Sans KR','Spoqa Han Sans Neo', 'sans-serif'; 
   }
   body {
     background-color: ${({ theme }) => theme.colors.background};
