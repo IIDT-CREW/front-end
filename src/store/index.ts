@@ -13,7 +13,7 @@ import {
   createMigrate,
 } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
-import naviReducer from 'store/navi/reducer'
+import navi from 'store/navi'
 import common from 'store/common'
 import auth from 'store/auth'
 // import limitOrders from './limitOrders/reducer'
@@ -31,7 +31,7 @@ const persistConfig = {
 const persistedReducer = persistReducer(
   persistConfig,
   combineReducers({
-    navi: naviReducer,
+    navi,
     common,
     auth,
   }),
