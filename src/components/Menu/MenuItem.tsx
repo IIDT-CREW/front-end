@@ -22,7 +22,6 @@ type MenuItemProps = {
   href: string
 }
 const MenuItem = ({ isActive, children, href }: MenuItemProps) => {
-  console.log('href = ', href)
   return (
     <St.StyledMenuItem isActive={isActive}>
       <Link href={href}>{children}</Link>

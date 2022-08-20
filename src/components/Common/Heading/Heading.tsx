@@ -4,20 +4,20 @@ import Text from '../Text/Text'
 
 const style = {
   [scales.MD]: {
-    fontSize: '20px',
-    fontSizeLg: '20px',
+    fontSize: '18px',
+    fontSizeLg: '18px',
   },
   [scales.LG]: {
-    fontSize: '24px',
-    fontSizeLg: '24px',
+    fontSize: '26px',
+    fontSizeLg: '26px',
   },
   [scales.XL]: {
-    fontSize: '32px',
-    fontSizeLg: '40px',
+    fontSize: '36px',
+    fontSizeLg: '36px',
   },
   [scales.XXL]: {
-    fontSize: '48px',
-    fontSizeLg: '64px',
+    fontSize: '45px',
+    fontSizeLg: '45px',
   },
 }
 
