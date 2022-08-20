@@ -82,19 +82,6 @@ const WillPage = () => {
   }
 
   const handleKakao = () => {
-    // 버튼 요소 생성 및 변경
-    // var kakaoBtnNew = document.createElement('button')
-    // var kakaoIco = document.createElement('span')
-    // var kakaoBtnTxt = document.createTextNode('카카오톡으로 공유')
-    // kakaoIco.classList.add('ico_sns')
-    // kakaoIco.classList.add('ico_kt')
-    // kakaoBtnNew.appendChild(kakaoIco)
-    // kakaoBtnNew.appendChild(kakaoBtnTxt)
-    // kakaoBtnNew.classList.add('btn_mark')
-
-    // var kakaoBtnOld = document.querySelector('a[data-service="kakaotalk"]')
-    // var kakaoBtnWrap = document.querySelector('.bundle_post')
-
     // 공유 정보 가져오기
     const shareContent = {
       title: document.querySelector('[property="og:title"]').attributes.content.value,
