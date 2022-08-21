@@ -2,7 +2,6 @@ import { useEffect, useState, useRef } from 'react'
 import ResetCSS from 'style/ResetCSS'
 import Script from 'next/script'
 import '../style/index.css'
-import { ToastListener } from 'contexts/ToastsContext'
 import type { AppProps } from 'next/app'
 import Head from 'next/head'
 import { Fragment } from 'react'
@@ -21,7 +20,8 @@ import { useNaviState } from 'store/navi/hooks'
 import { MENU_HEIGHT, FOOTER_HEIGHT } from 'config/constants/default'
 import useAuthUserStorage from 'hooks/useAuthUserStorage'
 import styled from 'styled-components'
-
+import { ToastContainer } from 'react-toastify'
+import 'style/custom-react-toastify.css'
 import 'aos/dist/aos.css'
 
 if (process.env.NODE_ENV === 'development') {
@@ -127,7 +127,14 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
       </Layout>
       <Footer />
 
-      <ToastListener />
+      <ToastContainer
+        position="bottom-right"
+        autoClose={2000}
+        closeOnClick
+        draggable={false}
+        pauseOnHover={false}
+        pauseOnFocusLoss={false}
+      />
     </>
   )
 }

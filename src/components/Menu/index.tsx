@@ -142,15 +142,15 @@ const MenuWrapper = () => {
                 {/* <Box width="40px" height="40px" borderRadius="50%">
                   <img src="" alt="" style={{ width: '100%', height: '100%' }} />
                 </Box> */}
-                <Text>{name}</Text>
-                <Text>{email}</Text>
-                <Button onClick={handleLogout}>로그아웃</Button>
+                {/* <Text>{name}</Text>
+                <Text>{email}</Text> */}
+                {/* <Button onClick={handleLogout}>로그아웃</Button> */}
               </>
             ) : (
               <>
-                <Box onClick={handleMenu} style={{ cursor: 'pointer' }}>
+                {/* <Box onClick={handleMenu} style={{ cursor: 'pointer' }}>
                   <MenuOutline />
-                </Box>
+                </Box> */}
                 <Button onClick={handleLogin}>시작하기</Button>
               </>
             )}
