@@ -1,4 +1,6 @@
+import Test from 'views/Write/test'
+
 const TestPage = () => {
-  return <div></div>
+  return <Test />
 }
 export default TestPage

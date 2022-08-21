@@ -27,7 +27,7 @@ export const St = {
   Wrapper: styled.div`
     position: relative;
     width: 100%;
-    z-index: 99999;
+    z-index: 10;
   `,
   StyledNav: styled.nav`
     display: flex;

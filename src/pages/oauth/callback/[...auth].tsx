@@ -15,13 +15,14 @@ const AuthCallback = () => {
   async function getUser() {
     try {
       const res = await getUserInfo()
-      console.log('getUserInfo = ', res)
       if (res.data && res.data.code === API_CODE.SUCCESS) {
         const { data: userInfo } = res.data
+        console.log(userInfo)
         return {
           id: '',
-          name: userInfo.mem_username,
-          email: userInfo.mem_email,
+          name: userInfo.MEM_USERNAME,
+          email: userInfo.MEM_EMAIL,
+          nickname: userInfo.MEM_NICKNAME,
         }
       }
     } catch (e) {
@@ -42,7 +43,7 @@ const AuthCallback = () => {
         axios.defaults.headers.common['Authorization'] = bearer
         axios.defaults.headers.common['refresh'] = REFRESH_TOKEN
         const info = await getUser()
-        console.log('info= ', info)
+        console.log('[getUser] info= ', info)
         if (info) {
           dispatch(
             authActions.setAuth({
@@ -50,6 +51,7 @@ const AuthCallback = () => {
               accessToken: ACCESS_TOKEN,
               name: info.name,
               email: info.email,
+              nickname: info.nickname,
             }),
           )
           const encDataString = encryptWithAES(
@@ -58,6 +60,7 @@ const AuthCallback = () => {
               accessToken: ACCESS_TOKEN,
               name: info.name,
               email: info.email,
+              nickname: info.nickname,
             }),
           )
           localStorage.setItem(STORAGE_NAME.USER, encDataString) //예시로 로컬에 저장함

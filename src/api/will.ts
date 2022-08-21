@@ -1,11 +1,22 @@
 import axiosDefault from 'axios'
 
+const url = 'http://3.36.74.108:3031'
+
+// Create axios instance.
+const axiosInstance = axiosDefault.create({
+  baseURL: url,
+  withCredentials: true,
+})
+
 export const getWill = (will_id: string) => {
-  return axiosDefault.get('http://localhost:3031/api/will/getWill', {
+  return axiosInstance.get('api/will/getWill', {
     params: {
       will_id,
     },
   })
+}
+export const getMyWill = () => {
+  return axiosInstance.get('api/will/getMyWill')
 }
 type insertWillParams = {
   title: string
@@ -15,9 +26,13 @@ type insertWillParams = {
   will_id: string
 }
 export const insertWill = (data: insertWillParams) => {
-  return axiosDefault.post('http://localhost:3031/api/will/insertWill', data)
+  return axiosInstance.post('api/will/insertWill', data)
 }
 
 export const getWillCount = () => {
-  return axiosDefault.get('http://localhost:3031/api/will/getWillCount')
+  return axiosInstance.get('api/will/getWillCount')
+}
+
+export const getDeleteWill = () => {
+  return axiosInstance.get('api/will/getDeleteWill')
 }

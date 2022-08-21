@@ -9,6 +9,7 @@ export const authSlice = createSlice({
     accessToken: null,
     name: '',
     email: '',
+    nickname: '',
   },
   reducers: {
     setAuth: (state, action) => {
@@ -16,12 +17,14 @@ export const authSlice = createSlice({
       state.accessToken = action.payload.accessToken
       state.name = action.payload.name
       state.email = action.payload.email
+      state.nickname = action.payload.nickname
     },
     initAuth: (state) => {
       state.isAuthenticated = false
       state.accessToken = null
       state.name = ''
       state.email = ''
+      state.nickname = ''
     },
     setToken: (state, action) => {
       state.accessToken = action.payload

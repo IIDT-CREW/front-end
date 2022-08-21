@@ -22,7 +22,7 @@ const bannerJson = [
     firstLine: '포기하지 말라, 희망을 잃지 말라',
     secondLine: '자신을 저버리지 말라',
     author: '/크리스토퍼 리브',
-    imagePath: '/images/home/camila-cordeiro-qhEa09mqSno-unsplash.jpg',
+    imagePath: '/images/home/avis-yang-wkHUmkgClg4-unsplash.jpg',
   },
   {
     firstLine: '당신은 움츠리기보다 활짝',
