@@ -1,6 +1,6 @@
 // localStorage, sessionStorage 이름
 export const STORAGE_NAME = {
-  USER: 'IIDT-U-S',
+  USER: 'IIDT_U_S',
 }
 
 export const API_CODE = {

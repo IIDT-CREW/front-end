@@ -1,5 +1,5 @@
 import React from 'react'
-import { Modal, ModalProps } from 'components/Common'
+import { Modal, ModalProps, Flex, Box, Text } from 'components/Common'
 import styled, { css } from 'styled-components'
 import { useRouter } from 'next/router'
 
@@ -120,11 +120,12 @@ const NAVER_LOGIN_URL =
   '&response_type=code' +
   '&state=RANDOM_STATE'
 
-export const LoginModal: React.FC<ModalProps> = ({ onDismiss, ...props }) => {
+const LoginModal: React.FC<ModalProps> = ({ onDismiss, ...props }) => {
   const router = useRouter()
   return (
-    <Modal title="로그인" onDismiss={onDismiss} {...props}>
-      <LoginButton
+    <Modal title="로그인이 필요해요" onDismiss={onDismiss} {...props} minWidth="586px">
+      <Flex justifyContent="center" alignItems="center" flexDirection="column">
+        {/* <LoginButton
         loginType={EType.NAVER}
         onClick={() => {
           router.push(NAVER_LOGIN_URL)
@@ -132,25 +133,37 @@ export const LoginModal: React.FC<ModalProps> = ({ onDismiss, ...props }) => {
       >
         <LoginIcon loginType={EType.NAVER} />
         <span>네이버 로그인</span>
-      </LoginButton>
-      <LoginButton
-        loginType={EType.KAKAO}
-        onClick={() => {
-          router.push(KAKAO_LOGIN_URL)
-        }}
-      >
-        <LoginIcon loginType={EType.KAKAO} />
-        <span>카카오 로그인</span>
-      </LoginButton>
-      <LoginButton
-        loginType={EType.GOOGLE}
-        onClick={() => {
-          router.push(GOOGLE_LOGIN_URL)
-        }}
-      >
-        <LoginIcon loginType={EType.GOOGLE} />
-        <span>Google 로그인</span>
-      </LoginButton>
+      </LoginButton> */}
+        <LoginButton
+          loginType={EType.KAKAO}
+          onClick={() => {
+            router.push(KAKAO_LOGIN_URL)
+          }}
+        >
+          <LoginIcon loginType={EType.KAKAO} />
+          <span>카카오 로그인</span>
+        </LoginButton>
+        <LoginButton
+          loginType={EType.GOOGLE}
+          onClick={() => {
+            router.push(GOOGLE_LOGIN_URL)
+          }}
+        >
+          <LoginIcon loginType={EType.GOOGLE} />
+          <span>Google 로그인</span>
+        </LoginButton>
+
+        <Box mt="64px" mb="32px">
+          <Text fontSize="10px" color="#A4A2A3" style={{ textDecorationLine: 'underline' }}>
+            개인정보 처리방침
+          </Text>
+          <Text fontSize="10px" color="#A4A2A3" style={{ textDecorationLine: 'underline' }}>
+            서비스 이용약관
+          </Text>
+        </Box>
+      </Flex>
     </Modal>
   )
 }
+
+export default LoginModal

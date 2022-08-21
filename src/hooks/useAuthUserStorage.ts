@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import { isEqual, isEmpty } from 'lodash'
+import isEqual from 'lodash/isEqual'
+import isEmpty from 'lodash/isEmpty'
 import { decryptWithAES, encryptWithAES } from 'utils/crypto'
 import { useAuthState } from 'store/auth/hooks'
 import { authActions } from 'store/auth'
@@ -12,8 +13,7 @@ const useAuthUserStorage = () => {
 
   // a. 최초 진입 시
   useEffect(() => {
-    const strData =
-      localStorage.getItem(STORAGE_NAME.USER) || sessionStorage.getItem(STORAGE_NAME.USER)
+    const strData = localStorage.getItem(STORAGE_NAME.USER) || sessionStorage.getItem(STORAGE_NAME.USER)
     if (!isEmpty(strData)) {
       dispatch(authActions.setAuth(JSON.parse(decryptWithAES(strData))))
     }
@@ -30,10 +30,7 @@ const useAuthUserStorage = () => {
     const currDecryptSessionValue = decryptWithAES(currSessionValue)
 
     // 전부 다 같으면 pass
-    if (
-      currLocalValue === currSessionValue &&
-      isEqual(JSON.parse(currDecryptLocalValue), authState)
-    ) {
+    if (currLocalValue === currSessionValue && isEqual(JSON.parse(currDecryptLocalValue), authState)) {
       return
     }
 

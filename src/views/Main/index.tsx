@@ -38,10 +38,10 @@ const St = {
 const MenuItem = ({ presentDeleteModal }) => {
   return (
     <Box>
-      <Flex padding="8px" style={{ gap: '8px' }}>
+      {/* <Flex padding="8px" style={{ gap: '8px' }}>
         <Export />
         <Text>수정하기</Text>
-      </Flex>
+      </Flex> */}
       <Flex padding="8px" style={{ gap: '8px' }}>
         <Export />
         <Text>공유하기</Text>

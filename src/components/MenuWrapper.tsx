@@ -1,15 +1,61 @@
-import { Heading, Box, Text, Flex } from 'components/Common'
+import { Box, Text } from 'components/Common'
 import { MENU_HEIGHT } from 'config/constants/default'
-import CloseOutline from 'components/Common/Svg/Icons/MenuOutline'
-// import Const
+import { useRouter } from 'next/router'
+import { useDispatch } from 'react-redux'
+import { naviActions } from 'store/navi'
+import Link from 'next/link'
+import { authActions } from 'store/auth'
+import { STORAGE_NAME } from 'config/constants/api'
+import styled from 'styled-components'
 
+const St = {
+  TextLink: styled(Text)`
+    cursor: pointer; ;
+  `,
+}
 const MenuWrapper = () => {
+  const dispatch = useDispatch()
+  const router = useRouter()
+
+  const retrunMarginTop = () => {
+    if (router.asPath.includes('/main')) {
+      return 0
+    }
+    return MENU_HEIGHT
+  }
+
+  const handleLogout = async () => {
+    try {
+      //...todo
+      // await logout()
+      console.log(STORAGE_NAME.USER)
+      localStorage.removeItem(STORAGE_NAME.USER)
+      sessionStorage.removeItem(STORAGE_NAME.USER)
+      dispatch(
+        authActions.setAuth({
+          isAuthenticated: false,
+          accessToken: '',
+          refreshToken: '',
+          name: '',
+          email: '',
+        }),
+      )
+      dispatch(naviActions.menuOnOff())
+    } catch (e) {
+      console.log('logout ', e)
+    }
+
+    // router.replace('/')
+  }
+
   return (
-    <Box mt={`${MENU_HEIGHT}px`} position="absolute" padding="20px">
+    <Box mt={`${retrunMarginTop()}px`} position="absolute" padding="10px">
       <Box>
-        <Text mb="24px">로그아웃</Text>
-        <Text mb="24px">개인정보 처리방침</Text>
-        <Text mb="24px">서비스 이용약관</Text>
+        <St.TextLink mb="24px" onClick={handleLogout}>
+          로그아웃
+        </St.TextLink>
+        <St.TextLink mb="24px">개인정보 처리방침</St.TextLink>
+        <St.TextLink mb="24px">서비스 이용약관</St.TextLink>
       </Box>
     </Box>
   )

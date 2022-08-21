@@ -17,3 +17,7 @@ type insertWillParams = {
 export const insertWill = (data: insertWillParams) => {
   return axiosDefault.post('http://localhost:3031/api/will/insertWill', data)
 }
+
+export const getWillCount = () => {
+  return axiosDefault.get('http://localhost:3031/api/will/getWillCount')
+}

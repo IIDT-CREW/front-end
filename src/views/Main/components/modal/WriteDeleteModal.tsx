@@ -26,6 +26,7 @@ const St = {
     order: 0;
     flex-grow: 1;
     color: #fff;
+    cursor: pointer;
   `,
 }
 
