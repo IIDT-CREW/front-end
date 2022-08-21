@@ -1,6 +1,6 @@
 import axiosDefault from 'axios'
 
-const url = 'http://3.36.74.108:3031'
+const url = 'http://3.35.24.26:3031'
 
 // Create axios instance.
 const axiosInstance = axiosDefault.create({
@@ -16,7 +16,12 @@ export const getWill = (will_id: string) => {
   })
 }
 export const getMyWill = () => {
-  return axiosInstance.get('api/will/getMyWill')
+  return axiosInstance.get('api/will/getMyWill', {
+    params: {
+      mem_userid: '',
+      mem_email: '',
+    },
+  })
 }
 type insertWillParams = {
   title: string
@@ -33,6 +38,6 @@ export const getWillCount = () => {
   return axiosInstance.get('api/will/getWillCount')
 }
 
-export const getDeleteWill = () => {
-  return axiosInstance.get('api/will/getDeleteWill')
+export const deleteWill = () => {
+  return axiosInstance.get('api/will/deleteWill')
 }

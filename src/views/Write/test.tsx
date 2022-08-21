@@ -3,12 +3,13 @@ import styled from 'styled-components'
 import { fontSize, FontSizeProps } from 'styled-system'
 import axios from 'axios'
 import { nanoid } from 'nanoid'
-import { getWill, insertWill, getWillCount } from 'api/will'
+import { getWill, insertWill, getWillCount, deleteWill, getMyWill } from 'api/will'
 import { toastContext } from '../../contexts/Toast'
 import { useContext } from 'react'
 
 const Write = () => {
   const { onToast } = useContext(toastContext)
+  const [wills, setWills] = useState([])
   const [title, setTitle] = useState('')
   const [contents, setContents] = useState('')
   const handleTitle = (e) => {
@@ -59,35 +60,40 @@ const Write = () => {
     }
   }
 
-  // const handleGeMytWill = async () => {
-  //   try {
-  //     const parameter = {
-  //       title: title,
-  //       content: contents,
-  //     }
-  //     const res = await insertWill(parameter)
-  //     handleToast()
-  //     console.log(res)
-  //   } catch (e) {
-  //     console.log(e)
-  //   }
-  // }
-
-  const handleSave = (e) => {
-    axios
-      .post('/api/write', {
-        title,
-        contents,
-      })
-      .then((res) => console.log(res))
+  const handleGeMytWill = async () => {
+    try {
+      const parameter = {
+        title: title,
+        content: contents,
+      }
+      const res = await insertWill(parameter)
+      handleToast()
+      console.log(res)
+    } catch (e) {
+      console.log(e)
+    }
   }
+
+  const handleGetWill = async () => {
+    try {
+      const res = await getWill('SNfTCOM5iFz5mxoRbotrb')
+      handleToast()
+      console.log(res)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
   return (
     <div style={{ marginTop: '100px' }}>
       <Title value={title} onChange={handleTitle}></Title>
       <Contents value={contents} onChange={handleContents}></Contents>
       <button onClick={handleClick}>시간</button>
-      <button onClick={handleInsertWill}>save다 뫤~</button>
-      <button onClick={handleWillCount}>getWillCount</button>
+      <button onClick={handleInsertWill}>저장 ㅇ</button>
+      <button onClick={handleWillCount}>유서 카운트 ㅇ </button>
+      <button onClick={deleteWill}>유서 삭제 </button>
+      <button onClick={handleGetWill}>유서 가져오기(공유용) o</button>
+      <button onClick={handleGeMytWill}>내 유서 가져오기</button>
     </div>
   )
 }

@@ -54,8 +54,11 @@ const MenuItem = ({ presentDeleteModal }) => {
   )
 }
 const WriteCard = () => {
+  const handleapge = () => {
+    alert()
+  }
   const [presentWarningModal] = useModal(<WriteWarningInfoModal />)
-  const [presentDeleteModal] = useModal(<WriteDeleteModal />)
+  const [presentDeleteModal] = useModal(<WriteDeleteModal handleapge={handleapge} />)
 
   useEffect(() => {
     presentWarningModal()

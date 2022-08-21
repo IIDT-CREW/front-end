@@ -31,6 +31,8 @@ const St = {
 }
 
 const WriteDeleteModal = ({ onDismiss, ...props }: any) => {
+  const { handleapge } = props
+
   return (
     <Modal title="유서를 삭제하시겠어요?" onDismiss={onDismiss} {...props}>
       <Flex flexDirection="column" justifyContent="center" alignItems="center">
@@ -39,7 +41,7 @@ const WriteDeleteModal = ({ onDismiss, ...props }: any) => {
         <Box mt="20px">
           <Flex style={{ gap: '8px' }}>
             <St.ConfirmButton background="grey">나중에 할게요</St.ConfirmButton>
-            <St.ConfirmButton>삭제할게요</St.ConfirmButton>
+            <St.ConfirmButton onClick={handleapge}>삭제할게요</St.ConfirmButton>
           </Flex>
         </Box>
       </Flex>

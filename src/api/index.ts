@@ -7,7 +7,8 @@ import { STORAGE_NAME } from 'config/constants/api'
 
 // Create axios instance.
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:3031',
+  // baseURL: 'http://localhost:3031',
+  baseURL: 'http://3.35.24.26:3031',
   withCredentials: true,
 })
 

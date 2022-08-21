@@ -78,26 +78,6 @@ const MenuWrapper = () => {
     presentLoginModal()
   }
 
-  const handleLogout = async () => {
-    try {
-      localStorage.removeItem('NFT-FRIENDS-USER-INFO')
-      sessionStorage.removeItem('NFT-FRIENDS-USER-INFO')
-      dispatch(
-        authActions.setAuth({
-          isAuthenticated: false,
-          accessToken: '',
-          refreshToken: '',
-          name: '',
-          email: '',
-        }),
-      )
-    } catch (e) {
-      console.log('logout ', e)
-    }
-
-    router.replace('/')
-  }
-
   const { setTheme, isDark } = useTheme()
 
   const handleDark = () => {

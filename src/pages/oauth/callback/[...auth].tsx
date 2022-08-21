@@ -34,7 +34,7 @@ const AuthCallback = () => {
     try {
       const res = await axios({
         method: 'GET',
-        url: `http://localhost:3031/api/oauth/callback/${coperation}?code=${code}`,
+        url: `http://3.35.24.26:3031/api/oauth/callback/${coperation}?code=${code}`,
       })
       if (res) {
         const ACCESS_TOKEN = res.data.accessToken
