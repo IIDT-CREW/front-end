@@ -101,9 +101,9 @@ const MenuWrapper = () => {
               </Link>
             </Flex>
             {MenuConfig &&
-              MenuConfig.map((menuItem) => {
+              MenuConfig.map((menuItem, i) => {
                 return (
-                  <DropdownMenu items={menuItem.items}>
+                  <DropdownMenu key={`${menuItem}-${i}`} items={menuItem.items}>
                     <MenuItem isActive={false} href={menuItem.href}>
                       {menuItem.label}
                     </MenuItem>
