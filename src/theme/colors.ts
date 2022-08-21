@@ -8,6 +8,7 @@ export const baseColors = {
   secondary: '#7645D9',
   success: '#31D0AA',
   warning: '#FFB237',
+  grayscale0: '#FFFFFF',
   grayscale1: '#ECEEF0',
   grayscale2: '#E8E9EB',
   grayscale4: '#D4D4D4',
@@ -27,7 +28,7 @@ export const additionalColors = {
 export const lightColors: Colors = {
   ...baseColors,
   ...additionalColors,
-  background: '#FAF9FA',
+  background: '#FFFFFF',
   backgroundDisabled: '#E9EAEB',
   backgroundAlt: '#FFFFFF',
   backgroundAlt2: 'rgba(255, 255, 255, 0.7)',
