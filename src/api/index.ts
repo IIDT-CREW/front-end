@@ -2,13 +2,13 @@
 import axios from 'axios'
 import { refresh } from './auth'
 import { decryptWithAES, encryptWithAES } from 'utils/crypto'
-import { API_CODE } from 'config/constants/api'
+import { API_CODE, API_URL } from 'config/constants/api'
 import { STORAGE_NAME } from 'config/constants/api'
 
 // Create axios instance.
 const axiosInstance = axios.create({
   // baseURL: 'http://localhost:3031',
-  baseURL: 'http://3.35.24.26:3031',
+  baseURL: API_URL,
   withCredentials: true,
 })
 

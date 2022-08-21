@@ -1,3 +1,6 @@
+// export const API_URL = 'http://3.35.24.26:3031'
+export const API_URL = 'http://localhost:3031'
+
 // localStorage, sessionStorage 이름
 export const STORAGE_NAME = {
   USER: 'IIDT_U_S',

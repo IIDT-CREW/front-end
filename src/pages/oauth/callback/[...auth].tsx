@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux'
 import { authActions } from 'store/auth'
 import { getUserInfo } from 'api/auth'
 import LoaderPage from 'components/LoaderPage'
-import { STORAGE_NAME, API_CODE } from 'config/constants/api'
+import { STORAGE_NAME, API_CODE, API_URL } from 'config/constants/api'
 import { decryptWithAES, encryptWithAES } from 'utils/crypto'
 
 const AuthCallback = () => {
@@ -19,10 +19,11 @@ const AuthCallback = () => {
         const { data: userInfo } = res.data
         console.log(userInfo)
         return {
-          id: '',
+          memIdx: userInfo.MEM_IDX,
           name: userInfo.MEM_USERNAME,
           email: userInfo.MEM_EMAIL,
           nickname: userInfo.MEM_NICKNAME,
+          userid: userInfo.MEM_USERID,
         }
       }
     } catch (e) {
@@ -34,7 +35,7 @@ const AuthCallback = () => {
     try {
       const res = await axios({
         method: 'GET',
-        url: `http://3.35.24.26:3031/api/oauth/callback/${coperation}?code=${code}`,
+        url: `${API_URL}/api/oauth/callback/${coperation}?code=${code}`,
       })
       if (res) {
         const ACCESS_TOKEN = res.data.accessToken
@@ -52,6 +53,8 @@ const AuthCallback = () => {
               name: info.name,
               email: info.email,
               nickname: info.nickname,
+              userid: info.userid,
+              memIdx: info.memIdx,
             }),
           )
           const encDataString = encryptWithAES(
@@ -61,6 +64,8 @@ const AuthCallback = () => {
               name: info.name,
               email: info.email,
               nickname: info.nickname,
+              userid: info.userid,
+              memIdx: info.memIdx,
             }),
           )
           localStorage.setItem(STORAGE_NAME.USER, encDataString) //예시로 로컬에 저장함

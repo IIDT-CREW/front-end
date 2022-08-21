@@ -31,7 +31,12 @@ const St = {
 }
 
 const WriteDeleteModal = ({ onDismiss, ...props }: any) => {
-  const { handleapge } = props
+  const { handleDelete } = props
+
+  const deleteAndClose = () => {
+    handleDelete()
+    onDismiss()
+  }
 
   return (
     <Modal title="유서를 삭제하시겠어요?" onDismiss={onDismiss} {...props}>
@@ -40,8 +45,10 @@ const WriteDeleteModal = ({ onDismiss, ...props }: any) => {
         <Text>하지만 이 유서를 통해 하루하루의 삶이 빛나고 소중해졌다면 삭제해도 좋아요</Text>
         <Box mt="20px">
           <Flex style={{ gap: '8px' }}>
-            <St.ConfirmButton background="grey">나중에 할게요</St.ConfirmButton>
-            <St.ConfirmButton onClick={handleapge}>삭제할게요</St.ConfirmButton>
+            <St.ConfirmButton background="grey" onClick={onDismiss}>
+              나중에 할게요
+            </St.ConfirmButton>
+            <St.ConfirmButton onClick={deleteAndClose}>삭제할게요</St.ConfirmButton>
           </Flex>
         </Box>
       </Flex>
