@@ -86,10 +86,10 @@ const Write = () => {
     router.push('main')
   }
   return (
-    <article>
+    <St.Article>
       <St.MenuBar>
         <St.GoToHistoryButton onClick={handleGoToHistory}>
-          <ArrowLeft />내 기록
+          <ArrowLeft fill="none" />내 기록
         </St.GoToHistoryButton>
         {/* <button onClick={handleClick}>시간</button> */}
         <St.SaveButton onClick={handleSave} disabled={contents.length ? false : true}>
@@ -102,12 +102,12 @@ const Write = () => {
       ) : (
         questionList.map((question, i) => (
           <div key={`${i}-${question}`}>
-            <div>{question}</div>
+            <St.Question>{question}</St.Question>
             <Contents value={contents} onChange={handleContents}></Contents>
           </div>
         ))
       )}
-    </article>
+    </St.Article>
   )
 }
 const Title = ({ ...props }: TextareaHTMLAttributes<HTMLTextAreaElement>) => {
@@ -120,6 +120,18 @@ const Contents = ({ ...props }: TextareaHTMLAttributes<HTMLTextAreaElement>) => 
 
 interface TextAreaProps extends FontSizeProps, HTMLAttributes<HTMLTextAreaElement> {}
 const St = {
+  Question: styled.div`
+    font-family: 'Nanum Myeongjo';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 26px;
+    margin-bottom: 16px;
+    color: ${({ theme }) => theme.colors.grayscale6};
+  `,
+  Article: styled.article`
+    margin-top: 78px;
+    padding: 0 24px;
+  `,
   MenuBar: styled.div`
     border: none;
     height: 78px;
@@ -163,7 +175,7 @@ const St = {
     :disabled {
       color: ${({ theme }) => theme.colors.grayscale5};
       background-color: ${({ theme }) => theme.colors.grayscale1};
-      cursor: none;
+      cursor: not-allowed;
     }
   `,
   Textarea: styled.textarea<TextAreaProps>`
