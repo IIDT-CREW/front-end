@@ -1,11 +1,11 @@
 import { Heading, Box, Text, Flex } from 'components/Common'
 import { MENU_HEIGHT } from 'config/constants/default'
 import CloseOutline from 'components/Common/Svg/Icons/MenuOutline'
-import { St } from 'components/Menu'
+// import Const
 
 const MenuWrapper = () => {
   return (
-    <Box mt={`${MENU_HEIGHT}px`}>
+    <Box mt={`${MENU_HEIGHT}px`} position="absolute" padding="20px">
       <Box>
         <Text mb="24px">로그아웃</Text>
         <Text mb="24px">개인정보 처리방침</Text>

@@ -24,7 +24,13 @@ const Card = ({
   alt = '',
 }) => {
   return (
-    <Box width="100%" height={height} position="relative" mb="20px">
+    <Box
+      width="100%"
+      height={height}
+      position="relative"
+      mb="20px"
+      background="linear-gradient(0deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4))"
+    >
       <img
         src={imagePath}
         alt={alt}
@@ -39,10 +45,10 @@ const Card = ({
       />
       <Box width="100%" height={height} position="relative">
         <Flex justifyContent="center" alignItems="center" height="100%" position="relative" flexDirection="column">
-          <Text fontSize="36px" fontWeight="600">
+          <Text fontSize="36px" fontWeight="600" data-aos="fade-down" data-aos-duration="1000">
             {title}
           </Text>
-          <Text fontSize="36px" fontWeight="600">
+          <Text fontSize="36px" fontWeight="600" data-aos="fade-up" data-aos-duration="3000">
             {secondTitle}
           </Text>
         </Flex>

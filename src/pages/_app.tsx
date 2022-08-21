@@ -1,3 +1,4 @@
+import { useEffect, useState, useRef } from 'react'
 import ResetCSS from 'style/ResetCSS'
 import Script from 'next/script'
 import '../style/index.css'
@@ -102,12 +103,23 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
   // Use the layout defined at the page level, if available
   const Layout = Component.Layout || Fragment
   const { isMenuOpen } = useNaviState()
+  const scrollPos = useRef(0)
+
+  useEffect(() => {
+    if (isMenuOpen) {
+      scrollPos.current = window.scrollY
+      document.body.style.overflow = 'hidden'
+      window.requestAnimationFrame(() => window.scrollTo(0, 0))
+    } else {
+      document.body.style.overflow = 'visible'
+      window.requestAnimationFrame(() => window.scrollTo(0, scrollPos.current))
+    }
+  }, [isMenuOpen])
 
   return (
     <>
       <Menu />
       <Layout>
-        {/* {isMenuOpen ? <MenuWrapper /> : <Component {...pageProps} />} */}
         {isMenuOpen && <MenuWrapper />}
         <St.Wrapper style={{ visibility: isMenuOpen ? 'hidden' : 'visible' }}>
           <Component {...pageProps} />
