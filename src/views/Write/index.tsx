@@ -1,19 +1,11 @@
-import {
-  ButtonHTMLAttributes,
-  HTMLAttributes,
-  MouseEventHandler,
-  TextareaHTMLAttributes,
-  useEffect,
-  useState,
-} from 'react'
+import { HTMLAttributes, TextareaHTMLAttributes, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { fontSize, FontSizeProps } from 'styled-system'
 import axios from 'axios'
 import { getWill, insertWill } from 'api/will'
 import { ArrowLeft } from 'components/Common/Svg'
 import { useRouter } from 'next/router'
-import { ModalCloseButton, useModal } from 'components/Common'
-import { Handler } from 'components/Common/Modal/types'
+import { useModal } from 'components/Common'
 import SelectPostTypeModal from 'views/Write/components/SelectPostTypeModal'
 const questionList = [
   '1. 살아오면서 가장 기뻤던 일은?',
@@ -34,6 +26,7 @@ const Write = () => {
   const [contents, setContents] = useState('')
   const router = useRouter()
   const [isDefaultPostType, setPostType] = useState(true)
+  const inputRef = useRef<HTMLFormElement>(null)
   const handlePostType = () => {
     setPostType(false)
     onDismiss()
@@ -74,6 +67,13 @@ const Write = () => {
   }
 
   const handleSave = (e) => {
+    if (isDefaultPostType) {
+    } else {
+      ;[...inputRef.current.children].map((element) => {
+        const [div, textarea] = element.children
+        return [div.textContent, (textarea as HTMLTextAreaElement).value]
+      })
+    }
     axios
       .post('/api/write', {
         title,
@@ -85,6 +85,17 @@ const Write = () => {
   const handleGoToHistory = () => {
     router.push('main')
   }
+  const isDisabledSave = () => {
+    console.log('test')
+    if (isDefaultPostType) return contents.length ? false : true
+    if (inputRef.current === null) return true
+    return ![...inputRef.current.children]
+      .map((element) => {
+        const [, textarea] = element.children
+        return (textarea as HTMLTextAreaElement).value
+      })
+      .every((value) => value.length)
+  }
   return (
     <St.Article>
       <St.MenuBar>
@@ -92,7 +103,7 @@ const Write = () => {
           <ArrowLeft fill="none" />내 기록
         </St.GoToHistoryButton>
         {/* <button onClick={handleClick}>시간</button> */}
-        <St.SaveButton onClick={handleSave} disabled={contents.length ? false : true}>
+        <St.SaveButton onClick={handleSave} disabled={isDisabledSave()}>
           작성 완료
         </St.SaveButton>
       </St.MenuBar>
@@ -100,32 +111,35 @@ const Write = () => {
       {isDefaultPostType ? (
         <Contents value={contents} onChange={handleContents}></Contents>
       ) : (
-        questionList.map((question, i) => (
-          <div key={`${i}-${question}`}>
-            <St.Question>{question}</St.Question>
-            <Contents value={contents} onChange={handleContents}></Contents>
-          </div>
-        ))
+        <form ref={inputRef}>
+          {questionList.map((question, i) => (
+            <div key={`${i}-${question}`}>
+              <St.Question>{question}</St.Question>
+              <Contents height="200px" onChange={handleContents}></Contents>
+            </div>
+          ))}
+        </form>
       )}
     </St.Article>
   )
 }
-const Title = ({ ...props }: TextareaHTMLAttributes<HTMLTextAreaElement>) => {
+interface TextAreaProps extends FontSizeProps, TextareaHTMLAttributes<HTMLTextAreaElement> {
+  height?: string
+}
+const Title = ({ ...props }: TextAreaProps) => {
   return <St.Textarea {...props} fontSize={'2rem'} placeholder="제목을 입력하세요." />
 }
-
-const Contents = ({ ...props }: TextareaHTMLAttributes<HTMLTextAreaElement>) => {
+const Contents = ({ ...props }: TextAreaProps) => {
   return <St.Textarea {...props} placeholder="내용을 입력하세요" />
 }
 
-interface TextAreaProps extends FontSizeProps, HTMLAttributes<HTMLTextAreaElement> {}
 const St = {
   Question: styled.div`
     font-family: 'Nanum Myeongjo';
     font-style: normal;
     font-weight: 700;
     font-size: 26px;
-    margin-bottom: 16px;
+    margin: 10px 0 16px 0;
     color: ${({ theme }) => theme.colors.grayscale6};
   `,
   Article: styled.article`
@@ -192,6 +206,7 @@ const St = {
       color: ${({ theme }) => theme.colors.grayscale5};
       font-size: 18px;
     }
+    ${({ height }) => `height: ${height}`};
     ${fontSize}
   `,
 }
