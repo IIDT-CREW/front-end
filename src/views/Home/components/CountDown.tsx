@@ -50,12 +50,12 @@ const CountDown = ({ height = '550px', isCountDown = true, text = '' }) => {
         <Box width="100%" height={height} position="relative">
           <Flex justifyContent="center" alignItems="center" height="100%" position="relative">
             {text === '' && (
-              <Text bold fontSize="72px" style={{ fontFamily: 'MapoGoldenPier' }} color="#fff">
+              <Text bold fontSize="72px" color="#fff">
                 {isCountDown ? moment.utc(leftTime * 1000).format('HH:mm:ss') : moment().format('HH:mm:ss')}
               </Text>
             )}
             {text !== '' && (
-              <Text bold fontSize="72px" style={{ fontFamily: 'MapoGoldenPier' }} color="#fff">
+              <Text bold fontSize="72px" color="#fff">
                 {text}
               </Text>
             )}

@@ -18,7 +18,6 @@ const Button = (props: ButtonProps) => {
 }
 
 const StyledButton = styled.button`
-  width: ${(props) => (props.width ? props.width : 'auto')}
   outline: none;
   border: none;
   box-sizing: border-box;
@@ -30,17 +29,15 @@ const StyledButton = styled.button`
   border-radius: 0.25rem;
   line-height: 1;
   font-weight: 600;
+  cursor: pointer;
   ${variant({
     variants: styleVariants,
   })};
   &:focus {
-    box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.2);
   }
   &:hover {
-    background: #e49600;
   }
   &:active {
-    background: #e49600;
   }
 `
 

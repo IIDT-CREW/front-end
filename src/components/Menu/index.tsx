@@ -2,9 +2,10 @@ import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
 import Flex from '../Common/Box/Flex'
+import { Heading } from '../Common'
 import Link from 'next/link'
 import { Box } from '../Common/Box'
-import { Button, ToggleButton } from 'components/Common/Button'
+import { Button } from 'components/Common/Button'
 import { Text } from 'components/Common/Text'
 import MenuItem from 'components/Menu/MenuItem'
 import DropdownMenu from './DropdownMenu'
@@ -12,12 +13,16 @@ import MenuConfig from './config'
 import { useRouter } from 'next/router'
 import { getActiveMenuItem, getActiveSubMenuItem } from './utils'
 import { authActions } from 'store/auth'
+import { naviActions } from 'store/navi'
+import { useNaviState } from 'store/navi/hooks'
 import { useIsLogin, useUserInfo } from 'store/auth/hooks'
 import useTheme, { THEME_TYPE } from 'hooks/useTheme'
 import ThemeToggleButton from '../Common/Button/ThemeToggleButton'
 
-const MENU_HEIGHT = 50
-const St = {
+import { MENU_HEIGHT } from 'config/constants/default'
+import MenuOutline from 'components/Common/Svg/Icons/MenuOutline'
+
+export const St = {
   Wrapper: styled.div`
     position: relative;
     width: 100%;
@@ -32,7 +37,6 @@ const St = {
     background-color: ${({ theme }) => theme?.nav?.background};
     border-bottom: 1px solid ${({ theme }) => theme.colors.cardBorder};
     transform: translate3d(0, 0, 0);
-
     padding-left: 16px;
     padding-right: 16px;
   `,
@@ -65,7 +69,7 @@ const MenuWrapper = () => {
   const activeSubMenuItem = getActiveSubMenuItem({ menuItem: activeMenuItem, pathname })
   const isLogin = useIsLogin()
   const { name, email } = useUserInfo()
-
+  const { isMenuOpen } = useNaviState()
   const handleLogin = () => {
     //todo login
   }
@@ -86,6 +90,9 @@ const MenuWrapper = () => {
     setTheme(isDark ? THEME_TYPE.LIGHT : THEME_TYPE.DARK)
   }
 
+  const handleMenu = () => {
+    dispatch(naviActions.menuOnOff())
+  }
   return (
     <St.Wrapper>
       <St.FixedContainer showMenu={showMenu} height={MENU_HEIGHT}>
@@ -93,9 +100,9 @@ const MenuWrapper = () => {
           <Flex justifyContent="center" alignItems="center">
             <Flex style={{ cursor: 'pointer' }}>
               <Link href="/">
-                <Text mr="15px" bold fontSize="20px" style={{ fontFamily: 'MapoGoldenPier' }}>
+                <Heading scale="lg" style={{ fontFamily: 'Cormorant' }}>
                   IIDT
-                </Text>
+                </Heading>
               </Link>
             </Flex>
             {MenuConfig &&
@@ -122,7 +129,10 @@ const MenuWrapper = () => {
                 <Button onClick={handleLogout}>로그아웃</Button>
               </>
             ) : (
-              <Button onClick={handleLogin}>로그인</Button>
+              <Box onClick={handleMenu} style={{ cursor: 'pointer' }}>
+                <MenuOutline />
+                {/* <Button onClick={handleLogin}>시작하기</Button> */}
+              </Box>
             )}
           </Flex>
         </St.StyledNav>

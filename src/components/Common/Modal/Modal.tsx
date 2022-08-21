@@ -1,15 +1,9 @@
 import React from 'react'
 import { useTheme } from 'styled-components'
 import Heading from '../Heading/Heading'
+import Box from '../Box/Box'
 import getThemeValue from '../../../utils/getThemeValue'
-import {
-  ModalBody,
-  ModalHeader,
-  ModalTitle,
-  ModalContainer,
-  ModalCloseButton,
-  ModalBackButton,
-} from './styles'
+import { ModalBody, ModalHeader, ModalTitle, ModalContainer, ModalCloseButton, ModalBackButton } from './styles'
 import { ModalProps } from './types'
 
 const Modal: React.FC<ModalProps> = ({
@@ -19,7 +13,7 @@ const Modal: React.FC<ModalProps> = ({
   children,
   hideTitle = false,
   hideCloseButton = false,
-  bodyPadding = '24px',
+  bodyPadding = '32px',
   headerBackground = 'transparent',
   minWidth = '320px',
   ...props
@@ -28,12 +22,10 @@ const Modal: React.FC<ModalProps> = ({
   return (
     <ModalContainer minWidth={minWidth} {...props}>
       {!hideTitle && (
-        <ModalHeader
-          background={getThemeValue(`colors.${headerBackground}`, headerBackground)(theme)}
-        >
+        <ModalHeader background={getThemeValue(`colors.${headerBackground}`, headerBackground)(theme)}>
           <ModalTitle>
             {onBack && <ModalBackButton onBack={onBack} />}
-            <Heading>{title}</Heading>
+            <Heading scale="md">{title}</Heading>
           </ModalTitle>
           {!hideCloseButton && <ModalCloseButton onDismiss={onDismiss} />}
         </ModalHeader>

@@ -7,15 +7,17 @@ import IconButton from '../Button/IconButton'
 import { ModalProps } from './types'
 
 export const ModalHeader = styled.div<{ background?: string }>`
+  position: relative;
   align-items: center;
+  justify-content: center;
   background: ${({ background }) => background || 'transparent'};
-  border-bottom: 1px solid ${({ theme }) => theme.colors.cardBorder};
   display: flex;
-  padding: 12px 24px;
+  padding: 32px 24px 14px 32px;
 `
 
 export const ModalTitle = styled(Flex)`
   align-items: center;
+  justify-content: center;
   flex: 1;
 `
 
@@ -27,9 +29,11 @@ export const ModalBody = styled(Flex)`
 
 export const ModalCloseButton: React.FC<{ onDismiss: ModalProps['onDismiss'] }> = ({ onDismiss }) => {
   return (
-    <IconButton variant="text" onClick={onDismiss} aria-label="Close the dialog">
-      <CloseIcon color="primary" />
-    </IconButton>
+    <Box position="absolute" right="0" top="24px">
+      <IconButton variant="text" onClick={onDismiss} aria-label="Close the dialog">
+        <CloseIcon />
+      </IconButton>
+    </Box>
   )
 }
 

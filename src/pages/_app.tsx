@@ -1,3 +1,4 @@
+import { useEffect, useState, useRef } from 'react'
 import ResetCSS from 'style/ResetCSS'
 import Script from 'next/script'
 import '../style/index.css'
@@ -14,7 +15,13 @@ import Providers from '../Providers'
 import GlobalStyle from '../style/Global'
 import useBaseQueryClient from 'hooks/queries/useBaseQueryClient'
 import Menu from 'components/Menu'
+import Footer from 'components/Footer'
+import MenuWrapper from 'components/MenuWrapper'
+import { useNaviState } from 'store/navi/hooks'
+import { MENU_HEIGHT, FOOTER_HEIGHT } from 'config/constants/default'
 import useAuthUserStorage from 'hooks/useAuthUserStorage'
+import styled from 'styled-components'
+
 import 'aos/dist/aos.css'
 
 if (process.env.NODE_ENV === 'development') {
@@ -87,15 +94,38 @@ type AppPropsWithLayout = AppProps & {
 
 // const ProductionErrorBoundary = process.env.NODE_ENV === 'production' ? ErrorBoundary : Fragment
 
+const St = {
+  Wrapper: styled.div`
+    min-height: calc(100vh - ${MENU_HEIGHT}px - ${FOOTER_HEIGHT}px);
+  `,
+}
 const App = ({ Component, pageProps }: AppPropsWithLayout) => {
   // Use the layout defined at the page level, if available
   const Layout = Component.Layout || Fragment
+  const { isMenuOpen } = useNaviState()
+  const scrollPos = useRef(0)
+
+  useEffect(() => {
+    if (isMenuOpen) {
+      scrollPos.current = window.scrollY
+      document.body.style.overflow = 'hidden'
+      window.requestAnimationFrame(() => window.scrollTo(0, 0))
+    } else {
+      document.body.style.overflow = 'visible'
+      window.requestAnimationFrame(() => window.scrollTo(0, scrollPos.current))
+    }
+  }, [isMenuOpen])
+
   return (
     <>
       <Menu />
       <Layout>
-        <Component {...pageProps} />
+        {isMenuOpen && <MenuWrapper />}
+        <St.Wrapper style={{ visibility: isMenuOpen ? 'hidden' : 'visible' }}>
+          <Component {...pageProps} />
+        </St.Wrapper>
       </Layout>
+      <Footer />
 
       <ToastListener />
     </>
