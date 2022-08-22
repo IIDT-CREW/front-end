@@ -8,7 +8,7 @@
   "scripts": {
     "analyze": "ANALYZE=true yarn build",
     "dev": "next dev -p 3001",
-    "build": "next build",
+    "build": "next build && next export",
     "start": "next start -p 6060",
     "lint": "eslint 'src/**/*.{js,jsx,ts,tsx}'",
     "lint:style": "npx stylelint '**/*.{ts,tsx}'",
