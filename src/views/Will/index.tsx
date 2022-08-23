@@ -47,8 +47,10 @@ const WillPage = () => {
     // 기존 카카오 클린업
     // Kakao.Link.cleanup()
     Kakao.cleanup()
-    // 새로운 키를 이용하여 init
-    Kakao.init(process.env.NEXT_PUBLIC_KAKAO_JAVASCRIPT)
+    if (process.env.NEXT_PUBLIC_KAKAO_JAVASCRIPT) {
+      // 새로운 키를 이용하여 init
+      Kakao.init(process.env.NEXT_PUBLIC_KAKAO_JAVASCRIPT)
+    }
   }
   useEffect(() => {
     // init 체크
