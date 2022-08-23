@@ -1,23 +1,11 @@
 import styled, { keyframes } from 'styled-components'
-import PageSection from 'components/PageSection'
 import useTheme from 'hooks/useTheme'
-import Container from 'components/Layout/Container'
-import { PageMeta } from 'components/Layout/Page'
-// import Hero from './components/Hero'
 import Heading from 'components/Common/Heading/Heading'
 import { Box, Flex } from 'components/Common/Box'
 import { Text } from 'components/Common/Text'
-import Page from 'components/Layout/Page'
-import LayoutContainer from './components/Layout/LayoutContainer'
-import ImageWrapper from './components/Layout/ImageWrapper'
-import LastLeaf from '../../../public/images/home/rhys-fradley.jpg'
-import road from '../../../public/images/home/casey-horner.jpg'
-// import Vibes from '../../../public/images/home/nft/Vibes@2x.png'
 import React, { useEffect } from 'react'
 import MainCard from './components/MainCard'
 import AOS from 'aos'
-import { useDispatch, useSelector } from 'react-redux'
-import { useModal } from '../../components/Common'
 import Clock from './components/Clock'
 import Link from 'next/link'
 
@@ -51,6 +39,7 @@ export const MainButton = styled.button`
   flex-grow: 1;
 
   color: #fff;
+  cursor: pointer;
 `
 
 const Home: React.FC = () => {
@@ -108,7 +97,9 @@ const Home: React.FC = () => {
             <Text fontSize="48px" mb="24px">
               다시 한 번 삶을 되돌아보는 시간
             </Text>
-            <MainButton>작성하러가기</MainButton>
+            <Link href="/main">
+              <MainButton>작성하러가기</MainButton>
+            </Link>
           </Flex>
         </Box>
       </Box>

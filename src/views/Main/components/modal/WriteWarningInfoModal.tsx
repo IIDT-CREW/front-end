@@ -27,6 +27,8 @@ const St = {
     flex-grow: 1;
 
     color: #fff;
+
+    cursor: pointer;
   `,
 }
 
@@ -50,7 +52,7 @@ const WriteWarningInfoModal = ({ onDismiss, ...props }: any) => {
 
         <Text mb="20px">마음이 힘들다면 1577-0199로 전화해주세요. 당신은 그 누구보다 소중하니까요.</Text>
         <Box>
-          <St.ConfirmButton>확인했어요</St.ConfirmButton>
+          <St.ConfirmButton onClick={onDismiss}>확인했어요</St.ConfirmButton>
         </Box>
       </Flex>
     </Modal>

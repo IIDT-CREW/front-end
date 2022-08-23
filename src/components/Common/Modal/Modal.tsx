@@ -1,7 +1,6 @@
 import React from 'react'
 import { useTheme } from 'styled-components'
 import Heading from '../Heading/Heading'
-import Box from '../Box/Box'
 import getThemeValue from '../../../utils/getThemeValue'
 import { ModalBody, ModalHeader, ModalTitle, ModalContainer, ModalCloseButton, ModalBackButton } from './styles'
 import { ModalProps } from './types'

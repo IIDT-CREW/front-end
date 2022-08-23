@@ -2,7 +2,7 @@ import { light, dark } from 'theme'
 import ModalProvider from 'components/Common/Modal/ModalContext'
 import { Provider } from 'react-redux'
 import { ThemeProvider } from 'styled-components'
-import { ToastsProvider } from 'contexts/ToastsContext'
+import { ToastContextProvider } from './contexts/Toast'
 import { Store } from '@reduxjs/toolkit'
 import { ThemeProvider as NextThemeProvider, useTheme as useNextTheme } from 'next-themes'
 
@@ -14,13 +14,13 @@ const StyledThemeProvider = (props) => {
 const Providers: React.FC<{ children: any; store: Store }> = ({ children, store }) => {
   return (
     <Provider store={store}>
-      <ToastsProvider>
-        <NextThemeProvider>
+      <NextThemeProvider>
+        <ToastContextProvider>
           <StyledThemeProvider>
             <ModalProvider>{children}</ModalProvider>
           </StyledThemeProvider>
-        </NextThemeProvider>
-      </ToastsProvider>
+        </ToastContextProvider>
+      </NextThemeProvider>
     </Provider>
   )
 }

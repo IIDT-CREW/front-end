@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
 import Flex from '../Common/Box/Flex'
@@ -18,15 +18,16 @@ import { useNaviState } from 'store/navi/hooks'
 import { useIsLogin, useUserInfo } from 'store/auth/hooks'
 import useTheme, { THEME_TYPE } from 'hooks/useTheme'
 import ThemeToggleButton from '../Common/Button/ThemeToggleButton'
-
+import { useModal } from 'components/Common'
 import { MENU_HEIGHT } from 'config/constants/default'
 import MenuOutline from 'components/Common/Svg/Icons/MenuOutline'
+import LoginModal from 'components/LoginModal'
 
 export const St = {
   Wrapper: styled.div`
     position: relative;
     width: 100%;
-    z-index: 99999;
+    z-index: 10;
   `,
   StyledNav: styled.nav`
     display: flex;
@@ -70,18 +71,11 @@ const MenuWrapper = () => {
   const isLogin = useIsLogin()
   const { name, email } = useUserInfo()
   const { isMenuOpen } = useNaviState()
+  const [presentLoginModal] = useModal(<LoginModal />)
+
   const handleLogin = () => {
     //todo login
-  }
-
-  const handleLogout = async () => {
-    try {
-      //todo logout
-    } catch (e) {
-      console.log('logout ', e)
-    }
-
-    router.replace('/')
+    presentLoginModal()
   }
 
   const { setTheme, isDark } = useTheme()
@@ -93,6 +87,7 @@ const MenuWrapper = () => {
   const handleMenu = () => {
     dispatch(naviActions.menuOnOff())
   }
+
   return (
     <St.Wrapper>
       <St.FixedContainer showMenu={showMenu} height={MENU_HEIGHT}>
@@ -121,18 +116,23 @@ const MenuWrapper = () => {
             <ThemeToggleButton selected={isDark} onClick={handleDark} />
             {isLogin ? (
               <>
-                <Box width="40px" height="40px" borderRadius="50%">
-                  <img src="" alt="" style={{ width: '100%', height: '100%' }} />
+                <Box onClick={handleMenu} style={{ cursor: 'pointer' }}>
+                  <MenuOutline />
                 </Box>
-                <Text>{name}</Text>
-                <Text>{email}</Text>
-                <Button onClick={handleLogout}>로그아웃</Button>
+                {/* <Box width="40px" height="40px" borderRadius="50%">
+                  <img src="" alt="" style={{ width: '100%', height: '100%' }} />
+                </Box> */}
+                {/* <Text>{name}</Text>
+                <Text>{email}</Text> */}
+                {/* <Button onClick={handleLogout}>로그아웃</Button> */}
               </>
             ) : (
-              <Box onClick={handleMenu} style={{ cursor: 'pointer' }}>
-                <MenuOutline />
-                {/* <Button onClick={handleLogin}>시작하기</Button> */}
-              </Box>
+              <>
+                {/* <Box onClick={handleMenu} style={{ cursor: 'pointer' }}>
+                  <MenuOutline />
+                </Box> */}
+                <Button onClick={handleLogin}>시작하기</Button>
+              </>
             )}
           </Flex>
         </St.StyledNav>

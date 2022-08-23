@@ -1,4 +1,4 @@
-import { RotatingCircleLoader } from 'react-loaders-kit'
+import { NotepadLoader } from 'react-loaders-kit'
 import { Flex } from 'components/Common/Box'
 import PageSection from 'components/PageSection'
 
@@ -7,7 +7,7 @@ const LoaderPage = () => {
   return (
     <PageSection innerProps={{ style: PageStyle }} index={1}>
       <Flex justifyContent="center" alignItems="center" style={{ height: '100%', width: '100%' }}>
-        <RotatingCircleLoader loading={true} size={45} duration={1.6} />
+        <NotepadLoader loading={true} size={45} duration={3} colors={['#000']} />
       </Flex>
     </PageSection>
   )

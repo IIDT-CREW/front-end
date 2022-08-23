@@ -11,7 +11,7 @@ export function useIsLogin(): boolean {
   return isAuthenticated
 }
 
-export function useUserInfo(): { name: string; email: string } {
-  const { name, email } = useSelector<AppState, AppState['auth']>((state) => state.auth)
-  return { name, email }
+export function useUserInfo(): { memIdx: number; userid: string; name: string; email: string; nickname: string } {
+  const { userid, name, email, nickname, memIdx } = useSelector<AppState, AppState['auth']>((state) => state.auth)
+  return { userid, name, email, nickname, memIdx }
 }
