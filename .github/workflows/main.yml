@@ -63,10 +63,14 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      # (5) 빌드 결과물을 S3 버킷에 업로드
+     # 빌드한 NEXT 파일 복사
+      - name: Copy next 
+        run: cp -r ./next/ ./deploy 
+               
+      # 빌드 결과물을 S3 버킷에 업로드
       - name: Upload to AWS S3
         run: |
-          aws deploy push --application-name ${{ secrets.CODE_DEPLOY_APPLICATION_NAME }} --ignore-hidden-files --s3-location s3://${{ secrets.AWS_S3_BUCKET_NAME }}/$GITHUB_SHA.zip --source .
+          aws deploy push --application-name ${{ secrets.CODE_DEPLOY_APPLICATION_NAME }} --ignore-hidden-files --s3-location s3://${{ secrets.AWS_S3_BUCKET_NAME }}/$GITHUB_SHA.zip --source ./deploy
 
      # S3 버킷에 있는 파일을 대상으로 CodeDeploy 실행
       - name: Deploy to AWS EC2 from S3
