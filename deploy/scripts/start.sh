@@ -16,8 +16,8 @@ else
         cp -r  /home/ubuntu/app/*  ${PROJECT_PATH}
         #cp -r `ls /home/ubuntu/app/|grep -v scripts | grep -v appspec.yml`${PROJECT_PATH}
 
-        cd ${PROJECT_PATH}
-
+        cd /home/ubuntu/seo/gitrepos/IIDT-front-end/
+        
         # echo
         # echo "==[${APPLICATION_NAME}] process: yarn install"
         # yarn install
