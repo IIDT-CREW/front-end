@@ -86,6 +86,7 @@ const WriteCard = ({ will, handleDelete }: WriteCardProps) => {
     // Kakao.Link.cleanup()
     Kakao.cleanup()
     // 새로운 키를 이용하여 init
+
     Kakao.init(process.env.NEXT_PUBLIC_KAKAO_JAVASCRIPT)
   }
 
