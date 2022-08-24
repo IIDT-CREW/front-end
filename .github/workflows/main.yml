@@ -65,7 +65,7 @@ jobs:
 
      # 빌드한 NEXT 파일 복사
       - name: Copy next 
-        run: cp -r ./next/ ./deploy 
+        run: cp -r ./.next/ ./deploy 
                
       # 빌드 결과물을 S3 버킷에 업로드
       - name: Upload to AWS S3
