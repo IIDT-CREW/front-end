@@ -1,5 +1,5 @@
 // export const API_URL = 'http://3.35.24.26:3031'
-export const API_URL = 'http://localhost:3031'
+export const API_URL = process.env.NODE_ENV === 'production' ? 'https://if-i-die-tomorrow.com' : 'http://localhost:3031'
 
 // localStorage, sessionStorage 이름
 export const STORAGE_NAME = {
