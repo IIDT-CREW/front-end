@@ -12,13 +12,11 @@ const useBaseQueryClient = (): QueryClientState => {
       new QueryClient({
         defaultOptions: {
           queries: {
-            refetchOnWindowFocus: false,
-            retry: false,
-            // globally default to 20 seconds
-            staleTime: 20 * 1000,
+            retry: 0,
+            useErrorBoundary: true,
           },
           mutations: {
-            retry: false,
+            useErrorBoundary: true,
           },
         },
       }),
