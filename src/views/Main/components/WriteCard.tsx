@@ -136,7 +136,16 @@ const WriteCard = ({ will, handleDelete }: WriteCardProps) => {
   }
 
   return (
-    <Box mb="40px" padding="20px" width="582px" border="1px solid black" borderRadius="4px">
+    <Box
+      mr="20px"
+      ml="20px"
+      mb="40px"
+      padding="20px"
+      minWidth="374px"
+      maxWidth="582px"
+      border="1px solid black"
+      borderRadius="4px"
+    >
       <Box padding="10px">
         <Flex justifyContent="space-between" alignItems="center">
           <Text>{moment(regDate).format('YYYY.MM.DD')}</Text>

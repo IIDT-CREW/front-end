@@ -116,7 +116,7 @@ const Write = () => {
       console.log(e)
     }
   }
-  // 1
+
   const queryClient = useQueryClient()
 
   const { data, isLoading } = useQuery('myWill', () =>
@@ -128,6 +128,15 @@ const Write = () => {
 
   const mutation = useMutation(insertWill, {
     onSuccess: () => {
+      handleToast({ message: '데이터를 가져왔습니다' })
+      // myWill로 시작하는 모든 쿼리를 무효화한다
+      queryClient.invalidateQueries('myWill')
+    },
+  })
+
+  const deleteMutation = useMutation(deleteWill, {
+    onSuccess: () => {
+      handleToast({ message: '데이터를 삭제했습니다.' })
       // myWill로 시작하는 모든 쿼리를 무효화한다
       queryClient.invalidateQueries('myWill')
     },
@@ -146,13 +155,18 @@ const Write = () => {
         저장 ㅇ
       </button>
       <button onClick={handleWillCount}>유서 카운트 ㅇ </button>
-      {/* <button onClick={deleteWill}>유서 삭제 </button> */}
+
       <button onClick={handleGetWill}>유서 가져오기(공유용) o</button>
       <button onClick={handleGeMytWill}>내 유서 가져오기</button>
 
       <div>
         {data?.result?.map((myWill) => {
-          return <WriteCard will={myWill} handleDelete={() => handledeleteWill(myWill.WILL_ID as string)} />
+          return (
+            <WriteCard
+              will={myWill}
+              handleDelete={() => deleteMutation.mutate({ will_id: myWill.WILL_ID as string })}
+            />
+          )
         })}
       </div>
     </div>

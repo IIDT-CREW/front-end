@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react'
+import { useEffect, useContext } from 'react'
 import { useRouter } from 'next/router'
-import { Box, Text, Flex } from 'components/Common'
+import { Box, Flex } from 'components/Common'
 import BannerCard from './components/BannerCard'
 import styled from 'styled-components'
 import MainInfo from './components/MainInfo'
@@ -8,6 +8,9 @@ import { MainButton } from '../Home'
 import { useModal } from 'components/Common'
 import WriteWarningInfoModal from './components/modal/WriteWarningInfoModal'
 import WriteCard from './components/WriteCard'
+import { useQuery, useMutation, useQueryClient } from 'react-query'
+import { deleteWill, getMyWill } from 'api/will'
+import { toastContext } from 'contexts/Toast'
 
 const St = {
   Container: styled(Box)`
@@ -33,39 +36,43 @@ const St = {
 }
 
 const Main = () => {
-  // Query
-  // const { isLoading, data, isError } = useQuery('users', getUserWithAxios, {
-  //   staleTime: 5000,
-  // })
-
-  // const mutation = useMutation((data: User) => axios.post('http://localhost:8000/user', data), {
-  //   onMutate: (data: User) => {
-  //     const previousValue = queryClient.getQueryData('users')
-  //     console.log('previousValue', data)
-  //     queryClient.setQueryData('users', (old: any) => {
-  //       console.log('old', old)
-  //       return [...old, data]
-  //     })
-
-  //     return previousValue
-  //   },
-  //   onSuccess: (result, variables, context) => {
-  //     console.log('성공 메시지:', result)
-  //     console.log('변수', variables)
-  //     console.log('onMutate에서 넘어온 값', context)
-  //     setUserId(userId + 1)
-  //   },
-  // })
-
+  const queryClient = useQueryClient()
+  const { onToast } = useContext(toastContext)
   const [presentWarningModal] = useModal(<WriteWarningInfoModal />)
-  // useEffect(() => {
-  //   presentWarningModal()
-  // }, [])
+
+  useEffect(() => {
+    presentWarningModal()
+  }, [])
 
   const router = useRouter()
   const handleWrite = () => {
     router.push('write')
   }
+  const handleToast = ({ message = '' }) => {
+    onToast({
+      type: 'success',
+      message,
+      option: {
+        position: 'top-center',
+      },
+    })
+  }
+
+  const { data, isLoading } = useQuery('myWill', () =>
+    getMyWill({
+      mem_userid: '2342340674',
+      mem_email: '',
+    }),
+  )
+
+  const deleteMutation = useMutation(deleteWill, {
+    onSuccess: () => {
+      handleToast({ message: '데이터를 삭제했습니다.' })
+      // myWill로 시작하는 모든 쿼리를 무효화한다
+      queryClient.invalidateQueries('myWill')
+    },
+  })
+
   return (
     <St.Container mt="78px">
       <Box mb="36px">
@@ -77,6 +84,15 @@ const Main = () => {
           <Box mb="55px">
             <MainButton onClick={handleWrite}> 작성하러가기</MainButton>
           </Box>
+          {data?.result?.map((myWill) => {
+            return (
+              <WriteCard
+                will={myWill}
+                handleDelete={() => deleteMutation.mutate({ will_id: myWill.WILL_ID as string })}
+              />
+            )
+          })}
+
           <WriteCard
             will={{
               CONTENT:
@@ -93,25 +109,6 @@ const Main = () => {
           />
         </Flex>
       </Flex>
-
-      {/* <St.Main>
-        <Flex height="100%" flexDirection="column" justifyContent="center" alignItems="center">
-          <Flex flexDirection="column" justifyContent="center" alignItems="center">
-            <Text fontSize="18px" bold mb="24px">
-              지금까지 작성된 마지막 일기
-            </Text>
-            <Text fontSize="26px" bold mb="24px">
-              {willCount}개
-            </Text>
-            <Text fontSize="18px" bold mb="24px">
-              당신의 마지막 일기를 작성해주세요.
-            </Text>
-            <Box mb="55px">
-              <MainButton> 작성하러가기</MainButton>
-            </Box>
-          </Flex>
-        </Flex>
-      </St.Main> */}
     </St.Container>
   )
 }

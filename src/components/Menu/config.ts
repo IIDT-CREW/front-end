@@ -17,19 +17,19 @@ export type ConfigMenuItemsType = Omit<MenuItemsType, 'items'> & { hideSubNav?: 
 }
 
 const config = [
-  {
-    label: '작성하기',
-    href: '/write',
-    // icon: 'SwapIcon',
-    // fillIcon: 'SwapFillIcon',
-    showItemsOnMobile: false,
-    items: [
-      // {
-      //   label: 'Grade',
-      //   href: '/grade',
-      // },
-    ],
-  },
+  // {
+  //   label: '작성하기',
+  //   href: '/write',
+  //   // icon: 'SwapIcon',
+  //   // fillIcon: 'SwapFillIcon',
+  //   showItemsOnMobile: false,
+  //   items: [
+  //     // {
+  //     //   label: 'Grade',
+  //     //   href: '/grade',
+  //     // },
+  //   ],
+  // },
   // {
   //   label: 'Test2',
   //   href: '/Test2',
