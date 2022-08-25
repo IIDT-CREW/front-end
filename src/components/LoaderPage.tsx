@@ -7,7 +7,7 @@ const LoaderPage = () => {
   return (
     <PageSection innerProps={{ style: PageStyle }} index={1}>
       <Flex justifyContent="center" alignItems="center" style={{ height: '100%', width: '100%' }}>
-        <NotepadLoader loading={true} size={45} duration={3} colors={['#000']} />
+        <NotepadLoader loading={true} size={45} duration={3} colors={['#000', '#000']} />
       </Flex>
     </PageSection>
   )
