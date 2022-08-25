@@ -46,7 +46,8 @@ function MyApp(props: AppProps) {
         />
         <meta name="title" content="IIDT" />
         <meta name="description" content="오늘이 마지막이라면" />
-        <meta name="theme-color" content="#1FC7D4" />
+        <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)" />
+        <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
         <meta name="twitter:image" content="" />
         <meta name="twitter:description" content="-" />
         <meta name="twitter:card" content="summary_large_image" />
