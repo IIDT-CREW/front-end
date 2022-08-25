@@ -46,7 +46,7 @@ const St = {
 const WillPage = () => {
   const router = useRouter()
   const queryClient = useQueryClient()
-
+  console.log('(router.query.id = ', router.query.id)
   const { data, isLoading } = useQuery('getWill', () => getWill(router.query.id as string))
 
   function kakaoShareFix() {
