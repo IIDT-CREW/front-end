@@ -3,17 +3,12 @@ import { useRouter } from 'next/router'
 import { Box, Text, Flex } from 'components/Common'
 import BannerCard from './components/BannerCard'
 import styled from 'styled-components'
+import MainInfo from './components/MainInfo'
 import { MainButton } from '../Home'
-import { usePopper } from 'react-popper'
-import Ellipsis from 'components/Common/Svg/Icons/Ellipsis'
-import Export from 'components/Common/Svg/Icons/Export'
-import Trash from 'components/Common/Svg/Icons/Trash'
 import { useModal } from 'components/Common'
-import moment from 'moment'
 import WriteWarningInfoModal from './components/modal/WriteWarningInfoModal'
-import WriteDeleteModal from './components/modal/WriteDeleteModal'
 import WriteCard from './components/WriteCard'
-import will from './dummy.json'
+
 const St = {
   Container: styled(Box)`
     min-height: calc(100% - 231px);
@@ -38,12 +33,34 @@ const St = {
 }
 
 const Main = () => {
-  const [presentWarningModal] = useModal(<WriteWarningInfoModal />)
-  useEffect(() => {
-    presentWarningModal()
-  }, [])
+  // Query
+  // const { isLoading, data, isError } = useQuery('users', getUserWithAxios, {
+  //   staleTime: 5000,
+  // })
 
-  const [willCount, setWillCount] = useState(1)
+  // const mutation = useMutation((data: User) => axios.post('http://localhost:8000/user', data), {
+  //   onMutate: (data: User) => {
+  //     const previousValue = queryClient.getQueryData('users')
+  //     console.log('previousValue', data)
+  //     queryClient.setQueryData('users', (old: any) => {
+  //       console.log('old', old)
+  //       return [...old, data]
+  //     })
+
+  //     return previousValue
+  //   },
+  //   onSuccess: (result, variables, context) => {
+  //     console.log('성공 메시지:', result)
+  //     console.log('변수', variables)
+  //     console.log('onMutate에서 넘어온 값', context)
+  //     setUserId(userId + 1)
+  //   },
+  // })
+
+  const [presentWarningModal] = useModal(<WriteWarningInfoModal />)
+  // useEffect(() => {
+  //   presentWarningModal()
+  // }, [])
 
   const router = useRouter()
   const handleWrite = () => {
@@ -56,15 +73,7 @@ const Main = () => {
       </Box>
       <Flex flexDirection="column" justifyContent="center" alignItems="center">
         <Flex flexDirection="column" justifyContent="center" alignItems="center">
-          <Text fontSize="18px" bold mb="24px">
-            지금까지 작성된 마지막 일기
-          </Text>
-          <Text fontSize="26px" bold mb="24px">
-            {willCount}개
-          </Text>
-          <Text fontSize="18px" bold mb="24px">
-            당신의 마지막 일기를 작성해주세요.
-          </Text>
+          <MainInfo />
           <Box mb="55px">
             <MainButton onClick={handleWrite}> 작성하러가기</MainButton>
           </Box>
