@@ -18,7 +18,8 @@ import Footer from 'components/Footer'
 import MenuWrapper from 'components/MenuWrapper'
 import { useNaviState } from 'store/navi/hooks'
 import { MENU_HEIGHT, FOOTER_HEIGHT } from 'config/constants/default'
-import useAuthUserStorage from 'hooks/useAuthUserStorage'
+// import useAuthUserStorage from 'hooks/useAuthUserStorage'
+import useAuthAccessToken from 'hooks/useAuthAccessToken'
 import styled from 'styled-components'
 import { ToastContainer } from 'react-toastify'
 import 'style/custom-react-toastify.css'
@@ -29,7 +30,8 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 function GlobalHooks() {
-  useAuthUserStorage()
+  // useAuthUserStorage()
+  useAuthAccessToken()
   return null
 }
 
