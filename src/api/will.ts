@@ -6,7 +6,7 @@ const url = API_URL
 // Create axios instance.
 export const axiosInstance = axiosDefault.create({
   baseURL: url,
-  withCredentials: true,
+  // withCredentials: true,
 })
 
 export const getWill = async (will_id: string) => {

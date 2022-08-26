@@ -9,7 +9,7 @@ import { STORAGE_NAME } from 'config/constants/api'
 const axiosInstance = axios.create({
   // baseURL: 'http://localhost:3031',
   baseURL: API_URL,
-  withCredentials: true,
+  //withCredentials: true,
 })
 
 axiosInstance.interceptors.request.use(
