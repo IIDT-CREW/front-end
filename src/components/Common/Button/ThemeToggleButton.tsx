@@ -12,17 +12,11 @@ const ThemeToggleButton = (props: ButtonProps | ToggleButtonProps) => {
   return (
     <StyledButton {...props}>
       <StyledDiv visible={selected}>
-        <IconMoon width="1.8rem" fill="#fdb11a" />
+        <IconMoon width="17" fill="#fff" />
       </StyledDiv>
       <StyledDiv visible={!selected}>
-        <IconSun width="1.8rem" fill="#fdb11a" />
+        <IconSun width="17" fill="#000" />
       </StyledDiv>
-
-      {/*selected ? (
-        <IconMoon width="1.8rem" fill="#fdb11a" />
-      ) : (
-        <IconSun width="1.8rem" fill="#fdb11a" />
-      )*/}
     </StyledButton>
   )
 }
