@@ -1,4 +1,5 @@
 import axiosDefault from 'axios'
+import authAxios from '.'
 import { API_URL } from 'config/constants/api'
 
 const url = API_URL
@@ -48,9 +49,13 @@ type deleteWillParams = {
 }
 
 export const insertWill = (data: insertWillParams) => {
-  return axiosInstance.post('api/will/insertWill', data)
+  return authAxios.post('api/will/insertWill', data)
 }
 
 export const deleteWill = (data: deleteWillParams) => {
-  return axiosInstance.post('api/will/deleteWill', data)
+  return authAxios.post('api/will/deleteWill', data)
+}
+
+export const updateWill = (data: deleteWillParams) => {
+  return authAxios.post('api/will/updateWill', data)
 }
