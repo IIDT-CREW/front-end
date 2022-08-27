@@ -1,0 +1,77 @@
+# deploy-work.yml
+name: CI/CD
+
+on:
+  push:
+    branches: [main] # sub-branch[branch name] 브랜치에서 push 이벤트가 일어났을 때 실행
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@master
+
+      - name: Cache node modules # node modules 캐싱
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: ${{ runner.OS }}-master-build-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.OS }}-build-
+            ${{ runner.OS }}-
+
+      - name: Setting .env
+        run: |
+          echo "NEXT_PUBLIC_KAKAO_CLIENT_ID=${{ secrets.NEXT_PUBLIC_KAKAO_CLIENT_ID }}" >> .env
+          echo "NEXT_PUBLIC_KAKAO_SECRET=${{ secrets.NEXT_PUBLIC_KAKAO_SECRET }}" >> .env
+
+          echo "NEXT_PUBLIC_KAKAO_JAVASCRIPT=${{ secrets.NEXT_PUBLIC_KAKAO_JAVASCRIPT }}" >> .env
+
+          echo "NEXT_PUBLIC_GOOGLE_CLIENT_ID=${{ secrets.NEXT_PUBLIC_GOOGLE_CLIENT_ID }}" >> .env
+          echo "NEXT_PUBLIC_GOOGLE_SECRET=${{ secrets.NEXT_PUBLIC_GOOGLE_SECRET }}" >> .env
+
+          echo "NEXT_PUBLIC_NAVER_CLIENT_ID=${{ secrets.NEXT_PUBLIC_NAVER_CLIENT_ID }}" >> .env
+          echo "NEXT_PUBLIC_NAVER_SECRET=${{ secrets.NEXT_PUBLIC_NAVER_SECRET }}" >> .env
+
+          echo "NEXT_PUBLIC_LOGIN_CALLBACK_URL_PREFIX=${{ secrets.NEXT_PUBLIC_LOGIN_CALLBACK_URL_PREFIX }}" >> .env
+          echo "NEXT_PUBLIC_PASSPHRASE=${{ secrets.NEXT_PUBLIC_PASSPHRASE }}" >> .env
+
+          echo "NEXT_PUBLIC_MODE=${{ secrets.NEXT_PUBLIC_MODE }}" >> .env
+          echo "NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}" >> .env
+          cat .env
+
+      - name: Install Dependencies # node module install
+        run: yarn
+
+      - name: Build # project build
+        run: yarn build
+
+      #       - name: Deploy to S3
+      #         env:
+      #           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #           AWS_DEFAULT_REGION: ap-northeast-2
+      #         run: aws s3 sync ./${{ secrets.BUILD_DIRECTORY }} ${{ secrets.AWS_S3_BUCKET_NAME }} --acl public-read --delete
+
+      # (4) AWS 인증 (IAM 사용자 Access Key, Secret Key 활용)
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      # 빌드한 NEXT 파일 복사
+      - name: Copy next
+        run: cp -r ./.next/* ./deploy
+
+      # 빌드 결과물을 S3 버킷에 업로드
+      - name: Upload to AWS S3
+        run: |
+          aws deploy push --application-name ${{ secrets.CODE_DEPLOY_APPLICATION_NAME }} --ignore-hidden-files --s3-location s3://${{ secrets.AWS_S3_BUCKET_NAME }}/$GITHUB_SHA.zip --source ./deploy
+
+      # S3 버킷에 있는 파일을 대상으로 CodeDeploy 실행
+      - name: Deploy to AWS EC2 from S3
+        run: |
+          aws deploy create-deployment --application-name ${{ secrets.CODE_DEPLOY_APPLICATION_NAME }} --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name ${{ secrets.CODE_DEPLOY_DEPLOYMENT_GROUP_NAME }} --s3-location bucket=${{ secrets.AWS_S3_BUCKET_NAME }},key=$GITHUB_SHA.zip,bundleType=zip

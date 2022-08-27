@@ -14,7 +14,7 @@ const StyledWrapper = styled.div<{ $width: number; $height: number; isFill: bool
     display: block;
     padding-top: ${({ $width, $height }) => ($height / $width) * 100}%;
   }
-
+  //background: ${({ theme }) => theme.colors.background};
   ${space}
 `
 

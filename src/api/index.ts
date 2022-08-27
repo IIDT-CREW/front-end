@@ -9,23 +9,24 @@ import { STORAGE_NAME } from 'config/constants/api'
 const axiosInstance = axios.create({
   // baseURL: 'http://localhost:3031',
   baseURL: API_URL,
-  withCredentials: true,
+  //withCredentials: true,
 })
 
 axiosInstance.interceptors.request.use(
   (config) => {
-    console.log('Reqest Config', config)
+    // 리프레시 토큰 및 엑세스 토큰 헤더 세팅
+    //console.log('[SEO][AXIOS][INTERCEPTORS] Reqest Config', config)
     const strData = localStorage.getItem(STORAGE_NAME.USER) || sessionStorage.getItem(STORAGE_NAME.USER)
-
+    //console.log('[SEO][AXIOS][INTERCEPTORS] strData', strData)
     const addConfigHeaders: any = {}
     if (strData) {
       const data = JSON.parse(decryptWithAES(strData))
       if (config.url === '/api/oauth/refresh') {
         addConfigHeaders.refresh = data?.refreshToken || ''
-      } else {
-        addConfigHeaders.Authorization = data?.accessToken ? `Bearer ${data.accessToken}` : ''
       }
+      addConfigHeaders.Authorization = data?.accessToken ? `Bearer ${data.accessToken}` : ''
     }
+
     const newConfig = { ...config, headers: { ...config.headers, ...addConfigHeaders } }
     console.log('config = ', newConfig)
     return newConfig
@@ -61,18 +62,15 @@ axiosInstance.interceptors.response.use(
               ),
             )
           }
-
+          /* refresh 토큰 및 access_token 저장  */
           const { access_token, refresh_token } = token_response.data
           const strData = localStorage.getItem(STORAGE_NAME.USER) || sessionStorage.getItem(STORAGE_NAME.USER)
 
           if (strData) {
             const data = JSON.parse(decryptWithAES(strData))
             const encDataString = encryptWithAES(JSON.stringify({ ...data, access_token, refresh_token }))
-
-            sessionStorage.setItem(STORAGE_NAME.USER, encDataString)
             localStorage.setItem(STORAGE_NAME.USER, encDataString)
           }
-
           return axios(response.config)
         })
         .catch((error) => {

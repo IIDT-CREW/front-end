@@ -3,19 +3,30 @@ import styled from 'styled-components'
 import observerOptions from './options'
 import Wrapper from './Wrapper'
 import { ImageProps } from './types'
+import { Skeleton } from '../Skeleton'
 import Placeholder from './Placeholder'
 
-const StyledImage = styled.img`
+type StyledImageProps = {
+  isImageLoaded: boolean
+  objectFit: string
+}
+const StyledImage = styled.img<StyledImageProps>`
   height: 100%;
   left: 0;
   position: absolute;
   top: 0;
   width: 100%;
+  transition: opacity 0.6s;
+  //background: ${({ theme }) => theme.colors.background};
+  opacity: ${({ isImageLoaded }) => (isImageLoaded ? 1 : 0.3)};
+  object-fit: ${({ objectFit }) => objectFit};
 `
 
-const Image: React.FC<ImageProps> = ({ src, alt, width, height, ...props }) => {
+const Image: React.FC<ImageProps> = ({ src, alt, width, height, isFill = false, objectFit = 'cover', ...props }) => {
   const imgRef = useRef<HTMLDivElement>(null)
   const [isLoaded, setIsLoaded] = useState(false)
+  const [isImageLoaded, setIsImageLoaded] = useState(false)
+  const [isImageLoadError, setIsImageLoadError] = useState(false)
 
   useEffect(() => {
     let observer: IntersectionObserver
@@ -27,6 +38,7 @@ const Image: React.FC<ImageProps> = ({ src, alt, width, height, ...props }) => {
           const { isIntersecting } = entry
           if (isIntersecting) {
             setIsLoaded(true)
+
             if (typeof observer?.disconnect === 'function') {
               observer.disconnect()
             }
@@ -45,7 +57,22 @@ const Image: React.FC<ImageProps> = ({ src, alt, width, height, ...props }) => {
 
   return (
     <Wrapper ref={imgRef} height={height} width={width} {...props}>
-      {isLoaded ? <StyledImage src={src} alt={alt} /> : <Placeholder />}
+      {isLoaded && (
+        <>
+          <StyledImage
+            isImageLoaded={isImageLoaded}
+            src={src}
+            alt={alt}
+            onLoad={() => setIsImageLoaded(true)}
+            onError={() => setIsImageLoadError(true)}
+            objectFit={objectFit}
+          />
+          {!isImageLoaded && !isImageLoadError && (
+            <Skeleton animation={'waves'} width={isFill ? '100%' : width} height={isFill ? '100%' : height} />
+          )}
+        </>
+      )}
+      <Placeholder isVisible={isImageLoadError} />
     </Wrapper>
   )
 }

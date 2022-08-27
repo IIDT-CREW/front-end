@@ -57,10 +57,10 @@ const Home: React.FC = () => {
         <Heading scale="lg" mt="56px" textAlign="center">
           IIDT
         </Heading>
-        <Text mt="16px" bold fontSize="96px" textAlign="center">
+        <Text mt="16px" bold fontSize={['60px', '72px', '96px', '96px']} textAlign="center">
           IF I DIE
         </Text>
-        <Text bold fontSize="96px" mb="24px" textAlign="center">
+        <Text bold fontSize={['60px', '72px', '96px', '96px']} mb="24px" textAlign="center">
           Tommorow
         </Text>
         <Clock />
@@ -83,10 +83,17 @@ const Home: React.FC = () => {
 
         <Box mb="50px" style={{ textAlign: 'center' }} height="500px">
           <Flex justifyContent="center" alignItems="center" height="100%" position="relative" flexDirection="column">
-            <Text fontSize="36px" color="" data-aos="fade-up" data-aos-duration="1000">
+            <Text fontSize={['18px', '24px', '36px', '36px']} color="" data-aos="fade-up" data-aos-duration="1000">
               만약 내일 생을 마감한다면,
             </Text>
-            <Text bold fontSize="36px" color="" mb="24px" data-aos="fade-up" data-aos-duration="3000">
+            <Text
+              bold
+              fontSize={['18px', '24px', '36px', '36px']}
+              color=""
+              mb="24px"
+              data-aos="fade-up"
+              data-aos-duration="3000"
+            >
               마지막으로 하고 싶은 말이 있나요?
             </Text>
           </Flex>
@@ -94,7 +101,7 @@ const Home: React.FC = () => {
 
         <Box mb="50px" style={{ textAlign: 'center' }}>
           <Flex justifyContent="center" flexDirection="column" alignItems="center">
-            <Text fontSize="48px" mb="24px">
+            <Text fontSize={['20px', '24px', '36px', '48px']} mb="24px">
               다시 한 번 삶을 되돌아보는 시간
             </Text>
             <Link href="/main">

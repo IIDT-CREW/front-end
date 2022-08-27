@@ -57,18 +57,28 @@ const AuthCallback = () => {
               memIdx: info.memIdx,
             }),
           )
+          // const encDataString = encryptWithAES(
+          //   JSON.stringify({
+          //     isAuthenticated: true,
+          //     accessToken: ACCESS_TOKEN,
+          //     refreshToken: REFRESH_TOKEN,
+          //     name: info.name,
+          //     email: info.email,
+          //     nickname: info.nickname,
+          //     userid: info.userid,
+          //     memIdx: info.memIdx,
+          //   }),
+          // )
+          // localStorage.setItem(STORAGE_NAME.USER, encDataString) //예시로 로컬에 저장함
+
           const encDataString = encryptWithAES(
             JSON.stringify({
-              isAuthenticated: true,
               accessToken: ACCESS_TOKEN,
-              name: info.name,
-              email: info.email,
-              nickname: info.nickname,
-              userid: info.userid,
-              memIdx: info.memIdx,
+              refreshToken: REFRESH_TOKEN,
             }),
           )
-          localStorage.setItem(STORAGE_NAME.USER, encDataString) //예시로 로컬에 저장함
+
+          localStorage.setItem(STORAGE_NAME.USER, encDataString)
           router.replace('/') // 토큰 받았았고 로그인됐으니 화면 전환시켜줌(메인으로)
         }
       }

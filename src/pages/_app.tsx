@@ -18,7 +18,8 @@ import Footer from 'components/Footer'
 import MenuWrapper from 'components/MenuWrapper'
 import { useNaviState } from 'store/navi/hooks'
 import { MENU_HEIGHT, FOOTER_HEIGHT } from 'config/constants/default'
-import useAuthUserStorage from 'hooks/useAuthUserStorage'
+// import useAuthUserStorage from 'hooks/useAuthUserStorage'
+import useAuthAccessToken from 'hooks/useAuthAccessToken'
 import styled from 'styled-components'
 import { ToastContainer } from 'react-toastify'
 import 'style/custom-react-toastify.css'
@@ -29,7 +30,8 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 function GlobalHooks() {
-  useAuthUserStorage()
+  // useAuthUserStorage()
+  useAuthAccessToken()
   return null
 }
 
@@ -46,7 +48,8 @@ function MyApp(props: AppProps) {
         />
         <meta name="title" content="IIDT" />
         <meta name="description" content="오늘이 마지막이라면" />
-        <meta name="theme-color" content="#1FC7D4" />
+        <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)" />
+        <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
         <meta name="twitter:image" content="" />
         <meta name="twitter:description" content="-" />
         <meta name="twitter:card" content="summary_large_image" />

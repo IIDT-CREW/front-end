@@ -1,32 +1,35 @@
 import axiosDefault from 'axios'
+import authAxios from '.'
 import { API_URL } from 'config/constants/api'
 
 const url = API_URL
 
 // Create axios instance.
-const axiosInstance = axiosDefault.create({
+export const axiosInstance = axiosDefault.create({
   baseURL: url,
-  withCredentials: true,
+  // withCredentials: true,
 })
 
-export const getWill = (will_id: string) => {
-  return axiosInstance.get('api/will/getWill', {
+export const getWill = async (will_id: string) => {
+  const response = await axiosInstance.get('api/will/getWill', {
     params: {
       will_id,
     },
   })
+  return response.data
 }
 type getMyWillParams = {
   mem_email: string
   mem_userid: string
 }
-export const getMyWill = ({ mem_email, mem_userid }: getMyWillParams) => {
-  return axiosInstance.get('api/will/getMyWill', {
+export const getMyWill = async ({ mem_email, mem_userid }: getMyWillParams) => {
+  const response = await axiosInstance.get('api/will/getMyWill', {
     params: {
       mem_userid,
       mem_email,
     },
   })
+  return response.data
 }
 type insertWillParams = {
   title: string
@@ -35,17 +38,24 @@ type insertWillParams = {
   mem_idx: number
   will_id: string
 }
-export const insertWill = (data: insertWillParams) => {
-  return axiosInstance.post('api/will/insertWill', data)
-}
 
-export const getWillCount = () => {
-  return axiosInstance.get('api/will/getWillCount')
+export const getWillCount = async () => {
+  const response = await axiosInstance.get('api/will/getWillCount')
+  return response.data
 }
 
 type deleteWillParams = {
   will_id: string
 }
+
+export const insertWill = (data: insertWillParams) => {
+  return authAxios.post('api/will/insertWill', data)
+}
+
 export const deleteWill = (data: deleteWillParams) => {
-  return axiosInstance.post('api/will/deleteWill', data)
+  return authAxios.post('api/will/deleteWill', data)
+}
+
+export const updateWill = (data: deleteWillParams) => {
+  return authAxios.post('api/will/updateWill', data)
 }

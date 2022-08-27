@@ -14,4 +14,5 @@ export interface ImageProps extends SpaceProps, ImgHTMLAttributes<HTMLImageEleme
   width?: number
   height?: number
   isFill?: boolean
+  objectFit?: string
 }

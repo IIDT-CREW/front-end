@@ -32,7 +32,7 @@ const pulse = keyframes`
   }
 `
 
-const AnimationWrapper = styled(Motion.div)`
+const AnimationWrapper = styled<any>(Motion.div)`
   position: relative;
   will-change: opacity;
   opacity: 0;
@@ -42,6 +42,8 @@ const AnimationWrapper = styled(Motion.div)`
   &.disappear {
     animation: ${disappearAnimation} 0.3s ease-in-out forwards;
   }
+  width: ${({ width }) => width || '100%'};
+  height: ${({ height }) => height || '100%'};
 `
 
 const SkeletonWrapper = styled.div<SkeletonProps>`
@@ -54,8 +56,7 @@ const Root = styled.div<SkeletonProps>`
   min-height: 20px;
   display: block;
   background-color: ${({ theme }) => theme.colors.backgroundDisabled};
-  border-radius: ${({ variant, theme }) =>
-    variant === VARIANT.CIRCLE ? theme.radii.circle : theme.radii.small};
+  border-radius: ${({ variant, theme }) => (variant === VARIANT.CIRCLE ? theme.radii.circle : theme.radii.small)};
 
   ${layout}
   ${space}
@@ -81,11 +82,7 @@ const Waves = styled(Root)`
   }
 `
 
-const Skeleton: React.FC<SkeletonProps> = ({
-  variant = VARIANT.RECT,
-  animation = ANIMATION.PULSE,
-  ...props
-}) => {
+const Skeleton: React.FC<SkeletonProps> = ({ variant = VARIANT.RECT, animation = ANIMATION.PULSE, ...props }) => {
   if (animation === ANIMATION.WAVES) {
     return <Waves variant={variant} {...props} />
   }
@@ -105,12 +102,13 @@ export const SkeletonV2: React.FC<SkeletonV2Props> = ({
   height,
   mr,
   ml,
+  mb,
   ...props
 }) => {
   const animationRef = useRef<HTMLDivElement>(null)
   const skeletonRef = useRef<HTMLDivElement>(null)
   return (
-    <SkeletonWrapper width={width} height={height} mr={mr} ml={ml} {...wrapperProps}>
+    <SkeletonWrapper width={width} height={height} mr={mr} ml={ml} mb={mb} {...wrapperProps}>
       <LazyMotion features={domAnimation}>
         <AnimatePresence>
           {isDataReady && (
