@@ -53,7 +53,7 @@ const ShareModal = ({ onDismiss, content, willId, ...props }: any) => {
     if (!Kakao.isInitialized()) {
       kakaoShareFix()
     }
-  }, [router.query.id, content])
+  }, [router.query.id, content, willId])
 
   const handleKakao = () => {
     // 공유 정보 가져오기
@@ -74,14 +74,14 @@ const ShareModal = ({ onDismiss, content, willId, ...props }: any) => {
           imageWidth: 1200,
           imageHeight: 630,
           link: {
-            webUrl: `${API_URL}/will/${router.query.id}`,
+            webUrl: `${API_URL}/will/${willId}`,
           },
         },
         buttons: [
           {
             title: '읽으러 가기',
             link: {
-              webUrl: `${API_URL}/will/${router.query.id}`,
+              webUrl: `${API_URL}/will/${willId}`,
             },
           },
         ],
