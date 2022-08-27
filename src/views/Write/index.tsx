@@ -7,6 +7,7 @@ import { ArrowLeft } from 'components/Common/Svg'
 import { useRouter } from 'next/router'
 import { useModal } from 'components/Common'
 import SelectPostTypeModal from 'views/Write/components/SelectPostTypeModal'
+import { MENU_HEIGHT } from 'config/constants/default'
 const questionList = [
   '1. 살아오면서 가장 기뻤던 일은?',
   '2. 살아오면서 가장 자부심을 느꼈던 일은?',
@@ -108,18 +109,20 @@ const Write = () => {
         </St.SaveButton>
       </St.MenuBar>
       {/* <Title value={title} onChange={handleTitle}></Title> */}
-      {isDefaultPostType ? (
-        <Contents value={contents} onChange={handleContents}></Contents>
-      ) : (
-        <form ref={inputRef}>
-          {questionList.map((question, i) => (
-            <div key={`${i}-${question}`}>
-              <St.Question>{question}</St.Question>
-              <Contents height="200px" onChange={handleContents}></Contents>
-            </div>
-          ))}
-        </form>
-      )}
+      <St.Editor>
+        {isDefaultPostType ? (
+          <Contents value={contents} onChange={handleContents}></Contents>
+        ) : (
+          <form ref={inputRef}>
+            {questionList.map((question, i) => (
+              <div key={`${i}-${question}`}>
+                <St.Question>{question}</St.Question>
+                <Contents height="200px" onChange={handleContents}></Contents>
+              </div>
+            ))}
+          </form>
+        )}
+      </St.Editor>
     </St.Article>
   )
 }
@@ -134,6 +137,9 @@ const Contents = ({ ...props }: TextAreaProps) => {
 }
 
 const St = {
+  Editor: styled.section`
+    padding: ${MENU_HEIGHT}px 24px 0 24px;
+  `,
   Question: styled.div`
     font-family: 'Nanum Myeongjo';
     font-style: normal;
@@ -143,15 +149,19 @@ const St = {
     color: ${({ theme }) => theme.colors.grayscale6};
   `,
   Article: styled.article`
-    margin-top: 78px;
-    padding: 0 24px;
+    margin-top: ${MENU_HEIGHT}px;
+    position: relative;
   `,
-  MenuBar: styled.div`
+  MenuBar: styled.nav`
     border: none;
-    height: 78px;
+    height: ${MENU_HEIGHT}px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: fixed;
+    width: 100%;
+    padding: 0 24px;
+    background-color: ${({ theme }) => theme.colors.background};
   `,
   GoToHistoryButton: styled.button`
     display: flex;
