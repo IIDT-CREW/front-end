@@ -85,6 +85,14 @@ const Main = () => {
       queryClient.invalidateQueries('myWill')
     },
   })
+
+  useEffect(() => {
+    if (isLogin) {
+      console.log('Is login ', isLogin)
+      queryClient.invalidateQueries('myWill')
+    }
+  }, [isLogin, queryClient])
+
   console.log(data)
   return (
     <St.Container mt="78px">

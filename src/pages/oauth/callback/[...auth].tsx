@@ -79,7 +79,10 @@ const AuthCallback = () => {
           )
 
           localStorage.setItem(STORAGE_NAME.USER, encDataString)
-          router.replace('/') // 토큰 받았았고 로그인됐으니 화면 전환시켜줌(메인으로)
+
+          const path = localStorage.getItem('login_path')
+          router.replace(path) // 토큰 받았았고 로그인됐으니 화면 전환시켜줌(메인으로)
+          localStorage.removeItem('login_path')
         }
       }
     } catch (e) {

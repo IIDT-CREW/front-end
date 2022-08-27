@@ -10,6 +10,7 @@ import { useModal } from 'components/Common'
 import moment from 'moment'
 import WriteDeleteModal from './modal/WriteDeleteModal'
 import ShareModal from './modal/ShareModal'
+import { useIsLogin, useUserInfo } from 'store/auth/hooks'
 
 const St = {
   Container: styled(Box)`
@@ -72,6 +73,7 @@ type WriteCardProps = {
 const WriteCard = ({ will, handleDelete, handlShare }: WriteCardProps) => {
   const { CONTENT: content, EDIT_DATE: editDate, MEM_IDX, REG_DATE: regDate, THUMBNAIL, TITLE, WILL_ID } = will
 
+  const isLogin = useIsLogin()
   const [presentDeleteModal] = useModal(<WriteDeleteModal handleDelete={handleDelete} />)
   const [presentShareModal] = useModal(<ShareModal handlShare={handlShare} content={content} willId={WILL_ID} />)
 
@@ -102,12 +104,14 @@ const WriteCard = ({ will, handleDelete, handlShare }: WriteCardProps) => {
       <Box padding="10px">
         <Flex justifyContent="space-between" alignItems="center">
           <Text>{moment(regDate).format('YYYY.MM.DD')}</Text>
-          <Text style={{ cursor: 'pointer' }} onClick={handleIsOpen} ref={setTargetRef}>
-            <Ellipsis />
-            <St.MenuWrapper ref={setTooltipRef} style={styles.popper} {...attributes.popper} isOpen={isOpen}>
-              <MenuItem presentDeleteModal={presentDeleteModal} presentShareModal={presentShareModal} />
-            </St.MenuWrapper>
-          </Text>
+          {isLogin && (
+            <Text style={{ cursor: 'pointer' }} onClick={handleIsOpen} ref={setTargetRef}>
+              <Ellipsis />
+              <St.MenuWrapper ref={setTooltipRef} style={styles.popper} {...attributes.popper} isOpen={isOpen}>
+                <MenuItem presentDeleteModal={presentDeleteModal} presentShareModal={presentShareModal} />
+              </St.MenuWrapper>
+            </Text>
+          )}
         </Flex>
       </Box>
 
