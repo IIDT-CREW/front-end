@@ -45,60 +45,9 @@ const St = {
 
 const WillPage = () => {
   const router = useRouter()
-  const queryClient = useQueryClient()
-  console.log('(router.query.id = ', router.query.id)
+  // const queryClient = useQueryClient()
+  // console.log('(router.query.id = ', router.query.id)
   const { data, isLoading } = useQuery('getWill', () => getWill(router.query.id as string))
-
-  function kakaoShareFix() {
-    // Kakao.Link.cleanup()
-    Kakao.cleanup()
-    if (process.env.NEXT_PUBLIC_KAKAO_JAVASCRIPT) {
-      // 새로운 키를 이용하여 init
-      Kakao.init(process.env.NEXT_PUBLIC_KAKAO_JAVASCRIPT)
-    }
-  }
-  useEffect(() => {
-    // init 체크
-    if (!Kakao.isInitialized()) {
-      kakaoShareFix()
-    }
-  }, [router.query.id])
-
-  const handleKakao = () => {
-    // 공유 정보 가져오기
-    // const shareContent = {
-    //   title: document.querySelector('[property="og:title"]').attributes.content.value,
-    //   desc: document.querySelector('[property="og:description"]').attributes.content.value,
-    //   image: document.querySelector('[property="og:image"]').attributes.content.value,
-    //   url: router.asPath,
-    // }
-
-    // 카카오 공유
-    const kakaoShareFunc = function () {
-      Kakao.Link.sendDefault({
-        objectType: 'feed',
-        content: {
-          title: '유서',
-          description: data.result.CONTENT,
-          imageUrl: 'https://www.if-i-die-tomorrow.com/images/home/patrick-ryan-3kUIaB2EPp8-unsplash.jpg',
-          imageWidth: 1200,
-          imageHeight: 630,
-          link: {
-            webUrl: `${process.env.NEXT_PUBLIC_API_URL}/will/${router.query.id}`,
-          },
-        },
-        buttons: [
-          {
-            title: '읽으러 가기',
-            link: {
-              webUrl: `${process.env.NEXT_PUBLIC_API_URL}/will/${router.query.id}`,
-            },
-          },
-        ],
-      })
-    }
-    kakaoShareFunc()
-  }
 
   return (
     <>
@@ -112,10 +61,10 @@ const WillPage = () => {
           </Flex>
         </Flex>
       </St.Container>
-      <Heading padding="20px" scale="md" textAlign="center">
+      {/* <Heading padding="20px" scale="md" textAlign="center">
         이 마지막 일기를 전달하시겠어요?
-      </Heading>
-      <Box>
+      </Heading> */}
+      {/* <Box>
         <Flex justifyContent="center" alignItems="center" flexWrap="wrap" style={{ gap: '10px' }}>
           <CopyToClipboard toCopy={`${process.env.NEXT_PUBLIC_API_URL}/${router.asPath}`} />
           <div onClick={handleKakao} type="button">
@@ -123,7 +72,7 @@ const WillPage = () => {
           </div>
         </Flex>
         <div></div>
-      </Box>
+      </Box> */}
     </>
   )
 }

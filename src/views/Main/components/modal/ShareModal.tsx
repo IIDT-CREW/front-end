@@ -3,7 +3,7 @@ import { Modal, ModalProps } from 'components/Common'
 import { Flex, Box, Text } from 'components/Common'
 import styled from 'styled-components'
 import CopyToClipboard from 'views/Will/components/CopyToClipboard'
-
+import { API_URL } from 'config/constants/api'
 import { useRouter } from 'next/router'
 
 const St = {
@@ -37,7 +37,7 @@ const St = {
   `,
 }
 
-const ShareModal = ({ onDismiss, content, ...props }: any) => {
+const ShareModal = ({ onDismiss, content, willId, ...props }: any) => {
   const router = useRouter()
 
   function kakaoShareFix() {
@@ -68,20 +68,20 @@ const ShareModal = ({ onDismiss, content, ...props }: any) => {
       Kakao.Link.sendDefault({
         objectType: 'feed',
         content: {
-          title: '유서',
+          title: '마지막 일기',
           description: content,
           imageUrl: 'https://www.if-i-die-tomorrow.com/images/home/patrick-ryan-3kUIaB2EPp8-unsplash.jpg',
           imageWidth: 1200,
           imageHeight: 630,
           link: {
-            webUrl: `${process.env.NEXT_PUBLIC_API_URL}/will/${router.query.id}`,
+            webUrl: `${API_URL}/will/${router.query.id}`,
           },
         },
         buttons: [
           {
             title: '읽으러 가기',
             link: {
-              webUrl: `${process.env.NEXT_PUBLIC_API_URL}/will/${router.query.id}`,
+              webUrl: `${API_URL}/will/${router.query.id}`,
             },
           },
         ],
@@ -93,13 +93,12 @@ const ShareModal = ({ onDismiss, content, ...props }: any) => {
   return (
     <Modal title="마지막 일기를 공유하세요" onDismiss={onDismiss} {...props}>
       <Flex flexDirection="column" justifyContent="center" alignItems="center">
-        <Text>이 유서는 그 누구도 아닌 나 자신을 돌아보는 일기입니다.</Text>
+        <Text>마음을 담아서 작성하셨나요?</Text>
         <Text>남들에게도 자신의 마지막 일기를 공유해보세요 </Text>
-        <Text mb="20px">마음이 힘들다면 1577-0199로 전화해주세요. 당신은 그 누구보다 소중하니까요.</Text>
-
+        <Text mb="20px">마음이 힘들다면 1577-0199로 전화해주세요. 당신은 그 누구보다 소중합니다.</Text>
         <Box>
           <Flex justifyContent="center" alignItems="center" flexWrap="wrap" style={{ gap: '10px' }}>
-            <CopyToClipboard toCopy={`${process.env.NEXT_PUBLIC_API_URL}/${router.asPath}`} />
+            <CopyToClipboard toCopy={`${API_URL}/will/${willId}`} />
             <div onClick={handleKakao} type="button">
               <img alt="" src="//developers.kakao.com/assets/img/about/logos/kakaolink/kakaolink_btn_small.png" />
             </div>

@@ -70,11 +70,10 @@ type WriteCardProps = {
 }
 
 const WriteCard = ({ will, handleDelete, handlShare }: WriteCardProps) => {
-  const router = useRouter()
   const { CONTENT: content, EDIT_DATE: editDate, MEM_IDX, REG_DATE: regDate, THUMBNAIL, TITLE, WILL_ID } = will
 
   const [presentDeleteModal] = useModal(<WriteDeleteModal handleDelete={handleDelete} />)
-  const [presentShareModal] = useModal(<ShareModal handlShare={handlShare} content={content} />)
+  const [presentShareModal] = useModal(<ShareModal handlShare={handlShare} content={content} willId={WILL_ID} />)
 
   const [targetRef, setTargetRef] = useState<HTMLDivElement | null>(null)
   const [tooltipRef, setTooltipRef] = useState<HTMLDivElement | null>(null)
