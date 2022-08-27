@@ -1,32 +1,33 @@
-import { HTMLAttributes, TextareaHTMLAttributes, useEffect, useRef, useState } from 'react'
+import { TextareaHTMLAttributes, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { fontSize, FontSizeProps } from 'styled-system'
-import axios from 'axios'
-import { getWill, insertWill } from 'api/will'
+import { insertWill } from 'api/will'
 import { ArrowLeft } from 'components/Common/Svg'
 import { useRouter } from 'next/router'
 import { useModal } from 'components/Common'
 import SelectPostTypeModal from 'views/Write/components/SelectPostTypeModal'
+import { MENU_HEIGHT } from 'config/constants/default'
+import { useUserInfo } from 'store/auth/hooks'
+import { nanoid } from 'nanoid'
+import { useMutation } from 'react-query'
 const questionList = [
   '1. 살아오면서 가장 기뻤던 일은?',
-  '2. 살아오면서 가장 자부심을 느꼈던 일은?',
-  '3. 살아오면서 가장 노여웠던 일은?',
-  '4. 살아오면서 가장 자존심이 상했던 일은?',
-  '5. 살아오면서 가장 슬펐던 일은?',
-  '6. 살아오면서 가장 상처받았던 일은?',
-  '7. 살아오면서 가장 수치스러웠던 일은?',
-  '8. 살아오면서 가장 후회스러운 일은?',
-  '9. 살아오면서 가장 미워했던 사람은?',
-  '10. 살아오면서 가장 사랑했던 사람은?',
-  '11. 죽음을 앞두고 가장 하고 싶은 말은?',
+  '2. 부끄러워서 친구들에게 하지 못한 말은?',
+  '3. 부끄러워서 가족들에게 하지 못한 말은?',
+  '4. 살아오면서 후회하는 일은?',
+  '5. 하지못해서 아쉬운 일은?',
+  '6. 과거로 돌아간다면 바꾸고 싶은 것은?',
+  '7. 지금 가장 생각나는 사람 세명에게',
 ]
 
 const Write = () => {
   const [title, setTitle] = useState('')
-  const [contents, setContents] = useState('')
+  const [content, setContents] = useState('')
   const router = useRouter()
   const [isDefaultPostType, setPostType] = useState(true)
   const inputRef = useRef<HTMLFormElement>(null)
+  const { memIdx } = useUserInfo()
+
   const handlePostType = () => {
     setPostType(false)
     onDismiss()
@@ -50,44 +51,36 @@ const Write = () => {
     })
   }
 
-  const handleInsertWill = async () => {
-    try {
-      const parameter = {
-        title: 'test',
-        content: 'hello',
-        thumbnail: 'title',
-        mem_idx: null,
-        will_id: 'tttt',
-      }
-      const res = await insertWill(parameter)
-      console.log(res)
-    } catch (e) {
-      console.log(e)
+  const savePost = useMutation(insertWill, {
+    onSuccess: () => {
+      goToMain()
+    },
+  })
+
+  const handleSave = () => {
+    const parameter = {
+      title,
+      thumbnail: 'title',
+      mem_idx: memIdx,
+      content: isDefaultPostType
+        ? content
+        : [...inputRef.current.children]
+            .map((element) => {
+              const [div, textarea] = element.children
+              return `${div.textContent}\n${(textarea as HTMLTextAreaElement).value}`
+            })
+            .join('\n'),
+      will_id: nanoid(),
     }
+
+    savePost.mutate(parameter)
   }
 
-  const handleSave = (e) => {
-    if (isDefaultPostType) {
-    } else {
-      ;[...inputRef.current.children].map((element) => {
-        const [div, textarea] = element.children
-        return [div.textContent, (textarea as HTMLTextAreaElement).value]
-      })
-    }
-    axios
-      .post('/api/write', {
-        title,
-        contents,
-      })
-      .then((res) => router.push('main'))
-  }
-
-  const handleGoToHistory = () => {
+  const goToMain = () => {
     router.push('main')
   }
   const isDisabledSave = () => {
-    console.log('test')
-    if (isDefaultPostType) return contents.length ? false : true
+    if (isDefaultPostType) return content.length ? false : true
     if (inputRef.current === null) return true
     return ![...inputRef.current.children]
       .map((element) => {
@@ -99,7 +92,7 @@ const Write = () => {
   return (
     <St.Article>
       <St.MenuBar>
-        <St.GoToHistoryButton onClick={handleGoToHistory}>
+        <St.GoToHistoryButton onClick={goToMain}>
           <ArrowLeft fill="none" />내 기록
         </St.GoToHistoryButton>
         {/* <button onClick={handleClick}>시간</button> */}
@@ -108,18 +101,20 @@ const Write = () => {
         </St.SaveButton>
       </St.MenuBar>
       {/* <Title value={title} onChange={handleTitle}></Title> */}
-      {isDefaultPostType ? (
-        <Contents value={contents} onChange={handleContents}></Contents>
-      ) : (
-        <form ref={inputRef}>
-          {questionList.map((question, i) => (
-            <div key={`${i}-${question}`}>
-              <St.Question>{question}</St.Question>
-              <Contents height="200px" onChange={handleContents}></Contents>
-            </div>
-          ))}
-        </form>
-      )}
+      <St.Editor>
+        {isDefaultPostType ? (
+          <Contents value={content} onChange={handleContents}></Contents>
+        ) : (
+          <form ref={inputRef}>
+            {questionList.map((question, i) => (
+              <div key={`${i}-${question}`}>
+                <St.Question>{question}</St.Question>
+                <Contents height="200px" onChange={handleContents}></Contents>
+              </div>
+            ))}
+          </form>
+        )}
+      </St.Editor>
     </St.Article>
   )
 }
@@ -134,6 +129,9 @@ const Contents = ({ ...props }: TextAreaProps) => {
 }
 
 const St = {
+  Editor: styled.section`
+    padding: ${MENU_HEIGHT}px 24px 0 24px;
+  `,
   Question: styled.div`
     font-family: 'Nanum Myeongjo';
     font-style: normal;
@@ -143,15 +141,19 @@ const St = {
     color: ${({ theme }) => theme.colors.grayscale6};
   `,
   Article: styled.article`
-    margin-top: 78px;
-    padding: 0 24px;
+    margin-top: ${MENU_HEIGHT}px;
+    position: relative;
   `,
-  MenuBar: styled.div`
+  MenuBar: styled.nav`
     border: none;
-    height: 78px;
+    height: ${MENU_HEIGHT}px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: fixed;
+    width: 100%;
+    padding: 0 24px;
+    background-color: ${({ theme }) => theme.colors.background};
   `,
   GoToHistoryButton: styled.button`
     display: flex;

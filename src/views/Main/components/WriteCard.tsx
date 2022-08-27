@@ -19,7 +19,13 @@ const St = {
   Main: styled(Box)`
     height: calc(100% - 231px);
   `,
-
+  Contents: styled.pre`
+    white-space: break-spaces;
+    color: black;
+    font-weight: 400;
+    line-height: 1.5;
+    font-size: 18px;
+  `,
   MenuWrapper: styled<any>(Box)`
     width: 200px;
     background: ${({ theme }) => theme.colors.background};
@@ -116,7 +122,7 @@ const WriteCard = ({ will, handleDelete, handlShare }: WriteCardProps) => {
       </Box>
 
       <Box>
-        <Text>{content}</Text>
+        <St.Contents>{content}</St.Contents>
       </Box>
     </Box>
   )
