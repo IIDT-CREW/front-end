@@ -75,6 +75,7 @@ const ShareModal = ({ onDismiss, content, willId, ...props }: any) => {
           imageHeight: 630,
           link: {
             webUrl: `${API_URL}/will/${willId}`,
+            mobileWebUrl: `${API_URL}/will/${willId}`,
           },
         },
         buttons: [
@@ -82,6 +83,7 @@ const ShareModal = ({ onDismiss, content, willId, ...props }: any) => {
             title: '읽으러 가기',
             link: {
               webUrl: `${API_URL}/will/${willId}`,
+              mobileWebUrl: `${API_URL}/will/${willId}`,
             },
           },
         ],
