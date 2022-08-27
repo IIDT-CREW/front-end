@@ -9,6 +9,7 @@ import Trash from 'components/Common/Svg/Icons/Trash'
 import { useModal } from 'components/Common'
 import moment from 'moment'
 import WriteDeleteModal from './modal/WriteDeleteModal'
+import ShareModal from './modal/ShareModal'
 
 const St = {
   Container: styled(Box)`
@@ -17,7 +18,13 @@ const St = {
   Main: styled(Box)`
     height: calc(100% - 231px);
   `,
-
+  Contents: styled.pre`
+    white-space: break-spaces;
+    color: black;
+    font-weight: 400;
+    line-height: 1.5;
+    font-size: 18px;
+  `,
   MenuWrapper: styled<any>(Box)`
     width: 200px;
     background: ${({ theme }) => theme.colors.background};
@@ -33,14 +40,14 @@ const St = {
   `,
 }
 
-const MenuItem = ({ presentDeleteModal, handleShare }) => {
+const MenuItem = ({ presentDeleteModal, presentShareModal }) => {
   return (
     <Box>
       {/* <Flex padding="8px" style={{ gap: '8px' }}>
           <Export />
           <Text>수정하기</Text>
         </Flex> */}
-      <Flex padding="8px" style={{ gap: '8px' }} onClick={handleShare}>
+      <Flex padding="8px" style={{ gap: '8px' }} onClick={presentShareModal}>
         <Export />
         <Text>공유하기</Text>
       </Flex>
@@ -65,13 +72,16 @@ type WriteCardProps = {
     WILL_ID: string
   }
   handleDelete?: () => void
+  handlShare?: () => void
 }
 
-const WriteCard = ({ will, handleDelete }: WriteCardProps) => {
+const WriteCard = ({ will, handleDelete, handlShare }: WriteCardProps) => {
   const router = useRouter()
   const { CONTENT: content, EDIT_DATE: editDate, MEM_IDX, REG_DATE: regDate, THUMBNAIL, TITLE, WILL_ID } = will
 
   const [presentDeleteModal] = useModal(<WriteDeleteModal handleDelete={handleDelete} />)
+  const [presentShareModal] = useModal(<ShareModal handlShare={handlShare} content={content} />)
+
   const [targetRef, setTargetRef] = useState<HTMLDivElement | null>(null)
   const [tooltipRef, setTooltipRef] = useState<HTMLDivElement | null>(null)
   const [isOpen, setIsOpen] = useState(false)
@@ -81,75 +91,35 @@ const WriteCard = ({ will, handleDelete }: WriteCardProps) => {
     modifiers: [{ name: 'offset', options: { offset: [0, 0] } }],
   })
 
-  function kakaoShareFix() {
-    // 기존 카카오 클린업
-    // Kakao.Link.cleanup()
-    Kakao.cleanup()
-    // 새로운 키를 이용하여 init
-    Kakao.init(process.env.NEXT_PUBLIC_KAKAO_JAVASCRIPT)
-  }
-
-  useEffect(() => {
-    // init 체크
-    if (!Kakao.isInitialized()) {
-      kakaoShareFix()
-    }
-  }, [router.query.id])
-
   const handleIsOpen = () => {
     setIsOpen((prev) => !prev)
   }
-  const handleKakao = () => {
-    // 공유 정보 가져오기
-    // const shareContent = {
-    //   title: document.querySelector('[property="og:title"]').attributes.content.value,
-    //   desc: document.querySelector('[property="og:description"]').attributes.content.value,
-    //   image: document.querySelector('[property="og:image"]').attributes.content.value,
-    //   url: router.asPath,
-    // }
-    // // 카카오 공유
-    // const kakaoShareFunc = function () {
-    //   Kakao.Link.sendDefault({
-    //     objectType: 'feed',
-    //     content: {
-    //       title: shareContent.title,
-    //       description: shareContent.desc,
-    //       imageUrl: shareContent.image,
-    //       imageWidth: 1200,
-    //       imageHeight: 630,
-    //       link: {
-    //         webUrl: shareContent.url,
-    //       },
-    //     },
-    //     buttons: [
-    //       {
-    //         title: '읽으러 가기',
-    //         link: {
-    //           webUrl: 'http://localhost:3001',
-    //         },
-    //       },
-    //     ],
-    //   })
-    // }
-    // kakaoShareFunc()
-  }
 
   return (
-    <Box mb="40px" padding="20px" width="582px" border="1px solid black" borderRadius="4px">
+    <Box
+      mr="20px"
+      ml="20px"
+      mb="40px"
+      padding="20px"
+      minWidth="374px"
+      maxWidth="582px"
+      border="1px solid black"
+      borderRadius="4px"
+    >
       <Box padding="10px">
         <Flex justifyContent="space-between" alignItems="center">
           <Text>{moment(regDate).format('YYYY.MM.DD')}</Text>
           <Text style={{ cursor: 'pointer' }} onClick={handleIsOpen} ref={setTargetRef}>
             <Ellipsis />
             <St.MenuWrapper ref={setTooltipRef} style={styles.popper} {...attributes.popper} isOpen={isOpen}>
-              <MenuItem presentDeleteModal={presentDeleteModal} handleShare={handleKakao} />
+              <MenuItem presentDeleteModal={presentDeleteModal} presentShareModal={presentShareModal} />
             </St.MenuWrapper>
           </Text>
         </Flex>
       </Box>
 
       <Box>
-        <Text>{content}</Text>
+        <St.Contents>{content}</St.Contents>
       </Box>
     </Box>
   )

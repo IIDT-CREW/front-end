@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { authActions } from 'store/auth'
 import { STORAGE_NAME } from 'config/constants/api'
 import styled from 'styled-components'
+import axios from 'api'
 
 const St = {
   TextLink: styled(Text)`
@@ -27,8 +28,8 @@ const MenuWrapper = () => {
   const handleLogout = async () => {
     try {
       //...todo
-      // await logout()
-      console.log(STORAGE_NAME.USER)
+      axios.defaults.headers.common.Authorization = ''
+      axios.defaults.headers.common.refresh = ''
       localStorage.removeItem(STORAGE_NAME.USER)
       sessionStorage.removeItem(STORAGE_NAME.USER)
       dispatch(

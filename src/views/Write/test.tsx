@@ -1,3 +1,4 @@
+import React from 'react'
 import { HTMLAttributes, TextareaHTMLAttributes, useState } from 'react'
 import styled from 'styled-components'
 import { fontSize, FontSizeProps } from 'styled-system'
@@ -8,6 +9,7 @@ import { useContext } from 'react'
 import { API_CODE } from 'config/constants/api'
 import { useIsLogin, useUserInfo } from 'store/auth/hooks'
 import WriteCard from 'views/Main/components/WriteCard'
+import { useQuery, useMutation, useQueryClient } from 'react-query'
 
 const Write = () => {
   const { onToast } = useContext(toastContext)
@@ -115,21 +117,56 @@ const Write = () => {
     }
   }
 
-  console.log(myWills)
+  const queryClient = useQueryClient()
+
+  const { data, isLoading } = useQuery('myWill', () =>
+    getMyWill({
+      mem_userid: '2342340674',
+      mem_email: email,
+    }),
+  )
+
+  const mutation = useMutation(insertWill, {
+    onSuccess: () => {
+      handleToast({ message: '데이터를 가져왔습니다' })
+      // myWill로 시작하는 모든 쿼리를 무효화한다
+      queryClient.invalidateQueries('myWill')
+    },
+  })
+
+  const deleteMutation = useMutation(deleteWill, {
+    onSuccess: () => {
+      handleToast({ message: '데이터를 삭제했습니다.' })
+      // myWill로 시작하는 모든 쿼리를 무효화한다
+      queryClient.invalidateQueries('myWill')
+    },
+  })
+
   return (
     <div style={{ marginTop: '100px' }}>
       <Title value={title} onChange={handleTitle}></Title>
       <Contents value={contents} onChange={handleContents}></Contents>
       <button onClick={handleClick}>시간</button>
-      <button onClick={handleInsertWill}>저장 ㅇ</button>
+      <button
+        onClick={() => {
+          mutation.mutate({ title: title, content: contents, thumbnail: 'title', mem_idx: 1, will_id: nanoid() })
+        }}
+      >
+        저장 ㅇ
+      </button>
       <button onClick={handleWillCount}>유서 카운트 ㅇ </button>
-      {/* <button onClick={deleteWill}>유서 삭제 </button> */}
+
       <button onClick={handleGetWill}>유서 가져오기(공유용) o</button>
       <button onClick={handleGeMytWill}>내 유서 가져오기</button>
 
       <div>
-        {myWills?.map((myWill) => {
-          return <WriteCard will={myWill} handleDelete={() => handledeleteWill(myWill.WILL_ID as string)} />
+        {data?.result?.map((myWill) => {
+          return (
+            <WriteCard
+              will={myWill}
+              handleDelete={() => deleteMutation.mutate({ will_id: myWill.WILL_ID as string })}
+            />
+          )
         })}
       </div>
     </div>

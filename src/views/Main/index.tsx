@@ -1,19 +1,17 @@
-import { useState, useEffect } from 'react'
+import { useEffect, useContext } from 'react'
 import { useRouter } from 'next/router'
-import { Box, Text, Flex } from 'components/Common'
+import { Box, Flex } from 'components/Common'
 import BannerCard from './components/BannerCard'
 import styled from 'styled-components'
+import MainInfo from './components/MainInfo'
 import { MainButton } from '../Home'
-import { usePopper } from 'react-popper'
-import Ellipsis from 'components/Common/Svg/Icons/Ellipsis'
-import Export from 'components/Common/Svg/Icons/Export'
-import Trash from 'components/Common/Svg/Icons/Trash'
 import { useModal } from 'components/Common'
-import moment from 'moment'
 import WriteWarningInfoModal from './components/modal/WriteWarningInfoModal'
-import WriteDeleteModal from './components/modal/WriteDeleteModal'
 import WriteCard from './components/WriteCard'
-import will from './dummy.json'
+import { useQuery, useMutation, useQueryClient } from 'react-query'
+import { deleteWill, getMyWill } from 'api/will'
+import { toastContext } from 'contexts/Toast'
+
 const St = {
   Container: styled(Box)`
     min-height: calc(100% - 231px);
@@ -38,17 +36,43 @@ const St = {
 }
 
 const Main = () => {
+  const queryClient = useQueryClient()
+  const { onToast } = useContext(toastContext)
   const [presentWarningModal] = useModal(<WriteWarningInfoModal />)
+
   useEffect(() => {
     presentWarningModal()
   }, [])
-
-  const [willCount, setWillCount] = useState(1)
 
   const router = useRouter()
   const handleWrite = () => {
     router.push('write')
   }
+  const handleToast = ({ message = '' }) => {
+    onToast({
+      type: 'success',
+      message,
+      option: {
+        position: 'top-center',
+      },
+    })
+  }
+
+  const { data, isLoading } = useQuery('myWill', () =>
+    getMyWill({
+      mem_userid: '2342340674',
+      mem_email: '',
+    }),
+  )
+
+  const deleteMutation = useMutation(deleteWill, {
+    onSuccess: () => {
+      handleToast({ message: '데이터를 삭제했습니다.' })
+      // myWill로 시작하는 모든 쿼리를 무효화한다
+      queryClient.invalidateQueries('myWill')
+    },
+  })
+
   return (
     <St.Container mt="78px">
       <Box mb="36px">
@@ -56,18 +80,19 @@ const Main = () => {
       </Box>
       <Flex flexDirection="column" justifyContent="center" alignItems="center">
         <Flex flexDirection="column" justifyContent="center" alignItems="center">
-          <Text fontSize="18px" bold mb="24px">
-            지금까지 작성된 마지막 일기
-          </Text>
-          <Text fontSize="26px" bold mb="24px">
-            {willCount}개
-          </Text>
-          <Text fontSize="18px" bold mb="24px">
-            당신의 마지막 일기를 작성해주세요.
-          </Text>
+          <MainInfo />
           <Box mb="55px">
             <MainButton onClick={handleWrite}> 작성하러가기</MainButton>
           </Box>
+          {data?.result?.map((myWill) => {
+            return (
+              <WriteCard
+                will={myWill}
+                handleDelete={() => deleteMutation.mutate({ will_id: myWill.WILL_ID as string })}
+              />
+            )
+          })}
+
           <WriteCard
             will={{
               CONTENT:
@@ -84,25 +109,6 @@ const Main = () => {
           />
         </Flex>
       </Flex>
-
-      {/* <St.Main>
-        <Flex height="100%" flexDirection="column" justifyContent="center" alignItems="center">
-          <Flex flexDirection="column" justifyContent="center" alignItems="center">
-            <Text fontSize="18px" bold mb="24px">
-              지금까지 작성된 마지막 일기
-            </Text>
-            <Text fontSize="26px" bold mb="24px">
-              {willCount}개
-            </Text>
-            <Text fontSize="18px" bold mb="24px">
-              당신의 마지막 일기를 작성해주세요.
-            </Text>
-            <Box mb="55px">
-              <MainButton> 작성하러가기</MainButton>
-            </Box>
-          </Flex>
-        </Flex>
-      </St.Main> */}
     </St.Container>
   )
 }
