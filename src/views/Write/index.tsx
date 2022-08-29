@@ -204,6 +204,7 @@ const St = {
     font-family: 'Nanum Myeongjo';
     color: ${({ theme }) => theme.colors.grayscale7};
     height: calc(100vh - 72px - 78px);
+    line-height: 28px;
     ::placeholder {
       color: ${({ theme }) => theme.colors.grayscale5};
       font-size: 18px;
