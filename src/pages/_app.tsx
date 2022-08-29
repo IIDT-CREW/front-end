@@ -132,11 +132,12 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
 
       <ToastContainer
         position="bottom-right"
-        autoClose={2000}
+        autoClose={3000}
         closeOnClick
         draggable={false}
         pauseOnHover={false}
         pauseOnFocusLoss={false}
+        hideProgressBar={true}
       />
     </>
   )

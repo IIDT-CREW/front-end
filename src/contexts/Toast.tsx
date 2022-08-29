@@ -1,6 +1,15 @@
 import { createContext, ReactNode } from 'react'
-import { toast, ToastOptions } from 'react-toastify'
+import { toast, ToastOptions, Slide } from 'react-toastify'
+import { Flex, Text } from 'components/Common'
+import styled from 'styled-components'
 
+const St = {
+  ToastWrapper: styled.div`
+    // background: ${({ theme }) => theme.colors.background};
+    /* 🌑/Gray/300 */
+    background: #191919;
+  `,
+}
 export const TYPE_OPTIONS = {
   INFO: 'info',
   SUCCESS: 'success',
@@ -32,16 +41,26 @@ export type ToastType = {
 
 export const toastContext = createContext<any>(undefined)
 
+export const CustomToast = (props) => {
+  return (
+    <St.ToastWrapper>
+      <Flex justifyContent="space-between" alignItems="center">
+        <Text style={{ fontFamily: 'SUIT', color: '#fff' }}>{props.message}</Text>
+        <Text style={{ fontFamily: 'SUIT', color: '#fff' }}>닫기</Text>
+      </Flex>
+    </St.ToastWrapper>
+  )
+}
 export const ToastContextProvider = ({ children }) => {
   const { Provider } = toastContext
   const onToast = ({ type, isOfficialError = false, message, option }: ToastType) => {
     switch (type) {
       case 'info': {
-        toast.info(message, { autoClose: 3000, ...option })
+        toast.info(message, { autoClose: 3000, hideProgressBar: true, ...option })
         break
       }
       case 'success': {
-        toast.success(message, { autoClose: 2000, ...option })
+        toast.success(message, { autoClose: 3000, hideProgressBar: true, ...option })
         break
       }
       case 'error': {
@@ -54,16 +73,21 @@ export const ToastContextProvider = ({ children }) => {
           ) : (
             message
           ),
-          { autoClose: 5000, ...option },
+          { autoClose: 5000, hideProgressBar: true, ...option },
         )
         break
       }
       case 'warning': {
-        toast.warn(message, { autoClose: 3000, ...option })
+        toast.warn(message, { autoClose: 3000, hideProgressBar: true, ...option })
         break
       }
       default:
-        toast.info(message)
+        toast(<CustomToast message={message} type={type} />, {
+          autoClose: 30000,
+          hideProgressBar: true,
+          transition: Slide,
+          ...option,
+        })
     }
   }
 
