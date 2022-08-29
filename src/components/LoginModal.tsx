@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Modal, ModalProps, Flex, Box, Text } from 'components/Common'
 import styled, { css } from 'styled-components'
 import { useRouter } from 'next/router'
@@ -122,6 +122,11 @@ const NAVER_LOGIN_URL =
 
 const LoginModal: React.FC<ModalProps> = ({ onDismiss, ...props }) => {
   const router = useRouter()
+
+  useEffect(() => {
+    localStorage.setItem('login_path', router.asPath)
+  }, [])
+
   return (
     <Modal title="로그인이 필요해요" onDismiss={onDismiss} {...props} minWidth="586px">
       <Flex justifyContent="center" alignItems="center" flexDirection="column">

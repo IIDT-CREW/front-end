@@ -24,7 +24,7 @@ export const getCustomMeta = (path: string): PageMeta => {
 
     case '/will':
       return {
-        title: `당신의 유서`,
+        title: `당신의 마지막 일기`,
         description: '',
         image: '',
       }

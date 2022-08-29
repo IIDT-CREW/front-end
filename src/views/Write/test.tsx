@@ -18,6 +18,8 @@ const Write = () => {
   const [title, setTitle] = useState('')
   const [contents, setContents] = useState('')
   const { userid, name, email, nickname, memIdx } = useUserInfo()
+
+  console.log('userid, name, email, nickname, memIdx = ', userid, name, email, nickname, memIdx)
   const handleTitle = (e) => {
     setTitle(e.target.value)
   }
@@ -147,12 +149,13 @@ const Write = () => {
       <Title value={title} onChange={handleTitle}></Title>
       <Contents value={contents} onChange={handleContents}></Contents>
       <button onClick={handleClick}>시간</button>
+      <button onClick={handleInsertWill}>저장 일반</button>
       <button
         onClick={() => {
-          mutation.mutate({ title: title, content: contents, thumbnail: 'title', mem_idx: 1, will_id: nanoid() })
+          mutation.mutate({ title: title, content: contents, thumbnail: 'title', mem_idx: memIdx, will_id: nanoid() })
         }}
       >
-        저장 ㅇ
+        저장 뮤테이션 ㅇ
       </button>
       <button onClick={handleWillCount}>유서 카운트 ㅇ </button>
 

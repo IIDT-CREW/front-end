@@ -14,7 +14,7 @@ const StyleButton = styled(Text).attrs({ role: 'button' })`
 `
 
 const Tooltip = styled.div<{ isTooltipDisplayed: boolean }>`
-  display: ${({ isTooltipDisplayed }) => (isTooltipDisplayed ? 'block' : 'none')};
+  opacity: ${({ isTooltipDisplayed }) => (isTooltipDisplayed ? '0.7' : '0')};
   position: absolute;
   bottom: -22px;
   right: 0;
@@ -22,8 +22,10 @@ const Tooltip = styled.div<{ isTooltipDisplayed: boolean }>`
   text-align: center;
   background-color: ${({ theme }) => theme.colors.contrast};
   color: ${({ theme }) => theme.colors.invertedContrast};
-  border-radius: 16px;
-  opacity: 0.7;
+  box-shadow: 0px 20px 36px -8px rgb(14 14 44 / 10%), 0px 1px 1px rgb(0 0 0 / 5%);
+  width: 80px;
+  border-radius: 4px;
+  transition: all 0.6s;
 `
 
 const CopyToClipboard: React.FC<Props> = ({ toCopy, ...props }) => {
@@ -60,8 +62,8 @@ const CopyToClipboard: React.FC<Props> = ({ toCopy, ...props }) => {
       {...props}
     >
       {/* {children} */}
-      <LinkOutlined style={{ width: '40px', height: '40px', fontSize: '32px' }} />
-      <Tooltip isTooltipDisplayed={isTooltipDisplayed}>Copied</Tooltip>
+      <LinkOutlined style={{ width: '40px', height: '40px', fontSize: '32px', color: '#000' }} />
+      <Tooltip isTooltipDisplayed={isTooltipDisplayed}>복사 완료.</Tooltip>
     </StyleButton>
   )
 }
