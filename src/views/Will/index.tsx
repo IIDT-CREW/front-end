@@ -16,6 +16,7 @@ import { useQuery, useMutation, useQueryClient } from 'react-query'
 declare global {
   interface Window {
     Kakao: any
+    gtag: any
   }
   const Kakao: any
 }
