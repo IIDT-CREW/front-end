@@ -25,9 +25,8 @@ const axiosInstance = axios.create({
 })
 
 axiosInstance.interceptors.request.use(
-  async (config) => {
-    const accessToken = await asyncLocalStorage.getItem('accessToken')
-    //const accessToken = localStorage.getItem('accessToken')
+  (config) => {
+    const accessToken = localStorage.getItem('accessToken')
     const addConfigHeaders: any = {}
     if (accessToken) {
       addConfigHeaders.Authorization = accessToken ? `Bearer ${accessToken}` : ''
@@ -44,54 +43,8 @@ axiosInstance.interceptors.request.use(
   },
 )
 
-// axios.interceptors.response.use(
-//   (response) => {
-//     return response
-//   },
-//   async (error) => {
-//     const {
-//       config,
-//       response: { status },
-//     } = error
-//     const originalRequest = config
-//     console.log('error!! ')
-//     if (status === 401) {
-//       if (!isTokenRefreshing) {
-//         // isTokenRefreshing이 false인 경우에만 token refresh 요청
-//         isTokenRefreshing = true
-//         const refreshToken = await AsyncStorage.getItem('refreshToken')
-//         const { data } = await axios.post(
-//           `http://localhost:3000/refresh/token`, // token refresh api
-//           {
-//             refreshToken,
-//           },
-//         )
-//         // 새로운 토큰 저장
-//         const { accessToken: newAccessToken, refreshToken: newRefreshToken } = data
-//         await AsyncStorage.multiSet([
-//           ['accessToken', newAccessToken],
-//           ['refreshToken', newRefreshToken],
-//         ])
-//         isTokenRefreshing = false
-//         axios.defaults.headers.common.Authorization = `Bearer ${newAccessToken}`
-//         // 새로운 토큰으로 지연되었던 요청 진행
-//         onTokenRefreshed(newAccessToken)
-//       }
-//       // token이 재발급 되는 동안의 요청은 refreshSubscribers에 저장
-//       const retryOriginalRequest = new Promise((resolve) => {
-//         addRefreshSubscriber((accessToken) => {
-//           originalRequest.headers.Authorization = 'Bearer ' + accessToken
-//           resolve(axios(originalRequest))
-//         })
-//       })
-//       return retryOriginalRequest
-//     }
-//     return Promise.reject(error)
-//   },
-// )
-
 axiosInstance.interceptors.response.use(
-  async (response) => {
+  (response) => {
     console.log('[AXIOS] INTERCEPTORS[RES] response= ', response)
     /*
       http status가 200인 경우
@@ -99,29 +52,30 @@ axiosInstance.interceptors.response.use(
       .then() 으로 이어집니다.
     */
     if (response.config.url !== '/api/oauth/refresh' && response.data.code === API_CODE.CREDENTIAL_EXPIRED) {
-      const token_response = await refresh()
-      if (token_response.status !== 200 || token_response.data.code !== API_CODE.SUCCESS) {
-        return Promise.reject(
-          new Error(
-            `Failed Request Refresh Token ${
-              token_response.data
-                ? `${token_response.data.result} ${token_response.data.reason}`
-                : token_response.status
-            }`,
-          ),
-        )
-      }
-
-      console.log('[AXIOS] INTERCEPTORS[RES] = token_response.data = ', token_response.data)
-      /* refresh 토큰 및 access_token 저장  */
-      const { accessToken } = token_response.data.result
-      localStorage.setItem('accessToken', accessToken)
-      asyncLocalStorage.setItem('accessToken', accessToken).then(() => {
-        axiosInstance.defaults.headers.common.Authorization = `Bearer ${accessToken}`
-        // eslint-disable-next-line no-param-reassign
-        response.config.headers.Authorization = `Bearer ${accessToken}`
-        return axiosInstance(response.config)
-      })
+      return refresh()
+        .then((token_response) => {
+          // error
+          if (token_response.status !== 200 || token_response.data.code !== API_CODE.SUCCESS) {
+            return Promise.reject(
+              new Error(
+                `Failed Request Refresh Token ${
+                  token_response.data
+                    ? `${token_response.data.result} ${token_response.data.reason}`
+                    : token_response.status
+                }`,
+              ),
+            )
+          }
+          console.log('[AXIOS] INTERCEPTORS[RES] = token_response.data = ', token_response.data)
+          /* refresh 토큰 및 access_token 저장  */
+          const { accessToken } = token_response.data.result
+          localStorage.setItem('accessToken', accessToken)
+          return axios(response.config)
+        })
+        .catch((error) => {
+          console.log('error = ', error)
+          return error
+        })
     }
 
     // console.log('response.data = ', response.data)

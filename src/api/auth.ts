@@ -8,3 +8,7 @@ export const getUserInfo = () => axios.get('/api/oauth/userInfo')
 export const logout = () => axiosDefault.get('/api/oauth/logout')
 
 export const refresh = () => axios.get('/api/oauth/refresh')
+
+export const login = async () => axios.get('/api/oauth/login')
+export const refreshTest = () => axios.get('/api/oauth/refreshTest')
+export const userInfoTest = () => axios.get('/api/oauth/userInfoTest')
