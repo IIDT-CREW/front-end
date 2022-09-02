@@ -27,13 +27,14 @@ const Write = () => {
     setContents(e.target.value)
   }
   const handleClick = (e) => {
+    handleToast({ message: '저장에 성공하였습니다.' })
     setContents((contents) => {
       return `${contents} ${new Date().toLocaleTimeString([], { timeStyle: 'medium', hour12: false })} `
     })
   }
   const handleToast = ({ message = '' }) => {
     onToast({
-      type: 'success',
+      type: '',
       message,
       option: {
         position: 'top-center',
@@ -161,7 +162,7 @@ const Write = () => {
 
       <button onClick={handleGetWill}>유서 가져오기(공유용) o</button>
       <button onClick={handleGeMytWill}>내 유서 가져오기</button>
-
+      <button></button>
       <div>
         {data?.result?.map((myWill) => {
           return (

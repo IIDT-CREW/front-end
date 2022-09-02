@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-sync-scripts */
 /* eslint-disable jsx-a11y/iframe-has-title */
 import Document, { Html, Head, Main, NextScript, DocumentContext } from 'next/document'
 import { ServerStyleSheet } from 'styled-components'
@@ -34,7 +35,6 @@ class MyDocument extends Document {
       <Html translate="no">
         <Head>
           <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;600&amp;display=swap" rel="stylesheet" />
-          <link href="//spoqa.github.io/spoqa-han-sans/css/SpoqaHanSansNeo.css" rel="stylesheet" type="text/css" />
           <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap&subset=korean" rel="stylesheet" />
           <link rel="shortcut icon" href="/favicon-.ico" />
           <link rel="apple-touch-icon" href="/logo.png" />
@@ -49,6 +49,7 @@ class MyDocument extends Document {
             href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap"
             rel="stylesheet"
           />
+          <script async src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GTAG}`} />
         </Head>
         <body>
           <Main />

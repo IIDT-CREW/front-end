@@ -1,6 +1,6 @@
 :root {
   --toastify-color-light: #fff;
-  --toastify-color-dark: #121212;
+  --toastify-color-dark: #191919;
   --toastify-color-info: #3498db;
   --toastify-color-success: #0074c1;
   --toastify-color-warning: #f1c40f;
@@ -10,7 +10,7 @@
   --toastify-icon-color-success: var(--toastify-color-success);
   --toastify-icon-color-warning: var(--toastify-color-warning);
   --toastify-icon-color-error: var(--toastify-color-error);
-  --toastify-toast-width: 320px;
+  --toastify-toast-width: 730px;
   --toastify-toast-background: #fff;
   --toastify-toast-min-height: 64px;
   --toastify-toast-max-height: 800px;
@@ -41,6 +41,7 @@
   box-sizing: border-box;
   color: #fff;
 }
+
 .Toastify__toast-container--top-left {
   top: 1em;
   left: 1em;
@@ -68,12 +69,24 @@
   right: 1em;
 }
 
+@media only screen and (max-width: 720px) {
+  .Toastify__toast-container {
+    width: 520px;
+    padding: 0;
+    left: 50%;
+    margin: 0;
+    transform: translateX(-50%) !important;
+  }
+}
+
 @media only screen and (max-width: 480px) {
   .Toastify__toast-container {
     width: 100vw;
     padding: 0;
-    left: 0;
+    left: 50%;
     margin: 0;
+    transform: translateX(-50%) !important;
+    border-radius: 0px !important;
   }
   .Toastify__toast-container--top-left,
   .Toastify__toast-container--top-center,
@@ -150,7 +163,7 @@
 @media only screen and (max-width: 480px) {
   .Toastify__toast {
     margin-bottom: 0;
-    border-radius: 0;
+    border-radius: 0px !important;
   }
 }
 .f {
@@ -169,8 +182,16 @@
   color: var(--toastify-text-color-dark);
 }
 .Toastify__toast-theme--light {
-  background: var(--toastify-color-light);
-  color: var(--toastify-text-color-light);
+  background: var(--toastify-color-dark);
+  color: var(--toastify-text-color-dark);
+
+  /* 🌑/Gray/400 */
+  border: 1px solid #2a2a2a;
+
+  /* elevation/🌑100 */
+
+  box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.2), 0px 2px 6px rgba(0, 0, 0, 0.6);
+  border-radius: 4px;
 }
 .Toastify__toast-theme--colored.Toastify__toast--default {
   background: var(--toastify-color-light);
@@ -219,6 +240,7 @@
 }
 
 .Toastify__close-button {
+  display: none;
   color: #fff;
   background: transparent;
   outline: none;

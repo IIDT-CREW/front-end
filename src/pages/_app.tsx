@@ -8,6 +8,7 @@ import { Fragment } from 'react'
 import { PersistGate } from 'redux-persist/integration/react'
 import { useStore, persistor } from 'store'
 import { NextPage } from 'next'
+import { useRouter } from 'next/router'
 import { Hydrate, QueryClient, QueryClientProvider } from 'react-query'
 import { ReactQueryDevtools } from 'react-query/devtools'
 import Providers from '../Providers'
@@ -20,6 +21,8 @@ import { useNaviState } from 'store/navi/hooks'
 import { MENU_HEIGHT, FOOTER_HEIGHT } from 'config/constants/default'
 // import useAuthUserStorage from 'hooks/useAuthUserStorage'
 import useAuthAccessToken from 'hooks/useAuthAccessToken'
+import * as gtag from 'utils/gtag'
+
 import styled from 'styled-components'
 import { ToastContainer } from 'react-toastify'
 import 'style/custom-react-toastify.css'
@@ -39,6 +42,7 @@ function MyApp(props: AppProps) {
   const { pageProps } = props
   const store = useStore(pageProps.initialReduxState)
   const queryClient = useBaseQueryClient()
+
   return (
     <>
       <Head>
@@ -103,6 +107,7 @@ const St = {
   `,
 }
 const App = ({ Component, pageProps }: AppPropsWithLayout) => {
+  const router = useRouter()
   // Use the layout defined at the page level, if available
   const Layout = Component.Layout || Fragment
   const { isMenuOpen } = useNaviState()
@@ -119,6 +124,16 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
     }
   }, [isMenuOpen])
 
+  useEffect(() => {
+    const handleRouteChange = (url) => {
+      gtag.pageview(url)
+    }
+    router.events.on('routeChangeComplete', handleRouteChange)
+    return () => {
+      router.events.off('routeChangeComplete', handleRouteChange)
+    }
+  }, [router.events])
+
   return (
     <>
       <Menu />
@@ -132,11 +147,12 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
 
       <ToastContainer
         position="bottom-right"
-        autoClose={2000}
+        autoClose={3000}
         closeOnClick
         draggable={false}
         pauseOnHover={false}
         pauseOnFocusLoss={false}
+        hideProgressBar={true}
       />
     </>
   )
