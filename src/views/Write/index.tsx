@@ -1,4 +1,4 @@
-import { TextareaHTMLAttributes, useEffect, useRef, useState } from 'react'
+import { TextareaHTMLAttributes, useContext, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { fontSize, FontSizeProps } from 'styled-system'
 import { insertWill } from 'api/will'
@@ -10,6 +10,8 @@ import { MENU_HEIGHT } from 'config/constants/default'
 import { useUserInfo } from 'store/auth/hooks'
 import { nanoid } from 'nanoid'
 import { useMutation } from 'react-query'
+import { toastContext } from 'contexts/Toast'
+
 const questionList = [
   '1. 살아오면서 가장 기뻤던 일은?',
   '2. 부끄러워서 친구들에게 하지 못한 말은?',
@@ -27,6 +29,7 @@ const Write = () => {
   const [isDefaultPostType, setPostType] = useState(true)
   const inputRef = useRef<HTMLFormElement>(null)
   const { memIdx } = useUserInfo()
+  const { onToast } = useContext(toastContext)
 
   const handlePostType = () => {
     setPostType(false)
@@ -54,6 +57,13 @@ const Write = () => {
   const savePost = useMutation(insertWill, {
     onSuccess: () => {
       goToMain()
+      onToast({
+        type: '',
+        message: '작성이 완료 되었어요',
+        option: {
+          position: 'top-center',
+        },
+      })
     },
   })
 
