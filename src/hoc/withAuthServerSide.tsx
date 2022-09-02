@@ -3,7 +3,7 @@ import nookies from 'nookies'
 import axios from 'api'
 import { useDispatch } from 'react-redux'
 import { useRouter } from 'next/router'
-import { getUserInfo, refreshTest } from 'api/auth'
+import { getUserInfo } from 'api/auth'
 import { authActions } from 'store/auth'
 /* getUser */
 async function getUser(content: any) {
@@ -27,15 +27,18 @@ export function withAuthServerSideProps(getServerSidePropsFunc?) {
 
     const nookie = nookies.get(context)
     const accessToken = nookie['access_token']
-    //있으면 세팅
     if (accessToken) {
-      axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`
     }
-    //없으면 refresh 호출
     if (!accessToken) {
-      await refreshTest()
     }
     console.log('nookie= ', nookie)
+    /* 토큰 세팅 */
+    if (context.req && cookie) {
+      axios.defaults.headers.common.Cookie = cookie
+      const bearer = `Bearer ${accessToken}`
+      axios.defaults.headers.common['Authorization'] = bearer
+      if (nookie['refresh_token']) axios.defaults.headers.common['refresh'] = nookie['refresh_token']
+    }
 
     const user = await getUser(context)
     if (getServerSidePropsFunc) {

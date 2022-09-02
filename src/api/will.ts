@@ -23,7 +23,7 @@ type getMyWillParams = {
   mem_userid: string
 }
 export const getMyWill = async ({ mem_email, mem_userid }: getMyWillParams) => {
-  const response = await axiosInstance.get('api/will/getMyWill', {
+  const response = await authAxios.get('api/will/getMyWill', {
     params: {
       mem_userid,
       mem_email,

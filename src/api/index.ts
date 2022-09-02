@@ -4,7 +4,7 @@ import { refresh } from './auth'
 import { decryptWithAES, encryptWithAES } from 'utils/crypto'
 import { API_CODE, API_URL } from 'config/constants/api'
 import { STORAGE_NAME } from 'config/constants/api'
-import { useDispatch } from 'react-redux'
+
 const asyncLocalStorage = {
   setItem: function (key, value) {
     return Promise.resolve().then(function () {
@@ -19,87 +19,38 @@ const asyncLocalStorage = {
 }
 // Create axios instance.
 const axiosInstance = axios.create({
-  // baseURL: 'http://localhost:3031',
   baseURL: API_URL,
   withCredentials: true,
 })
 
 axiosInstance.interceptors.request.use(
   async (config) => {
-    const accessToken = await asyncLocalStorage.getItem('accessToken')
-    //const accessToken = localStorage.getItem('accessToken')
+    const strData = await asyncLocalStorage.getItem(STORAGE_NAME.USER)
+    //onsole.log('strData = ', strData)
     const addConfigHeaders: any = {}
-    if (accessToken) {
-      addConfigHeaders.Authorization = accessToken ? `Bearer ${accessToken}` : ''
+    if (strData) {
+      const data = JSON.parse(decryptWithAES(strData))
+      if (data.accessToken) {
+        addConfigHeaders.Authorization = data.accessToken ? `Bearer ${data.accessToken}` : ''
+      }
     }
-
     const newConfig = { ...config, headers: { ...config.headers, ...addConfigHeaders } }
-    console.log('[AXIOS] INTERCEPTORS[REQ] = ', newConfig)
+    //console.log('[AXIOS] INTERCEPTORS[REQ] = ', newConfig)
     return newConfig
   },
   (error) => {
-    console.log('error ', error)
+    //console.log('error ', error)
     // 요청 에러 처리를 작성합니다.
     return Promise.reject(error)
   },
 )
 
-// axios.interceptors.response.use(
-//   (response) => {
-//     return response
-//   },
-//   async (error) => {
-//     const {
-//       config,
-//       response: { status },
-//     } = error
-//     const originalRequest = config
-//     console.log('error!! ')
-//     if (status === 401) {
-//       if (!isTokenRefreshing) {
-//         // isTokenRefreshing이 false인 경우에만 token refresh 요청
-//         isTokenRefreshing = true
-//         const refreshToken = await AsyncStorage.getItem('refreshToken')
-//         const { data } = await axios.post(
-//           `http://localhost:3000/refresh/token`, // token refresh api
-//           {
-//             refreshToken,
-//           },
-//         )
-//         // 새로운 토큰 저장
-//         const { accessToken: newAccessToken, refreshToken: newRefreshToken } = data
-//         await AsyncStorage.multiSet([
-//           ['accessToken', newAccessToken],
-//           ['refreshToken', newRefreshToken],
-//         ])
-//         isTokenRefreshing = false
-//         axios.defaults.headers.common.Authorization = `Bearer ${newAccessToken}`
-//         // 새로운 토큰으로 지연되었던 요청 진행
-//         onTokenRefreshed(newAccessToken)
-//       }
-//       // token이 재발급 되는 동안의 요청은 refreshSubscribers에 저장
-//       const retryOriginalRequest = new Promise((resolve) => {
-//         addRefreshSubscriber((accessToken) => {
-//           originalRequest.headers.Authorization = 'Bearer ' + accessToken
-//           resolve(axios(originalRequest))
-//         })
-//       })
-//       return retryOriginalRequest
-//     }
-//     return Promise.reject(error)
-//   },
-// )
-
 axiosInstance.interceptors.response.use(
   async (response) => {
-    console.log('[AXIOS] INTERCEPTORS[RES] response= ', response)
-    /*
-      http status가 200인 경우
-    응답 바로 직전에 대해 작성합니다.
-      .then() 으로 이어집니다.
-    */
+    //console.log('[AXIOS] INTERCEPTORS[RES] response= ', response)
     if (response.config.url !== '/api/oauth/refresh' && response.data.code === API_CODE.CREDENTIAL_EXPIRED) {
       const token_response = await refresh()
+      //console.log('[AXIOS] isRefresh ')
       if (token_response.status !== 200 || token_response.data.code !== API_CODE.SUCCESS) {
         return Promise.reject(
           new Error(
@@ -112,23 +63,31 @@ axiosInstance.interceptors.response.use(
         )
       }
 
-      console.log('[AXIOS] INTERCEPTORS[RES] = token_response.data = ', token_response.data)
+      //console.log('[AXIOS] INTERCEPTORS[RES] = token_response.data = ', token_response.data)
       /* refresh 토큰 및 access_token 저장  */
       const { accessToken } = token_response.data.result
-      localStorage.setItem('accessToken', accessToken)
-      asyncLocalStorage.setItem('accessToken', accessToken).then(() => {
-        axiosInstance.defaults.headers.common.Authorization = `Bearer ${accessToken}`
-        // eslint-disable-next-line no-param-reassign
-        response.config.headers.Authorization = `Bearer ${accessToken}`
-        return axiosInstance(response.config)
-      })
+
+      /* storage 저장  */
+      const storageData = await asyncLocalStorage.getItem(STORAGE_NAME.USER)
+      if (storageData) {
+        // console.log('storageData= ', storageData)
+        const parsedData = JSON.parse(decryptWithAES(storageData))
+        const encDataString = encryptWithAES(JSON.stringify({ ...parsedData, accessToken }))
+        await asyncLocalStorage.setItem(STORAGE_NAME.USER, encDataString)
+      }
+
+      /* accesstoken header 값 제 세팅 */
+      axiosInstance.defaults.headers.common.Authorization = `Bearer ${accessToken}`
+      // eslint-disable-next-line no-param-reassign
+      response.config.headers.Authorization = `Bearer ${accessToken}`
+      return axiosInstance(response.config)
     }
 
     // console.log('response.data = ', response.data)
     // return Promise.resolve(response)
     switch (response.data.code) {
       case API_CODE.SUCCESS: // 정상
-        console.log('[AXIOS] INTERCEPTORS[RES] success!!')
+        // console.log('[AXIOS] INTERCEPTORS[RES] success!!')
         return Promise.resolve(response)
       case API_CODE.FAILURE_USER_AUTH:
       case API_CODE.INVALID_TOKEN: // 유효하지 않은 토큰 키
