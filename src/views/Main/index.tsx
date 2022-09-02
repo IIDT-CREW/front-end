@@ -93,7 +93,7 @@ const Main = () => {
     }
   }, [isLogin, queryClient])
 
-  console.log(data)
+  console.log(data?.result)
   return (
     <St.Container mt="78px">
       <Box mb="36px">
@@ -109,14 +109,13 @@ const Main = () => {
           )}
           {isLogin &&
             !isError &&
-            data?.result?.map((myWill) => {
-              return (
-                <WriteCard
-                  will={myWill}
-                  handleDelete={() => deleteMutation.mutate({ will_id: myWill.WILL_ID as string })}
-                />
-              )
-            })}
+            data?.result?.map((myWill, i) => (
+              <WriteCard
+                key={`${i}-${myWill.WILL_ID}`}
+                will={myWill}
+                handleDelete={() => deleteMutation.mutate({ will_id: myWill.WILL_ID as string })}
+              />
+            ))}
 
           {/* <WriteCard
             will={{
