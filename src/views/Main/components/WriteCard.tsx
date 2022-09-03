@@ -6,6 +6,7 @@ import { usePopper } from 'react-popper'
 import Ellipsis from 'components/Common/Svg/Icons/Ellipsis'
 import Export from 'components/Common/Svg/Icons/Export'
 import Trash from 'components/Common/Svg/Icons/Trash'
+import Edit from 'components/Common/Svg/Icons/Edit'
 import { useModal } from 'components/Common'
 import moment from 'moment'
 import WriteDeleteModal from './modal/WriteDeleteModal'
@@ -39,15 +40,18 @@ const St = {
       visibility: hidden;
     `};
   `,
+  CardWrapper: styled(Box)`
+    box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.15), 0px 2px 6px rgba(0, 0, 0, 0.13);
+  `,
 }
 
-const MenuItem = ({ presentDeleteModal, presentShareModal }) => {
+const MenuItem = ({ presentDeleteModal, presentShareModal, handleEdit }) => {
   return (
     <Box>
-      {/* <Flex padding="8px" style={{ gap: '8px' }}>
-          <Export />
-          <Text>수정하기</Text>
-        </Flex> */}
+      <Flex padding="8px" style={{ gap: '8px' }} onClick={handleEdit}>
+        <Edit />
+        <Text>수정하기</Text>
+      </Flex>
       <Flex padding="8px" style={{ gap: '8px' }} onClick={presentShareModal}>
         <Export />
         <Text>공유하기</Text>
@@ -78,7 +82,7 @@ type WriteCardProps = {
 
 const WriteCard = ({ will, handleDelete, handlShare }: WriteCardProps) => {
   const { CONTENT: content, EDIT_DATE: editDate, MEM_IDX, REG_DATE: regDate, THUMBNAIL, TITLE, WILL_ID } = will
-
+  const router = useRouter()
   const isLogin = useIsLogin()
   const [presentDeleteModal] = useModal(<WriteDeleteModal handleDelete={handleDelete} />)
   const [presentShareModal] = useModal(<ShareModal handlShare={handlShare} content={content} willId={WILL_ID} />)
@@ -96,25 +100,24 @@ const WriteCard = ({ will, handleDelete, handlShare }: WriteCardProps) => {
     setIsOpen((prev) => !prev)
   }
 
+  const handleEdit = () => {
+    router.push(`/write?will_id=${WILL_ID}`)
+  }
+
   return (
-    <Box
-      mr="20px"
-      ml="20px"
-      mb="40px"
-      padding="20px"
-      minWidth="374px"
-      maxWidth="582px"
-      border="1px solid black"
-      borderRadius="4px"
-    >
-      <Box padding="10px">
+    <St.CardWrapper mr="24px" ml="24px" mb="40px" padding="20px" minWidth="582px" maxWidth="582px" borderRadius="4px">
+      <Box mb="20px">
         <Flex justifyContent="space-between" alignItems="center">
           <Text>{moment(regDate).format('YYYY.MM.DD')}</Text>
           {isLogin && (
             <Text style={{ cursor: 'pointer' }} onClick={handleIsOpen} ref={setTargetRef}>
               <Ellipsis />
               <St.MenuWrapper ref={setTooltipRef} style={styles.popper} {...attributes.popper} isOpen={isOpen}>
-                <MenuItem presentDeleteModal={presentDeleteModal} presentShareModal={presentShareModal} />
+                <MenuItem
+                  presentDeleteModal={presentDeleteModal}
+                  presentShareModal={presentShareModal}
+                  handleEdit={handleEdit}
+                />
               </St.MenuWrapper>
             </Text>
           )}
@@ -122,9 +125,12 @@ const WriteCard = ({ will, handleDelete, handlShare }: WriteCardProps) => {
       </Box>
 
       <Box>
+        <Text fontWeight="600" mb="8px">
+          {TITLE ? TITLE : '22년 9월 1일에 쓰는 마지막 일기'}
+        </Text>
         <St.Contents>{content}</St.Contents>
       </Box>
-    </Box>
+    </St.CardWrapper>
   )
 }
 

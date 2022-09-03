@@ -40,6 +40,8 @@ export const MainButton = styled.button`
 
   color: #fff;
   cursor: pointer;
+
+  font-family: SUIT;
 `
 
 const Home: React.FC = () => {

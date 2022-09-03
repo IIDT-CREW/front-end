@@ -46,8 +46,13 @@ const Main = () => {
   const [presenLoginModal] = useModal(<LoginModal />)
 
   useEffect(() => {
-    presentWarningModal()
-  }, [])
+    const isPrecented = localStorage.getItem('isPrecented')
+    if (!isPrecented) {
+      localStorage.setItem('isPrecented', 'true')
+      presentWarningModal()
+    }
+    if (isPrecented) return
+  }, [presentWarningModal])
 
   const router = useRouter()
   const handleWrite = () => {

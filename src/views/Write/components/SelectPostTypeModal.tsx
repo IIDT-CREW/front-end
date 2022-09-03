@@ -1,56 +1,40 @@
-import { ModalCloseButton } from 'components/Common'
-import { Handler } from 'components/Common/Modal/types'
-import { ButtonHTMLAttributes, MouseEventHandler } from 'react'
+import { Modal, ModalProps } from 'components/Common'
+import { Flex, Box, Text } from 'components/Common'
 import styled from 'styled-components'
+import { ButtonHTMLAttributes, MouseEventHandler } from 'react'
+
 interface customModalProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  onDismiss?: MouseEventHandler<HTMLButtonElement>
+  onDismiss?: () => void
 }
+
 const SelectPostTypeModal = ({ onClick, onDismiss }: customModalProps) => {
   return (
-    <St.SelectPostTypeModal>
-      <St.ModalTitle>
-        유서 작성 방식을 선택할 수 있어요.
-        <ModalCloseButton onDismiss={onDismiss as Handler} />
-      </St.ModalTitle>
+    <Modal title="일기 작성 방식을 선택할 수 있어요" onDismiss={onDismiss}>
+      <Flex flexDirection="column" justifyContent="center" alignItems="center">
+        <Box mb="20px">
+          <Flex justifyContent="center" flexDirection="column" style={{ textAlign: 'center' }}>
+            <Text> 마지막 일기를 처음 작성하시는 분들을 위해 두 가지의 선택방식을 두었어요.</Text>
+            <Text>편하신 방법을 선택하여, 당신의 마지막 일기를 작성해주세요.</Text>
+          </Flex>
+        </Box>
 
-      <St.ModalDescription>
-        유서를 처음 작성하시는 분들을 위해 두 가지의 선택방식을 두었어요. 편하신 방법을 선택하여, 당신의 마지막 일기를
-        작성해주세요.
-      </St.ModalDescription>
-      <St.ModalButton onClick={onClick}>질문에 따라 유서를 적고 싶어요</St.ModalButton>
-      <St.ModalButton onClick={onDismiss} variant="primary">
-        제 마음대로 유서를 적고 싶어요
-      </St.ModalButton>
-    </St.SelectPostTypeModal>
+        <Box mt="20px">
+          <Flex flexDirection="column">
+            <St.ModalButton onClick={onClick}>질문에 따라 유서를 적고 싶어요</St.ModalButton>
+            <St.ModalButton onClick={onDismiss} variant="primary">
+              제 마음대로 일기를 적고 싶어요
+            </St.ModalButton>
+          </Flex>
+        </Box>
+      </Flex>
+    </Modal>
   )
 }
+
+export default SelectPostTypeModal
+
 type variant = 'primary' | 'secondary'
 const St = {
-  ModalTitle: styled.div`
-    font-weight: 600;
-    font-size: 18px;
-    margin-top: 32px;
-  `,
-  ModalDescription: styled.div`
-    width: 410px;
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 20px;
-    margin-top: 8px;
-    text-align: center;
-  `,
-  SelectPostTypeModal: styled.div`
-    z-index: 100;
-    position: relative;
-    width: 586px;
-    height: 375px;
-    background: #ffffff;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.06), 0px 0px 1px rgba(0, 0, 0, 0.08);
-    border-radius: 4px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  `,
   ModalButton: styled.button<{ variant?: variant }>`
     display: flex;
     flex-direction: row;
@@ -61,7 +45,7 @@ const St = {
 
     width: 335px;
     height: 50px;
-    margin-top: 40px;
+    margin: 16px 20px;
 
     ${({ variant, theme }) => {
       if (variant === 'primary') {
@@ -86,5 +70,3 @@ const St = {
     line-height: 22px;
   `,
 }
-
-export default SelectPostTypeModal

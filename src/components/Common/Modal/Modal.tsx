@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useTheme } from 'styled-components'
 import Heading from '../Heading/Heading'
 import getThemeValue from '../../../utils/getThemeValue'
@@ -18,6 +18,15 @@ const Modal: React.FC<ModalProps> = ({
   ...props
 }) => {
   const theme = useTheme()
+
+  useEffect(() => {
+    const preventGoBack = () => {
+      onDismiss()
+    }
+    window.addEventListener('popstate', preventGoBack)
+    return () => window.removeEventListener('popstate', preventGoBack)
+  }, [onDismiss])
+
   return (
     <ModalContainer minWidth={minWidth} {...props}>
       {!hideTitle && (
