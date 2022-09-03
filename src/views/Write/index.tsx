@@ -37,10 +37,40 @@ const Write = () => {
   const goToBack = () => {
     router.push('/main')
   }
+
+  const isWriteDown = () => {
+    if (inputRef.current === null) return false
+    return ![...inputRef.current.children]
+      .map((element) => {
+        const [, textarea] = element.children
+        return (textarea as HTMLTextAreaElement).value
+      })
+      .every((value) => value.length === 0)
+  }
+
   const [modal, onDismiss] = useModal(<SelectPostTypeModal onClick={handlePostType} />)
   const [presentWarningHistoryBackModal] = useModal(<WarningHistoryBackModal goToBack={goToBack} />)
 
+  const isWriteDownTitleAndContent = title !== '' || content !== '' || isWriteDown()
+
+  const preventGoBack = () => {
+    console.log('isWriteDownTitleAndContent  =', isWriteDownTitleAndContent)
+    if (isWriteDownTitleAndContent) {
+      presentWarningHistoryBackModal()
+    }
+    history.pushState(null, '', location.href)
+  }
+
   useEffect(() => {
+    if (!isWriteDownTitleAndContent) return
+    history.pushState(null, '', location.href)
+    window.addEventListener('popstate', preventGoBack)
+    return () => {
+      window.removeEventListener('popstate', preventGoBack)
+    }
+  }, [isWriteDownTitleAndContent])
+
+  https: useEffect(() => {
     modal()
   }, [])
 
@@ -58,19 +88,9 @@ const Write = () => {
     })
   }
 
-  const isWriteDown = () => {
-    if (inputRef.current === null) return true
-    return ![...inputRef.current.children]
-      .map((element) => {
-        const [, textarea] = element.children
-        return (textarea as HTMLTextAreaElement).value
-      })
-      .every((value) => value.length === 0)
-  }
-
   const goToMain = () => {
     if (isDefaultPostType) {
-      if (title || content) {
+      if (title !== '' || content !== ' ') {
         presentWarningHistoryBackModal()
         return
       }
