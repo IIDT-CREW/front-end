@@ -32,11 +32,11 @@ const St = {
 }
 
 const WarningHistoryBackModal = ({ onDismiss, ...props }: any) => {
-  const { handleDelete } = props
+  const { goToBack } = props
 
-  const deleteAndClose = () => {
-    handleDelete()
+  const handleGoToMain = () => {
     onDismiss()
+    goToBack()
   }
 
   return (
@@ -46,10 +46,10 @@ const WarningHistoryBackModal = ({ onDismiss, ...props }: any) => {
         <Text fontWeight="600">지금까지 작성된 내용은 저장되지 않습니다</Text>
         <Box mt="20px">
           <Flex style={{ gap: '8px' }}>
-            <St.ConfirmButton background="grey" onClick={onDismiss}>
+            <St.ConfirmButton background="grey" onClick={handleGoToMain}>
               나중에 다시 쓸게요
             </St.ConfirmButton>
-            <St.ConfirmButton onClick={deleteAndClose}>지금 계속 쓸게요</St.ConfirmButton>
+            <St.ConfirmButton onClick={onDismiss}>지금 계속 쓸게요</St.ConfirmButton>
           </Flex>
         </Box>
       </Flex>

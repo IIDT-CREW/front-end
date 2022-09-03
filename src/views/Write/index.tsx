@@ -5,7 +5,9 @@ import { insertWill } from 'api/will'
 import { ArrowLeft } from 'components/Common/Svg'
 import { useRouter } from 'next/router'
 import { useModal } from 'components/Common'
-import SelectPostTypeModal from 'views/Write/components/SelectPostTypeModal'
+import SelectPostTypeModal from 'views/Write/components/modal/SelectPostTypeModal'
+import WarningHistoryBackModal from 'views/Write/components/modal/WarningHistoryBackModal'
+
 import { MENU_HEIGHT } from 'config/constants/default'
 import { useUserInfo } from 'store/auth/hooks'
 import { nanoid } from 'nanoid'
@@ -32,7 +34,12 @@ const Write = () => {
     setPostType(false)
     onDismiss()
   }
+  const goToBack = () => {
+    router.push('/main')
+  }
   const [modal, onDismiss] = useModal(<SelectPostTypeModal onClick={handlePostType} />)
+  const [presentWarningHistoryBackModal] = useModal(<WarningHistoryBackModal goToBack={goToBack} />)
+
   useEffect(() => {
     modal()
   }, [])
@@ -51,9 +58,32 @@ const Write = () => {
     })
   }
 
+  const isWriteDown = () => {
+    if (inputRef.current === null) return true
+    return ![...inputRef.current.children]
+      .map((element) => {
+        const [, textarea] = element.children
+        return (textarea as HTMLTextAreaElement).value
+      })
+      .every((value) => value.length === 0)
+  }
+
+  const goToMain = () => {
+    if (isDefaultPostType) {
+      if (title || content) {
+        presentWarningHistoryBackModal()
+        return
+      }
+    }
+    if (!isDefaultPostType && isWriteDown()) {
+      presentWarningHistoryBackModal()
+      return
+    }
+    router.push('main')
+  }
   const savePost = useMutation(insertWill, {
     onSuccess: () => {
-      goToMain()
+      goToBack()
     },
   })
 
@@ -76,9 +106,6 @@ const Write = () => {
     savePost.mutate(parameter)
   }
 
-  const goToMain = () => {
-    router.push('main')
-  }
   const isDisabledSave = () => {
     if (isDefaultPostType) return content.length ? false : true
     if (inputRef.current === null) return true
@@ -89,6 +116,7 @@ const Write = () => {
       })
       .every((value) => value.length)
   }
+
   return (
     <St.Article>
       <St.MenuBar>
