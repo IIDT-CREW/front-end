@@ -57,13 +57,16 @@ const Write = () => {
     console.log('isWriteDownTitleAndContent  =', isWriteDownTitleAndContent)
     if (isWriteDownTitleAndContent) {
       presentWarningHistoryBackModal()
+    } else {
+      history.pushState(null, '', location.href)
     }
-    history.pushState(null, '', location.href)
   }
 
   useEffect(() => {
     if (!isWriteDownTitleAndContent) return
-    history.pushState(null, '', location.href)
+    if (isWriteDownTitleAndContent) {
+      history.pushState(null, '', location.href)
+    }
     window.addEventListener('popstate', preventGoBack)
     return () => {
       window.removeEventListener('popstate', preventGoBack)
