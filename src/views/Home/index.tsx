@@ -8,6 +8,7 @@ import MainCard from './components/MainCard'
 import AOS from 'aos'
 import Clock from './components/Clock'
 import Link from 'next/link'
+import { useIsLogin } from 'store/auth/hooks'
 
 //aos
 //offest
@@ -49,6 +50,7 @@ const Home: React.FC = () => {
     AOS.init()
     AOS.refresh()
   }, [])
+  const isLogin = useIsLogin()
 
   const { theme } = useTheme()
   // const { accessToken } = useSelector<AppState, AppState['auth']>((state) => state.auth)
@@ -106,7 +108,7 @@ const Home: React.FC = () => {
             <Text fontSize={['20px', '24px', '36px', '48px']} mb="24px">
               다시 한 번 삶을 되돌아보는 시간
             </Text>
-            <Link href="/main">
+            <Link href={isLogin ? '/write' : '/main'}>
               <MainButton>작성하러가기</MainButton>
             </Link>
           </Flex>
