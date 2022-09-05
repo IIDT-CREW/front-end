@@ -47,7 +47,7 @@ const Card = ({
       <Box width="100%" height={height} position="relative">
         <Flex justifyContent="center" alignItems="center" height="100%" position="relative" flexDirection="column">
           <Text
-            fontSize={['18px', '24px', '36px', '36px']}
+            fontSize={['16px', '16px', '36px', '36px']}
             fontWeight="600"
             data-aos="fade-down"
             data-aos-duration="1000"
@@ -55,7 +55,7 @@ const Card = ({
             {title}
           </Text>
           <Text
-            fontSize={['18px', '24px', '36px', '36px']}
+            fontSize={['16px', '16px', '36px', '36px']}
             fontWeight="600"
             data-aos="fade-up"
             data-aos-duration="3000"

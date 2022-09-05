@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import ResetCSS from 'style/ResetCSS'
 import Script from 'next/script'
 import '../style/index.css'

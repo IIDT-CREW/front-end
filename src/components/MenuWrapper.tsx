@@ -3,11 +3,11 @@ import { MENU_HEIGHT } from 'config/constants/default'
 import { useRouter } from 'next/router'
 import { useDispatch } from 'react-redux'
 import { naviActions } from 'store/navi'
-import Link from 'next/link'
 import { authActions } from 'store/auth'
 import { STORAGE_NAME } from 'config/constants/api'
 import styled from 'styled-components'
 import axios from 'api'
+import { logout } from 'api/auth'
 
 const St = {
   TextLink: styled(Text)`
@@ -28,6 +28,7 @@ const MenuWrapper = () => {
   const handleLogout = async () => {
     try {
       //...todo
+      await logout()
       axios.defaults.headers.common.Authorization = ''
       axios.defaults.headers.common.refresh = ''
       localStorage.removeItem(STORAGE_NAME.USER)

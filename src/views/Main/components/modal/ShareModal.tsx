@@ -65,7 +65,7 @@ const ShareModal = ({ onDismiss, content, willId, ...props }: any) => {
     // }
     // 카카오 공유
     const kakaoShareFunc = () => {
-      Kakao.Link.sendDefault({
+      Kakao.Share.sendDefault({
         objectType: 'feed',
         content: {
           title: '마지막 일기',
@@ -87,9 +87,14 @@ const ShareModal = ({ onDismiss, content, willId, ...props }: any) => {
             },
           },
         ],
+        // serverCallbackArgs: {
+        //   // 사용자 정의 파라미터 설정
+        //   key: 'value',
+        // },
       })
     }
     kakaoShareFunc()
+    onDismiss()
   }
 
   return (

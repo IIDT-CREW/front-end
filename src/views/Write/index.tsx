@@ -5,7 +5,9 @@ import { insertWill } from 'api/will'
 import { ArrowLeft } from 'components/Common/Svg'
 import { useRouter } from 'next/router'
 import { useModal } from 'components/Common'
-import SelectPostTypeModal from 'views/Write/components/SelectPostTypeModal'
+import SelectPostTypeModal from 'views/Write/components/modal/SelectPostTypeModal'
+import WarningHistoryBackModal from 'views/Write/components/modal/WarningHistoryBackModal'
+
 import { MENU_HEIGHT } from 'config/constants/default'
 import { useUserInfo } from 'store/auth/hooks'
 import { nanoid } from 'nanoid'
@@ -35,7 +37,45 @@ const Write = () => {
     setPostType(false)
     onDismiss()
   }
+  const goToBack = () => {
+    router.push('/main')
+  }
+
+  const isWriteDown = () => {
+    if (inputRef.current === null) return false
+    return ![...inputRef.current.children]
+      .map((element) => {
+        const [, textarea] = element.children
+        return (textarea as HTMLTextAreaElement).value
+      })
+      .every((value) => value.length === 0)
+  }
+
   const [modal, onDismiss] = useModal(<SelectPostTypeModal onClick={handlePostType} />)
+  const [presentWarningHistoryBackModal] = useModal(<WarningHistoryBackModal goToBack={goToBack} />)
+
+  const isWriteDownTitleAndContent = title !== '' || content !== '' || isWriteDown()
+
+  const preventGoBack = () => {
+    console.log('isWriteDownTitleAndContent  =', isWriteDownTitleAndContent)
+    if (isWriteDownTitleAndContent) {
+      presentWarningHistoryBackModal()
+    } else {
+      history.pushState(null, '', location.href)
+    }
+  }
+
+  useEffect(() => {
+    if (!isWriteDownTitleAndContent) return
+    if (isWriteDownTitleAndContent) {
+      history.pushState(null, '', location.href)
+    }
+    window.addEventListener('popstate', preventGoBack)
+    return () => {
+      window.removeEventListener('popstate', preventGoBack)
+    }
+  }, [isWriteDownTitleAndContent])
+
   useEffect(() => {
     modal()
   }, [])
@@ -54,16 +94,29 @@ const Write = () => {
     })
   }
 
+  const goToMain = () => {
+    if (isDefaultPostType) {
+      if (title !== '' || content !== ' ') {
+        presentWarningHistoryBackModal()
+        return
+      }
+    }
+    if (!isDefaultPostType && isWriteDown()) {
+      presentWarningHistoryBackModal()
+      return
+    }
+    router.push('main')
+  }
   const savePost = useMutation(insertWill, {
     onSuccess: () => {
-      goToMain()
       onToast({
         type: '',
         message: '작성이 완료 되었어요',
         option: {
           position: 'top-center',
         },
-      })
+      })      
+      goToBack()
     },
   })
 
@@ -86,9 +139,6 @@ const Write = () => {
     savePost.mutate(parameter)
   }
 
-  const goToMain = () => {
-    router.push('main')
-  }
   const isDisabledSave = () => {
     if (isDefaultPostType) return content.length ? false : true
     if (inputRef.current === null) return true
@@ -99,6 +149,7 @@ const Write = () => {
       })
       .every((value) => value.length)
   }
+
   return (
     <St.Article>
       <St.MenuBar>

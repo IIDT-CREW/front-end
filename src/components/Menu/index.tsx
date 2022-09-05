@@ -94,7 +94,7 @@ const MenuWrapper = () => {
         <St.StyledNav>
           <Flex justifyContent="center" alignItems="center">
             <Flex style={{ cursor: 'pointer' }}>
-              <Link href="/">
+              <Link href={isLogin ? '/main' : '/'}>
                 <Heading scale="lg" style={{ fontFamily: 'Cormorant' }}>
                   IIDT
                 </Heading>

@@ -6,7 +6,7 @@ import { authActions } from 'store/auth'
 import { getUserInfo } from 'api/auth'
 import LoaderPage from 'components/LoaderPage'
 import { STORAGE_NAME, API_CODE, API_URL } from 'config/constants/api'
-import { decryptWithAES, encryptWithAES } from 'utils/crypto'
+import { encryptWithAES } from 'utils/crypto'
 
 const AuthCallback = () => {
   const router = useRouter()
@@ -16,8 +16,8 @@ const AuthCallback = () => {
     try {
       const res = await getUserInfo()
       if (res.data && res.data.code === API_CODE.SUCCESS) {
-        const { data: userInfo } = res.data
-        console.log(userInfo)
+        const { result: userInfo } = res.data
+
         return {
           memIdx: userInfo.MEM_IDX,
           name: userInfo.MEM_USERNAME,
@@ -39,12 +39,11 @@ const AuthCallback = () => {
       })
       if (res) {
         const ACCESS_TOKEN = res.data.accessToken
-        const REFRESH_TOKEN = res.data.refreshToken
         const bearer = `Bearer ${ACCESS_TOKEN}`
         axios.defaults.headers.common['Authorization'] = bearer
-        axios.defaults.headers.common['refresh'] = REFRESH_TOKEN
+        // axios.defaults.headers.common['refresh'] = REFRESH_TOKEN
         const info = await getUser()
-        console.log('[getUser] info= ', info)
+        //console.log('[getUser] info= ', info)
         if (info) {
           dispatch(
             authActions.setAuth({
@@ -57,28 +56,18 @@ const AuthCallback = () => {
               memIdx: info.memIdx,
             }),
           )
-          // const encDataString = encryptWithAES(
-          //   JSON.stringify({
-          //     isAuthenticated: true,
-          //     accessToken: ACCESS_TOKEN,
-          //     refreshToken: REFRESH_TOKEN,
-          //     name: info.name,
-          //     email: info.email,
-          //     nickname: info.nickname,
-          //     userid: info.userid,
-          //     memIdx: info.memIdx,
-          //   }),
-          // )
-          // localStorage.setItem(STORAGE_NAME.USER, encDataString) //예시로 로컬에 저장함
-
           const encDataString = encryptWithAES(
             JSON.stringify({
+              isAuthenticated: true,
               accessToken: ACCESS_TOKEN,
-              refreshToken: REFRESH_TOKEN,
+              name: info.name,
+              email: info.email,
+              nickname: info.nickname,
+              userid: info.userid,
+              memIdx: info.memIdx,
             }),
           )
-
-          localStorage.setItem(STORAGE_NAME.USER, encDataString)
+          localStorage.setItem(STORAGE_NAME.USER, encDataString) //예시로 로컬에 저장함
 
           const path = localStorage.getItem('login_path')
           router.replace(path) // 토큰 받았았고 로그인됐으니 화면 전환시켜줌(메인으로)
@@ -86,7 +75,6 @@ const AuthCallback = () => {
         }
       }
     } catch (e) {
-      console.log(e)
       alert('오류가 발생했습니다. 로그인 재 시도해주세요')
       router.replace('/') // 토큰 받았았고 로그인됐으니 화면 전환시켜줌(메인으로)
       return null
