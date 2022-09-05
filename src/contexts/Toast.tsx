@@ -83,7 +83,7 @@ export const ToastContextProvider = ({ children }) => {
       }
       default:
         toast(<CustomToast message={message} type={type} />, {
-          autoClose: 30000,
+          autoClose: 3000,
           hideProgressBar: true,
           transition: Slide,
           ...option,

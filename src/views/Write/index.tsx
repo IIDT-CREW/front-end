@@ -73,7 +73,7 @@ const Write = () => {
     }
   }, [isWriteDownTitleAndContent])
 
-  https: useEffect(() => {
+  useEffect(() => {
     modal()
   }, [])
 
