@@ -36,7 +36,7 @@ export const MainButton = styled.button`
 
   background: #000000;
   border-radius: 4px;
-
+  border: none;
   /* Inside auto layout */
 
   flex: none;

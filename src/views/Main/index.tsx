@@ -99,6 +99,16 @@ const Main = () => {
     },
   })
 
+
+  useEffect(() => {
+    if (isLogin) {
+      console.log('Is login ', isLogin)
+      queryClient.invalidateQueries('myWill')
+    }
+  }, [isLogin, queryClient])
+
+  console.log(data?.result)
+
   return (
     <St.Container mt="78px">
       <Box mb="36px">
@@ -114,15 +124,16 @@ const Main = () => {
 
           {isLogin &&
             !isError &&
-            data?.result?.map((myWill) => {
-              return (
-                <WriteCard
-                  key={myWill.WILL_ID}
-                  will={myWill}
-                  handleDelete={() => deleteMutation.mutate({ will_id: myWill.WILL_ID as string })}
-                />
-              )
-            })}
+
+            data?.result?.map((myWill, i) => (
+              <WriteCard
+                key={`${i}-${myWill.WILL_ID}`}
+                will={myWill}
+                handleDelete={() => deleteMutation.mutate({ will_id: myWill.WILL_ID as string })}
+              />
+            ))}
+
+
         </Flex>
       </Flex>
     </St.Container>

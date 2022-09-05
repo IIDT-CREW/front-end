@@ -1,4 +1,4 @@
-import { TextareaHTMLAttributes, useEffect, useRef, useState } from 'react'
+import { TextareaHTMLAttributes, useContext, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { fontSize, FontSizeProps } from 'styled-system'
 import { insertWill } from 'api/will'
@@ -12,6 +12,8 @@ import { MENU_HEIGHT } from 'config/constants/default'
 import { useUserInfo } from 'store/auth/hooks'
 import { nanoid } from 'nanoid'
 import { useMutation } from 'react-query'
+import { toastContext } from 'contexts/Toast'
+
 const questionList = [
   '1. 살아오면서 가장 기뻤던 일은?',
   '2. 부끄러워서 친구들에게 하지 못한 말은?',
@@ -29,6 +31,7 @@ const Write = () => {
   const [isDefaultPostType, setPostType] = useState(true)
   const inputRef = useRef<HTMLFormElement>(null)
   const { memIdx } = useUserInfo()
+  const { onToast } = useContext(toastContext)
 
   const handlePostType = () => {
     setPostType(false)
@@ -106,6 +109,13 @@ const Write = () => {
   }
   const savePost = useMutation(insertWill, {
     onSuccess: () => {
+      onToast({
+        type: '',
+        message: '작성이 완료 되었어요',
+        option: {
+          position: 'top-center',
+        },
+      })      
       goToBack()
     },
   })
@@ -118,11 +128,11 @@ const Write = () => {
       content: isDefaultPostType
         ? content
         : [...inputRef.current.children]
-            .map((element) => {
-              const [div, textarea] = element.children
-              return `${div.textContent}\n${(textarea as HTMLTextAreaElement).value}`
-            })
-            .join('\n'),
+          .map((element) => {
+            const [div, textarea] = element.children
+            return `${div.textContent}\n${(textarea as HTMLTextAreaElement).value}`
+          })
+          .join('\n'),
       will_id: nanoid(),
     }
 
@@ -151,34 +161,45 @@ const Write = () => {
           작성 완료
         </St.SaveButton>
       </St.MenuBar>
-      {/* <Title value={title} onChange={handleTitle}></Title> */}
       <St.Editor>
+        <Title value={title}
+          onChange={handleTitle}
+          fontSize={'26px'}
+          height='30px'
+          marginBottom='24px'
+          placeholder={`${new Date().toLocaleDateString('ko-KR', {
+            year: '2-digit',
+            month: 'long',
+            day: 'numeric',
+          })}에 쓰는 마지막 일기`} >
+        </Title>
         {isDefaultPostType ? (
           <Contents value={content} onChange={handleContents}></Contents>
         ) : (
-          <form ref={inputRef}>
-            {questionList.map((question, i) => (
-              <div key={`${i}-${question}`}>
-                <St.Question>{question}</St.Question>
-                <Contents height="200px" onChange={handleContents}></Contents>
-              </div>
-            ))}
-          </form>
-        )}
-      </St.Editor>
-    </St.Article>
+            <form ref={inputRef}>
+              {questionList.map((question, i) => (
+                <div key={`${i}-${question}`}>
+                  <St.Question>{question}</St.Question>
+                  <Contents height="200px" onChange={handleContents}></Contents>
+                </div>
+              ))}
+            </form>
+          )
+        }
+      </St.Editor >
+    </St.Article >
   )
 }
 interface TextAreaProps extends FontSizeProps, TextareaHTMLAttributes<HTMLTextAreaElement> {
-  height?: string
+  height?: string,
+  marginBottom?: string,
 }
 const Title = ({ ...props }: TextAreaProps) => {
-  return <St.Textarea {...props} fontSize={'2rem'} placeholder="제목을 입력하세요." />
+  return <St.Textarea  {...props} />
 }
 const Contents = ({ ...props }: TextAreaProps) => {
-  return <St.Textarea {...props} placeholder="내용을 입력하세요" />
+  return <St.Textarea fontSize={'18px'} placeholder="내용을 입력하세요" {...props} />
 }
-
 const St = {
   Editor: styled.section`
     padding: ${MENU_HEIGHT}px 24px 0 24px;
@@ -253,13 +274,15 @@ const St = {
     font-size: 18px;
     font-weight: 400;
     font-family: 'Nanum Myeongjo';
+    padding: unset;
     color: ${({ theme }) => theme.colors.grayscale7};
-    height: calc(100vh - 72px - 78px);
+    height: ${({ height }) => `${height || 'calc(100vh - 72px - 78px)'}`};
+    line-height: 28px;
     ::placeholder {
       color: ${({ theme }) => theme.colors.grayscale5};
-      font-size: 18px;
+      ${fontSize}
     }
-    ${({ height }) => `height: ${height}`};
+    ${({ marginBottom }) => `margin-bottom:${marginBottom}`};
     ${fontSize}
   `,
 }
