@@ -34,7 +34,8 @@ export const MainButton = styled.button`
 
   /* Color/Grayscale 7 */
 
-  background: #000000;
+  background: ${({ theme }) => theme.colors.contrast};
+  color: ${({ theme }) => theme.colors.background};
   border-radius: 4px;
   border: none;
   /* Inside auto layout */
@@ -43,7 +44,6 @@ export const MainButton = styled.button`
   order: 0;
   flex-grow: 1;
 
-  color: #fff;
   cursor: pointer;
 
   font-family: SUIT;
@@ -56,7 +56,6 @@ const Home: React.FC = () => {
     AOS.refresh()
   }, [])
   const isLogin = useIsLogin()
-
   const { theme } = useTheme()
   // const { accessToken } = useSelector<AppState, AppState['auth']>((state) => state.auth)
 
@@ -75,6 +74,7 @@ const Home: React.FC = () => {
         >
           IF I DIE
         </Text>
+
         <Text
           fontFamily="Cormorant"
           fontWeight="700"
@@ -86,7 +86,7 @@ const Home: React.FC = () => {
         </Text>
         <Clock />
 
-        <MainCard
+        {/* <MainCard
           height={isMobile ? '300px' : '469px'}
           title="내일이 내생에"
           secondTitle="마지막이라고 생각해보신적 있나요?"
@@ -100,9 +100,9 @@ const Home: React.FC = () => {
           secondTitle="소중한 이들에게 하고싶은 말이 있나요?"
           imagePath="/images/home/huyen-pham--PTlx55R-KU-unsplash.jpg"
           alt=""
-        />
+        /> */}
 
-        <Box mb="50px" style={{ textAlign: 'center' }} height="500px">
+        <Box mb="50px" style={{ textAlign: 'center' }} height="100vh">
           <Flex justifyContent="center" alignItems="center" height="100%" position="relative" flexDirection="column">
             <Text fontSize={['16px', '16px', '36px', '36px']} color="" data-aos="fade-up" data-aos-duration="1000">
               만약 내일 생을 마감한다면,

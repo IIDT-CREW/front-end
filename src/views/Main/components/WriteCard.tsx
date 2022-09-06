@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { Box, Text, Flex } from 'components/Common'
+import { getColor } from 'components/Common/Text/Text'
 import styled from 'styled-components'
 import { usePopper } from 'react-popper'
 import Ellipsis from 'components/Common/Svg/Icons/Ellipsis'
@@ -22,10 +23,10 @@ const St = {
   `,
   Contents: styled.pre`
     white-space: break-spaces;
-    color: black;
     font-weight: 400;
     line-height: 1.5;
     font-size: 18px;
+    color: ${getColor};
   `,
   MenuWrapper: styled<any>(Box)`
     width: 200px;
@@ -105,7 +106,7 @@ const WriteCard = ({ will, handleDelete, handlShare }: WriteCardProps) => {
   }
 
   return (
-    <St.CardWrapper mr="24px" ml="24px" mb="40px" padding="20px" minWidth="582px" maxWidth="582px" borderRadius="4px">
+    <St.CardWrapper mr="24px" ml="24px" mb="40px" padding="20px" minWidth="362px" maxWidth="582px" borderRadius="4px">
       <Box mb="20px">
         <Flex justifyContent="space-between" alignItems="center">
           <Text>{moment(regDate).format('YYYY.MM.DD')}</Text>

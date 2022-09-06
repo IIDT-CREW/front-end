@@ -5,8 +5,7 @@ import '../style/index.css'
 import type { AppProps } from 'next/app'
 import Head from 'next/head'
 import { Fragment } from 'react'
-import { PersistGate } from 'redux-persist/integration/react'
-import { useStore, persistor } from 'store'
+import store from 'store'
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { Hydrate, QueryClient, QueryClientProvider } from 'react-query'
@@ -40,7 +39,6 @@ function GlobalHooks() {
 
 function MyApp(props: AppProps) {
   const { pageProps } = props
-  const store = useStore(pageProps.initialReduxState)
   const queryClient = useBaseQueryClient()
 
   return (
@@ -66,9 +64,7 @@ function MyApp(props: AppProps) {
             <GlobalHooks />
             <ResetCSS />
             <GlobalStyle />
-            <PersistGate loading={null} persistor={persistor}>
-              <App {...props} />
-            </PersistGate>
+            <App {...props} />
           </Providers>
         </Hydrate>
 

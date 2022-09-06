@@ -13,4 +13,4 @@ export const naviSlice = createSlice({
 })
 
 export const naviActions = { ...naviSlice.actions }
-export default naviSlice.reducer
+export default naviSlice

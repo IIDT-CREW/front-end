@@ -3,24 +3,10 @@ import { useState, useEffect, useRef } from 'react'
 import { Box, Text, Flex } from 'components/Common'
 import styled from 'styled-components'
 
-const St = {
-  ImageWrapper: styled(Box)`
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-
-    img {
-      max-height: 100%;
-      width: auto;
-    }
-  `,
-}
-
 const Clock = ({ height = '300px', isCountDown = true, text = '' }) => {
   const timer: any = useRef(null)
-
   const [time, setTime] = useState(moment())
+
   useEffect(() => {
     timer.current = setInterval(() => {
       setTime(moment())
