@@ -86,7 +86,7 @@ const Home: React.FC = () => {
         </Text>
         <Clock />
 
-        {/* <MainCard
+        <MainCard
           height={isMobile ? '300px' : '469px'}
           title="내일이 내생에"
           secondTitle="마지막이라고 생각해보신적 있나요?"
@@ -100,7 +100,7 @@ const Home: React.FC = () => {
           secondTitle="소중한 이들에게 하고싶은 말이 있나요?"
           imagePath="/images/home/huyen-pham--PTlx55R-KU-unsplash.jpg"
           alt=""
-        /> */}
+        />
 
         <Box mb="50px" style={{ textAlign: 'center' }} height="100vh">
           <Flex justifyContent="center" alignItems="center" height="100%" position="relative" flexDirection="column">

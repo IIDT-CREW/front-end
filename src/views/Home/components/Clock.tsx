@@ -1,15 +1,15 @@
 import moment from 'moment'
 import { useState, useEffect, useRef } from 'react'
 import { Box, Text, Flex } from 'components/Common'
-import styled from 'styled-components'
 
-const Clock = ({ height = '300px', isCountDown = true, text = '' }) => {
+const Clock = ({ height = '300px' }) => {
   const timer: any = useRef(null)
-  const [time, setTime] = useState(moment())
+  const [time, setTime] = useState('')
 
   useEffect(() => {
+    setTime(moment().format('HH:mm:ss'))
     timer.current = setInterval(() => {
-      setTime(moment())
+      setTime(moment().format('HH:mm:ss'))
     }, 1000)
     return () => {
       clearInterval(timer.current)
@@ -25,7 +25,7 @@ const Clock = ({ height = '300px', isCountDown = true, text = '' }) => {
           <Flex flexDirection="column" justifyContent="center" alignItems="center" height="100%" position="relative">
             <Text fontSize={['18px', null, null, '26px']}>현재 시간</Text>
             <Text fontWeight="700" fontSize={['36px', null, null, '48px']}>
-              {time.format('HH:mm:ss')}
+              {time}
             </Text>
           </Flex>
         </Box>

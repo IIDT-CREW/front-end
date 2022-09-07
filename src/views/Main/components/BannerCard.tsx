@@ -19,6 +19,12 @@ const St = {
 
 const bannerJson = [
   {
+    firstLine: '',
+    secondLine: '',
+    author: '',
+    imagePath: '',
+  },
+  {
     firstLine: '포기하지 말라, 희망을 잃지 말라',
     secondLine: '자신을 저버리지 말라',
     author: '/Christopher Reeve',
@@ -50,15 +56,19 @@ const bannerJson = [
     imagePath: '/images/home/ant-rozetsky-q-DJ9XhKkhA-unsplash.jpg',
   },
 ]
-const bannerIndex = Math.floor(Math.random() * 4)
+
 const BannerCard = ({ height = '231px' }) => {
   const timer: any = useRef(null)
 
-  const [time, setTime] = useState(moment())
+  const [time, setTime] = useState('')
+  const [bannerIndex, setBannerIndex] = useState(0)
   useEffect(() => {
+    setTime(moment().format('HH:mm:ss'))
+    setBannerIndex(Math.floor(Math.random() * 4) + 1)
     timer.current = setInterval(() => {
-      setTime(moment())
+      setTime(moment().format('HH:mm:ss'))
     }, 1000)
+
     return () => {
       clearInterval(timer.current)
     }
@@ -88,7 +98,7 @@ const BannerCard = ({ height = '231px' }) => {
             <Text bold>{author}</Text>
             <Box>
               <Text bold fontSize="48px">
-                {time.format('HH : mm : ss')}
+                {time}
               </Text>
             </Box>
           </Flex>

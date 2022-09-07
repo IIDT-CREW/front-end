@@ -7,11 +7,12 @@ interface ThemedProps extends TextProps {
   theme: DefaultTheme
 }
 
-// export const getColor = ({ color, theme }: ThemedProps) => {
-//   return getThemeValue(`colors.${color}`, color)(theme)
-// }
+export const getColor = ({ color, theme }: ThemedProps) => {
+  return getThemeValue(`colors.${color}`, color)(theme)
+}
 
 const Text = styled.div<TextProps>`
+  color: ${getColor};
   font-weight: ${({ bold }) => (bold ? 600 : 400)};
   line-height: 1.5;
   ${({ textTransform }) => textTransform && `text-transform: ${textTransform};`}
