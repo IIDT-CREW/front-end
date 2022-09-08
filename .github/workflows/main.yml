@@ -39,6 +39,7 @@ jobs:
 
           echo "NEXT_PUBLIC_MODE=${{ secrets.NEXT_PUBLIC_MODE }}" >> .env
           echo "NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}" >> .env
+          echo "NEXT_PUBLIC_GTAG=${{ secrets.NEXT_PUBLIC_GTAG }}" >> .env
           cat .env
 
       - name: Install Dependencies # node module install
