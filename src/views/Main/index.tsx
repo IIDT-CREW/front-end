@@ -99,7 +99,6 @@ const Main = () => {
     },
   })
 
-
   useEffect(() => {
     if (isLogin) {
       console.log('Is login ', isLogin)
@@ -124,7 +123,6 @@ const Main = () => {
 
           {isLogin &&
             !isError &&
-
             data?.result?.map((myWill, i) => (
               <WriteCard
                 key={`${i}-${myWill.WILL_ID}`}
@@ -132,8 +130,6 @@ const Main = () => {
                 handleDelete={() => deleteMutation.mutate({ will_id: myWill.WILL_ID as string })}
               />
             ))}
-
-
         </Flex>
       </Flex>
     </St.Container>
