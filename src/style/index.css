@@ -1,5 +1,8 @@
-.nanummyeongjo * {
-  font-family: 'Nanum Myeongjo', serif;
+@font-face {
+  font-family: 'nanummyeongjo';
+  src: url('/fonts/NanumMyeongjo-Regular.ttf');
+  font-weight: normal;
+  font-style: normal;
 }
 
 @font-face {

@@ -34,18 +34,15 @@ class MyDocument extends Document {
     return (
       <Html translate="no">
         <Head>
-          <link href="https://fonts.googleapis.com/css?family=Nanum+Myeongjo&display=swap" rel="stylesheet" />
-          <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;600&amp;display=swap" rel="stylesheet" />
-          <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap&subset=korean" rel="stylesheet" />
-          <link rel="shortcut icon" href="/favicon-.ico" />
+          <link rel="shortcut icon" href="/favicon.ico" />
           <link rel="apple-touch-icon" href="/logo.png" />
           <link rel="manifest" href="/manifest.json" />
           <script type="text/javascript" src="https://developers.kakao.com/sdk/js/kakao.min.js" />
-          <script
+          {/* <script
             type="text/javascript"
             src="https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.0.js"
             charSet="utf-8"
-          />
+          /> */}
           <script async src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GTAG}`} />
         </Head>
         <body>
