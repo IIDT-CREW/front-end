@@ -1,20 +1,5 @@
-import React, { useEffect } from 'react'
 import { Box, Text, Flex } from 'components/Common'
-import styled from 'styled-components'
-import useIntersectionObserver from 'hooks/useIntersectionObserver'
-
-const St = {
-  CardListWrappr: styled.div`
-    display: flex;
-    justify-content: space-between;
-  `,
-  CardContainer: styled.div`
-    background: linear-gradient(293deg, #f17b32, #eed848);
-    border-radius: 12px;
-    width: 150px;
-    height: 300px;
-  `,
-}
+import StyledImage from 'components/Common/Image/StyledImage'
 
 const Card = ({
   height,
@@ -26,12 +11,13 @@ const Card = ({
   return (
     <Box
       width="100%"
-      height={height}
+      height={`${height}px`}
       position="relative"
       mb="20px"
       background="linear-gradient(0deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4))"
     >
-      <img
+      <StyledImage
+        isFill
         src={imagePath}
         alt={alt}
         style={{
@@ -44,7 +30,7 @@ const Card = ({
         }}
       />
 
-      <Box width="100%" height={height} position="relative">
+      <Box width="100%" height={`${height}px`} position="relative">
         <Flex justifyContent="center" alignItems="center" height="100%" position="relative" flexDirection="column">
           <Text
             fontSize={['16px', '16px', '36px', '36px']}
