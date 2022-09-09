@@ -35,6 +35,7 @@ const Card = ({
           <Text
             fontSize={['16px', '16px', '36px', '36px']}
             fontWeight="600"
+            color="#000"
             data-aos="fade-down"
             data-aos-duration="1000"
           >
@@ -43,6 +44,7 @@ const Card = ({
           <Text
             fontSize={['16px', '16px', '36px', '36px']}
             fontWeight="600"
+            color="#000"
             data-aos="fade-up"
             data-aos-duration="3000"
           >

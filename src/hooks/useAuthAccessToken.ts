@@ -4,12 +4,12 @@ import { decryptWithAES } from 'utils/crypto'
 import { authActions } from 'store/auth'
 import { STORAGE_NAME, API_CODE } from 'config/constants/api'
 import { getUserInfo } from 'api/auth'
-
+import { useIsLogin } from 'store/auth/hooks'
 import axios from 'api'
 
 const useAuthAccessToken = () => {
   const dispatch = useDispatch()
-
+  const isLogin = useIsLogin()
   async function getUser() {
     try {
       const res = await getUserInfo()
@@ -30,6 +30,7 @@ const useAuthAccessToken = () => {
   }
 
   useEffect(() => {
+    if (isLogin) return
     const getUserInfo = async () => {
       const storageData = localStorage.getItem(STORAGE_NAME.USER)
       if (!storageData) return
@@ -57,6 +58,7 @@ const useAuthAccessToken = () => {
         )
       }
     }
+
     getUserInfo()
   })
 

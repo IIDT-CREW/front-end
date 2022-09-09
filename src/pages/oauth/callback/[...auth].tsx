@@ -1,12 +1,18 @@
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
-import axios from 'api'
+import axios from 'axios'
 import { useDispatch } from 'react-redux'
 import { authActions } from 'store/auth'
 import { getUserInfo } from 'api/auth'
 import LoaderPage from 'components/LoaderPage'
 import { STORAGE_NAME, API_CODE, API_URL } from 'config/constants/api'
 import { encryptWithAES } from 'utils/crypto'
+
+// Create axios instance.
+const axiosInstance = axios.create({
+  baseURL: API_URL,
+  withCredentials: true,
+})
 
 const AuthCallback = () => {
   const router = useRouter()
@@ -33,7 +39,7 @@ const AuthCallback = () => {
 
   async function loginTransaction(coperation: string, code: string) {
     try {
-      const res = await axios({
+      const res = await axiosInstance({
         method: 'GET',
         url: `${API_URL}/api/oauth/callback/${coperation}?code=${code}`,
       })
@@ -42,8 +48,8 @@ const AuthCallback = () => {
         const bearer = `Bearer ${ACCESS_TOKEN}`
         axios.defaults.headers.common['Authorization'] = bearer
         // axios.defaults.headers.common['refresh'] = REFRESH_TOKEN
+
         const info = await getUser()
-        //console.log('[getUser] info= ', info)
         if (info) {
           dispatch(
             authActions.setAuth({
@@ -68,11 +74,11 @@ const AuthCallback = () => {
             }),
           )
           localStorage.setItem(STORAGE_NAME.USER, encDataString) //예시로 로컬에 저장함
-
-          const path = localStorage.getItem('login_path')
-          router.replace(path) // 토큰 받았았고 로그인됐으니 화면 전환시켜줌(메인으로)
-          localStorage.removeItem('login_path')
         }
+
+        const path = localStorage.getItem('login_path')
+        router.replace(path) // 토큰 받았았고 로그인됐으니 화면 전환시켜줌(메인으로)
+        localStorage.removeItem('login_path')
       }
     } catch (e) {
       alert('오류가 발생했습니다. 로그인 재 시도해주세요')
