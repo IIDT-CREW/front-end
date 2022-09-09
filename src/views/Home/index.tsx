@@ -1,15 +1,16 @@
-import styled, { keyframes } from 'styled-components'
+import styled from 'styled-components'
 import useTheme from 'hooks/useTheme'
 import Heading from 'components/Common/Heading/Heading'
 import { Box, Flex } from 'components/Common/Box'
 import { Text } from 'components/Common/Text'
 import React, { useEffect } from 'react'
-import MainCard from './components/MainCard'
 import AOS from 'aos'
-import Clock from './components/Clock'
 import Link from 'next/link'
 import { useIsLogin } from 'store/auth/hooks'
 import useMatchBreakpoints from 'hooks/useMatchBreakpoints'
+import MainCard from './components/MainCard'
+import Clock from './components/Clock'
+
 //aos
 //offest
 //easing

@@ -1,4 +1,6 @@
-import Home from 'views/Home'
+import dynamic from 'next/dynamic'
+const Home = dynamic(import('views/Home'))
+
 // import { withAuthComponent, withAuthServerSideProps } from 'hoc/withAuthServerSide'
 
 const IndexPage = ({ theme }) => {

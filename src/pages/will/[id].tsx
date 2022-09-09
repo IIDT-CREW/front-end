@@ -1,7 +1,9 @@
-import type { GetServerSideProps, NextPage } from 'next'
-import Will from 'views/Will'
-import { dehydrate, QueryClient, useQuery } from 'react-query'
+import type { GetServerSideProps } from 'next'
+import { dehydrate, QueryClient } from 'react-query'
 import { getWill } from 'api/will'
+import dynamic from 'next/dynamic'
+const Will = dynamic(import('views/Will'))
+
 const WillPage = () => {
   return <Will />
 }

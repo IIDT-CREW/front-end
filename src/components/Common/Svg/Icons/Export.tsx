@@ -12,7 +12,7 @@ const Icon: React.FC<SvgProps> = (props) => {
       <path
         d="M5 16L5 17C5 18.1046 5.89543 19 7 19L17 19C18.1046 19 19 18.1046 19 17V16"
         stroke="#2E3237"
-        stroke-width="1.5"
+        strokeWidth="1.5"
       />
     </Svg>
   )

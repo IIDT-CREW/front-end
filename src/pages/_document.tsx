@@ -2,7 +2,6 @@
 /* eslint-disable jsx-a11y/iframe-has-title */
 import Document, { Html, Head, Main, NextScript, DocumentContext } from 'next/document'
 import { ServerStyleSheet } from 'styled-components'
-
 class MyDocument extends Document {
   static async getInitialProps(ctx: DocumentContext) {
     const sheet = new ServerStyleSheet()
@@ -38,11 +37,12 @@ class MyDocument extends Document {
           <link rel="apple-touch-icon" href="/logo.png" />
           <link rel="manifest" href="/manifest.json" />
           <link href="https://fonts.googleapis.com/css?family=Nanum+Myeongjo&display=swap" rel="stylesheet" />
+          <script type="text/javascript" src="https://developers.kakao.com/sdk/js/kakao.min.js" />
 
-          <script async>
+          {/* <script async>
             const preloadScript = document.createElement('script'); preloadScript.src =
             "https://developers.kakao.com/sdk/js/kakao.min.js"; document.body.appendChild(preloadScript);
-          </script>
+          </script> */}
           {/* <script
             type="text/javascript"
             src="https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.0.js"

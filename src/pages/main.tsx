@@ -1,7 +1,9 @@
-import Main from 'views/Main'
+import dynamic from 'next/dynamic'
 import type { GetServerSideProps } from 'next'
 import { dehydrate, QueryClient } from 'react-query'
 // import { getWill, getMyWill } from 'api/will'
+
+const Main = dynamic(import('views/Main'))
 
 const MainPage = () => {
   return <Main />
