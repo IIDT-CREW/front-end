@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
 import Flex from '../Common/Box/Flex'
@@ -6,16 +6,13 @@ import { Heading } from '../Common'
 import Link from 'next/link'
 import { Box } from '../Common/Box'
 import { Button } from 'components/Common/Button'
-import { Text } from 'components/Common/Text'
 import MenuItem from 'components/Menu/MenuItem'
 import DropdownMenu from './DropdownMenu'
 import MenuConfig from './config'
 import { useRouter } from 'next/router'
-import { getActiveMenuItem, getActiveSubMenuItem } from './utils'
-import { authActions } from 'store/auth'
+// import { getActiveMenuItem } from './utils'
 import { naviActions } from 'store/navi'
-import { useNaviState } from 'store/navi/hooks'
-import { useIsLogin, useUserInfo } from 'store/auth/hooks'
+import { useIsLogin } from 'store/auth/hooks'
 import useTheme, { THEME_TYPE } from 'hooks/useTheme'
 import ThemeToggleButton from '../Common/Button/ThemeToggleButton'
 import { useModal } from 'components/Common'
@@ -63,14 +60,14 @@ export const St = {
 
 const MenuWrapper = () => {
   const dispatch = useDispatch()
-  const { pathname } = useRouter()
-  const router = useRouter()
+  // const { pathname } = useRouter()
+  // const router = useRouter()
   const [showMenu, setShowMenu] = useState(true)
-  const activeMenuItem = getActiveMenuItem({ menuConfig: MenuConfig, pathname })
-  const activeSubMenuItem = getActiveSubMenuItem({ menuItem: activeMenuItem, pathname })
+  //const activeMenuItem = getActiveMenuItem({ menuConfig: MenuConfig, pathname })
+  //const activeSubMenuItem = getActiveSubMenuItem({ menuItem: activeMenuItem, pathname })
   const isLogin = useIsLogin()
-  const { name, email } = useUserInfo()
-  const { isMenuOpen } = useNaviState()
+  // const { name, email } = useUserInfo()
+  // const { isMenuOpen } = useNaviState()
   const [presentLoginModal] = useModal(<LoginModal />)
 
   const handleLogin = () => {

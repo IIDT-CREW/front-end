@@ -1,5 +1,3 @@
-//
-export * from './Alert'
 export * from './Box'
 export * from './Svg'
 export * from './Text'

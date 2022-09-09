@@ -1,13 +1,13 @@
-import { useSelector, useDispatch } from 'react-redux'
-import { AppDispatch, AppState } from '../index'
+import { useSelector } from 'react-redux'
+import { RootState } from '../index'
 import { authActions } from './'
 
-export function useAuthState(): AppState['auth'] {
-  return useSelector<AppState, AppState['auth']>((state) => state.auth)
+export function useAuthState(): RootState['auth'] {
+  return useSelector<RootState, RootState['auth']>((state) => state.auth)
 }
 
 export function useIsLogin(): boolean {
-  const { isAuthenticated } = useSelector<AppState, AppState['auth']>((state) => state.auth)
+  const { isAuthenticated } = useSelector<RootState, RootState['auth']>((state) => state.auth)
   return isAuthenticated
 }
 

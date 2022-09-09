@@ -1,41 +1,9 @@
 import { useEffect } from 'react'
 import { Modal, ModalProps } from 'components/Common'
 import { Flex, Box, Text } from 'components/Common'
-import styled from 'styled-components'
 import CopyToClipboard from 'views/Will/components/CopyToClipboard'
 import { API_URL } from 'config/constants/api'
 import { useRouter } from 'next/router'
-
-const St = {
-  ConfirmButton: styled.div`
-    /* Auto layout */
-
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    padding: 14px 16px;
-    gap: 10px;
-
-    width: 335px;
-    height: 50px;
-
-    /* Color/Grayscale 7 */
-
-    background: #000000;
-    border-radius: 4px;
-
-    /* Inside auto layout */
-
-    flex: none;
-    order: 0;
-    flex-grow: 1;
-
-    color: #fff;
-
-    cursor: pointer;
-  `,
-}
 
 const ShareModal = ({ onDismiss, content, willId, ...props }: any) => {
   const router = useRouter()

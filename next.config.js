@@ -39,7 +39,7 @@ module.exports = withBundleAnalyzer({
   webpack(config) {
     //console.log(config);
     const prod = process.env.NODE_ENV === 'production'
-    console.log('prod = ', prod)
+    // console.log('prod = ', prod)
     // 플러그인 관련 설정
     const plugins = [
       ...config.plugins,

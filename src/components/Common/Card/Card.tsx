@@ -1,7 +1,7 @@
 import styled, { keyframes, css, DefaultTheme } from 'styled-components'
 import { Box } from '../Box'
 import { HTMLAttributes } from 'react'
-import { space, SpaceProps } from 'styled-system'
+import { SpaceProps } from 'styled-system'
 
 export interface CardProps extends SpaceProps, HTMLAttributes<HTMLDivElement> {
   isActive?: boolean
@@ -27,13 +27,7 @@ const PromotedGradient = keyframes`
     background-position: 50% 0%;
   }
 `
-const getBorderColor = ({
-  isActive,
-  isSuccess,
-  isWarning,
-  borderBackground,
-  theme,
-}: StyledCardProps) => {
+const getBorderColor = ({ isActive, isSuccess, isWarning, borderBackground, theme }: StyledCardProps) => {
   if (borderBackground) {
     return borderBackground
   }

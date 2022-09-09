@@ -1,4 +1,4 @@
-import { ElementType, ReactNode } from 'react'
+import { ElementType } from 'react'
 import { LayoutProps, SpaceProps } from 'styled-system'
 import { PolymorphicComponentProps } from 'utils/polymorphic'
 export const scales = {
@@ -29,7 +29,4 @@ export interface BaseButtonProps extends LayoutProps, SpaceProps {
   disabled?: boolean
   width?: string
 }
-export type ButtonProps<P extends ElementType = 'button'> = PolymorphicComponentProps<
-  P,
-  BaseButtonProps
->
+export type ButtonProps<P extends ElementType = 'button'> = PolymorphicComponentProps<P, BaseButtonProps>

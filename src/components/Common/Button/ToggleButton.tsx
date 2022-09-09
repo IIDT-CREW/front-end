@@ -1,7 +1,5 @@
 import styled from 'styled-components'
-import { variant } from 'styled-system'
-import { styleVariants, scaleVariants } from './theme'
-import { Scale, ButtonProps } from './types'
+import { ButtonProps } from './types'
 
 interface ToggleButtonProps {
   selected: boolean

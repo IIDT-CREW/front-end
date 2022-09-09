@@ -15,7 +15,6 @@ enum RET {
 }
 
 const withAuth = (Component: any) => {
-  console.log('Component = ', Component)
   return () => {
     const router = useRouter()
     const [verifyState, setVerifyState] = useState({ isLoading: true })

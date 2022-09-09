@@ -6,7 +6,7 @@ const LoginTestPage = () => {
   const handleLogin = async () => {
     try {
       const res = await login()
-      console.log(res.data.result)
+
       const accessToken = res.data.result
       dispatch(
         authActions.setAuth({
@@ -26,7 +26,6 @@ const LoginTestPage = () => {
   const handleUserInfoTest = async () => {
     try {
       const res = await userInfoTest()
-      console.log('res = ', res)
       //localStorage.setItem('accessToken', accessToken)
     } catch (e) {
       console.log(e)

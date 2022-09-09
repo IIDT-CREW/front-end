@@ -61,7 +61,6 @@ const ModalProvider = ({ children }: ModalProviderProps) => {
   const animationRef = useRef<HTMLDivElement>(null)
 
   const handlePresent = (node: React.ReactNode, newNodeId: string, closeOverlayClick: boolean) => {
-    console.log(node)
     setModalNode(node)
     setIsOpen(true)
     setNodeId(newNodeId)

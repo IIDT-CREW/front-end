@@ -1,5 +1,5 @@
 /* eslint-disable react/no-array-index-key */
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { usePopper } from 'react-popper'
 import useOnClickOutside from 'hooks/useOnClickOutside'
 import { Box } from '../Common/Box'
@@ -136,7 +136,6 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
     },
   )
 
-  console.log('hasITEM', hasItems)
   return (
     <Box ref={setTargetRef} {...props}>
       <Box

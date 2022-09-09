@@ -57,7 +57,6 @@ const Write = () => {
   const isWriteDownTitleAndContent = title !== '' || content !== '' || isWriteDown()
 
   const preventGoBack = () => {
-    console.log('isWriteDownTitleAndContent  =', isWriteDownTitleAndContent)
     if (isWriteDownTitleAndContent) {
       presentWarningHistoryBackModal()
     } else {
@@ -115,7 +114,7 @@ const Write = () => {
         option: {
           position: 'top-center',
         },
-      })      
+      })
       goToBack()
     },
   })
@@ -128,11 +127,11 @@ const Write = () => {
       content: isDefaultPostType
         ? content
         : [...inputRef.current.children]
-          .map((element) => {
-            const [div, textarea] = element.children
-            return `${div.textContent}\n${(textarea as HTMLTextAreaElement).value}`
-          })
-          .join('\n'),
+            .map((element) => {
+              const [div, textarea] = element.children
+              return `${div.textContent}\n${(textarea as HTMLTextAreaElement).value}`
+            })
+            .join('\n'),
       will_id: nanoid(),
     }
 
@@ -162,40 +161,40 @@ const Write = () => {
         </St.SaveButton>
       </St.MenuBar>
       <St.Editor>
-        <Title value={title}
+        <Title
+          value={title}
           onChange={handleTitle}
           fontSize={'26px'}
-          height='30px'
-          marginBottom='24px'
+          height="30px"
+          marginBottom="24px"
           placeholder={`${new Date().toLocaleDateString('ko-KR', {
             year: '2-digit',
             month: 'long',
             day: 'numeric',
-          })}에 쓰는 마지막 일기`} >
-        </Title>
+          })}에 쓰는 마지막 일기`}
+        ></Title>
         {isDefaultPostType ? (
           <Contents value={content} onChange={handleContents}></Contents>
         ) : (
-            <form ref={inputRef}>
-              {questionList.map((question, i) => (
-                <div key={`${i}-${question}`}>
-                  <St.Question>{question}</St.Question>
-                  <Contents height="200px" onChange={handleContents}></Contents>
-                </div>
-              ))}
-            </form>
-          )
-        }
-      </St.Editor >
-    </St.Article >
+          <form ref={inputRef}>
+            {questionList.map((question, i) => (
+              <div key={`${i}-${question}`}>
+                <St.Question>{question}</St.Question>
+                <Contents height="200px" onChange={handleContents}></Contents>
+              </div>
+            ))}
+          </form>
+        )}
+      </St.Editor>
+    </St.Article>
   )
 }
 interface TextAreaProps extends FontSizeProps, TextareaHTMLAttributes<HTMLTextAreaElement> {
-  height?: string,
-  marginBottom?: string,
+  height?: string
+  marginBottom?: string
 }
 const Title = ({ ...props }: TextAreaProps) => {
-  return <St.Textarea  {...props} />
+  return <St.Textarea {...props} />
 }
 const Contents = ({ ...props }: TextAreaProps) => {
   return <St.Textarea fontSize={'18px'} placeholder="내용을 입력하세요" {...props} />

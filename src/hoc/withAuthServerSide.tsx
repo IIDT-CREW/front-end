@@ -31,7 +31,6 @@ export function withAuthServerSideProps(getServerSidePropsFunc?) {
     }
     if (!accessToken) {
     }
-    console.log('nookie= ', nookie)
     /* 토큰 세팅 */
     if (context.req && cookie) {
       axios.defaults.headers.common.Cookie = cookie

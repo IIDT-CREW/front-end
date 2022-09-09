@@ -1,7 +1,7 @@
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit'
 import auth from './auth'
 import navi from './navi'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import type { TypedUseSelectorHook } from 'react-redux'
 
 // ### 리듀서 State 타입 정의
