@@ -28,7 +28,7 @@ const bannerJson = [
     firstLine: '포기하지 말라, 희망을 잃지 말라',
     secondLine: '자신을 저버리지 말라',
     author: '/Christopher Reeve',
-    imagePath: '/images/home/avis-yang-wkHUmkgClg4-unsplash.jpg',
+    imagePath: '/images/home/avis-yang-0QPGGcOLxWQ-unsplash.jpg',
   },
   {
     firstLine: '당신은 움츠리기보다 활짝',
@@ -37,15 +37,15 @@ const bannerJson = [
     imagePath: '/images/home/wes-hicks-u-jh6blYQmQ-unsplash.jpg',
   },
   {
-    firstLine: '절대 어제를 후회하지 마라. 인생은 오늘의 나 안에 있고',
-    secondLine: '내일은 스스로 만드는 것이다.',
+    firstLine: '절대 어제를 후회하지 마라. ',
+    secondLine: '인생은 오늘의 나 안에 있고 내일은 스스로 만드는 것이다.',
     author: '/L. Ron Hubbard',
     imagePath: '/images/home/seb-mooze-LfAZZnTyDB8-unsplash.jpg',
   },
 
   {
-    firstLine: '행복이란 하늘이 파랗다는 것을 발견하는 것 만큼이나',
-    secondLine: '쉬운 일이다.',
+    firstLine: '행복이란 하늘이 파랗다는 것을',
+    secondLine: '발견하는 것 만큼이나 쉬운 일이다.',
     author: '/Jostein Gaarder',
     imagePath: '/images/home/billy-huynh-v9bnfMCyKbg-unsplash.jpg',
   },
@@ -56,7 +56,7 @@ const bannerJson = [
     imagePath: '/images/home/ant-rozetsky-q-DJ9XhKkhA-unsplash.jpg',
   },
 ]
-
+const bannerIndex = Math.floor(Math.random() * 5)
 const BannerCard = ({ height = '231px' }) => {
   const timer: any = useRef(null)
 
@@ -93,9 +93,15 @@ const BannerCard = ({ height = '231px' }) => {
         />
         <Box width="100%" height={height} position="relative">
           <Flex flexDirection="column" justifyContent="center" alignItems="center" height="100%" position="relative">
-            <Text bold>{firstLine}</Text>
-            <Text bold>{secondLine}</Text>
-            <Text bold>{author}</Text>
+            <Text fontSize={['14px', null, null, '18px']} bold>
+              {firstLine}
+            </Text>
+            <Text fontSize={['14px', null, null, '18px']} bold>
+              {secondLine}
+            </Text>
+            <Text fontSize={['14px', null, null, '18px']} bold>
+              {author}
+            </Text>
             <Box>
               <Text bold fontSize="48px">
                 {time}
