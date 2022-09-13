@@ -47,7 +47,6 @@ axiosInstance.interceptors.request.use(
 
 axiosInstance.interceptors.response.use(
   async (response) => {
-    //console.log('[AXIOS] INTERCEPTORS[RES] response= ', response)
     if (response.config.url !== '/api/oauth/refresh' && response.data.code === API_CODE.CREDENTIAL_EXPIRED) {
       const token_response = await refresh()
       //console.log('[AXIOS] isRefresh ')
@@ -83,17 +82,18 @@ axiosInstance.interceptors.response.use(
       return axiosInstance(response.config)
     }
 
-    // console.log('response.data = ', response.data)
     // return Promise.resolve(response)
     switch (response.data.code) {
       case API_CODE.SUCCESS: // 정상
         // console.log('[AXIOS] INTERCEPTORS[RES] success!!')
         return Promise.resolve(response)
       case API_CODE.FAILURE_USER_AUTH:
+      case API_CODE.CREDENTIAL_EXPIRED:
       case API_CODE.INVALID_TOKEN: // 유효하지 않은 토큰 키
       case API_CODE.INVALID_SIGNATURE: // 사용할 수 없는 토큰입니다.
       case API_CODE.BLACKLIST_TOKEN:
       case API_CODE.BAD_USER_STATUS: // 정지된 사용자
+        localStorage.removeItem(STORAGE_NAME.USER)
         return Promise.reject(
           new Error(`${response.data ? `[${response.data.result}] ${response.data.reason}` : response.status}`),
         )
@@ -111,13 +111,20 @@ axiosInstance.interceptors.response.use(
   },
 
   (error) => {
-    console.log('error= ', error)
-    /*
+    switch (error?.response?.data?.code) {
+      case API_CODE.CREDENTIAL_EXPIRED: // 정상
+      case API_CODE.FAILURE_USER_AUTH:
+        localStorage.removeItem(STORAGE_NAME.USER)
+        return Promise.reject(error)
+      default: {
+        return Promise.reject(error)
+      }
+      /*
       http status가 200이 아닌 경우
       응답 에러 처리를 작성합니다.
       .catch() 으로 이어집니다.
     */
-    return Promise.reject(error)
+    }
   },
 )
 

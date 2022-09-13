@@ -27,9 +27,9 @@ import { ToastContainer } from 'react-toastify'
 import 'style/custom-react-toastify.css'
 import 'aos/dist/aos.css'
 
-if (process.env.NODE_ENV === 'development') {
-  import('mocks')
-}
+// if (process.env.NODE_ENV === 'development') {
+//   import('mocks')
+// }
 
 function GlobalHooks() {
   // useAuthUserStorage()
