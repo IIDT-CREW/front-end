@@ -46,7 +46,7 @@ module.exports = withBundleAnalyzer({
       new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /^\.\/ko$/),
       new webpack.ContextReplacementPlugin(
         /highlight\.js\/lib\/languages$/,
-        new RegExp(`^./(${['javascript', 'python'].join('|')})$`),
+        new RegExp(`^./(${['javascript'].join('|')})$`),
       ),
     ]
     if (prod) {

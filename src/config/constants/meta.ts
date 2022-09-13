@@ -1,27 +1,15 @@
 import { PageMeta } from './types'
 
 export const DEFAULT_META: PageMeta = {
-  title: 'title',
-  description: 'description',
-  image: 'image',
+  title: 'IIDT',
+  description: '만약 오늘이 마지막이라면.',
+  image: '/images/home/patrick-ryan-3kUIaB2EPp8-unsplash.jpg',
 }
 
 export const getCustomMeta = (path: string): PageMeta => {
-  let basePath
-  if (path.startsWith('/a')) {
-    basePath = '/a'
-  } else if (path.startsWith('/b')) {
-    basePath = '/b'
-  } else {
-    basePath = path
-  }
+  const basePath = path
 
   switch (basePath) {
-    case '/':
-      return {
-        title: `${'Home'} | ${'your_home'}`,
-      }
-
     case '/will':
       return {
         title: `당신의 마지막 일기`,
