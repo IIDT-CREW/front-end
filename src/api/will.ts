@@ -1,7 +1,7 @@
 import axiosDefault from 'axios'
 import authAxios from '.'
 import { API_URL } from 'config/constants/api'
-
+import { GetWillCount, GetWill, GetMyWill, GetMyWillParams, InsertWillParams, DeleteWillParams } from './types'
 const url = API_URL
 
 // Create axios instance.
@@ -11,19 +11,16 @@ export const axiosInstance = axiosDefault.create({
 })
 
 export const getWill = async (will_id: string) => {
-  const response = await axiosInstance.get('api/will/getWill', {
+  const response = await axiosInstance.get<GetWill>('api/will/getWill', {
     params: {
       will_id,
     },
   })
   return response.data
 }
-type getMyWillParams = {
-  mem_email: string
-  mem_userid: string
-}
-export const getMyWill = async ({ mem_email, mem_userid }: getMyWillParams) => {
-  const response = await authAxios.get('api/will/getMyWill', {
+
+export const getMyWill = async ({ mem_email, mem_userid }: GetMyWillParams) => {
+  const response = await authAxios.get<GetMyWill>('api/will/getMyWill', {
     params: {
       mem_userid,
       mem_email,
@@ -31,31 +28,20 @@ export const getMyWill = async ({ mem_email, mem_userid }: getMyWillParams) => {
   })
   return response.data
 }
-type insertWillParams = {
-  title: string
-  content: string
-  thumbnail: string
-  mem_idx: number
-  will_id: string
-}
 
 export const getWillCount = async () => {
-  const response = await axiosInstance.get('api/will/getWillCount')
+  const response = await axiosInstance.get<GetWillCount>('api/will/getWillCount')
   return response.data
 }
 
-type deleteWillParams = {
-  will_id: string
-}
-
-export const insertWill = (data: insertWillParams) => {
+export const insertWill = (data: InsertWillParams) => {
   return authAxios.post('api/will/insertWill', data)
 }
 
-export const deleteWill = (data: deleteWillParams) => {
+export const deleteWill = (data: DeleteWillParams) => {
   return authAxios.post('api/will/deleteWill', data)
 }
 
-export const updateWill = (data: deleteWillParams) => {
+export const updateWill = (data: DeleteWillParams) => {
   return authAxios.post('api/will/updateWill', data)
 }

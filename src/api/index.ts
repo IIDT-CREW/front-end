@@ -25,18 +25,22 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   async (config) => {
-    const strData = await asyncLocalStorage.getItem(STORAGE_NAME.USER)
-    //onsole.log('strData = ', strData)
-    const addConfigHeaders: any = {}
-    if (strData) {
-      const data = JSON.parse(decryptWithAES(strData))
-      if (data.accessToken) {
-        addConfigHeaders.Authorization = data.accessToken ? `Bearer ${data.accessToken}` : ''
+    try {
+      const strData = await asyncLocalStorage.getItem(STORAGE_NAME.USER)
+      //onsole.log('strData = ', strData)
+      const addConfigHeaders: any = {}
+      if (strData) {
+        const data = JSON.parse(decryptWithAES(strData))
+        if (data.accessToken) {
+          addConfigHeaders.Authorization = data.accessToken ? `Bearer ${data.accessToken}` : ''
+        }
       }
+      const newConfig = { ...config, headers: { ...config.headers, ...addConfigHeaders } }
+      //console.log('[AXIOS] INTERCEPTORS[REQ] = ', newConfig)
+      return newConfig
+    } catch (e) {
+      return config
     }
-    const newConfig = { ...config, headers: { ...config.headers, ...addConfigHeaders } }
-    //console.log('[AXIOS] INTERCEPTORS[REQ] = ', newConfig)
-    return newConfig
   },
   (error) => {
     //console.log('error ', error)
@@ -93,7 +97,7 @@ axiosInstance.interceptors.response.use(
       case API_CODE.INVALID_SIGNATURE: // 사용할 수 없는 토큰입니다.
       case API_CODE.BLACKLIST_TOKEN:
       case API_CODE.BAD_USER_STATUS: // 정지된 사용자
-        localStorage.removeItem(STORAGE_NAME.USER)
+        if (localStorage) localStorage.removeItem(STORAGE_NAME.USER)
         return Promise.reject(
           new Error(`${response.data ? `[${response.data.result}] ${response.data.reason}` : response.status}`),
         )
@@ -114,7 +118,7 @@ axiosInstance.interceptors.response.use(
     switch (error?.response?.data?.code) {
       case API_CODE.CREDENTIAL_EXPIRED: // 정상
       case API_CODE.FAILURE_USER_AUTH:
-        localStorage.removeItem(STORAGE_NAME.USER)
+        if (localStorage) localStorage.removeItem(STORAGE_NAME.USER)
         return Promise.reject(error)
       default: {
         return Promise.reject(error)
