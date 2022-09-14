@@ -8,18 +8,18 @@ import { ThemeProvider as NextThemeProvider, useTheme as useNextTheme } from 'ne
 
 const StyledThemeProvider = (props) => {
   const { resolvedTheme } = useNextTheme()
-  return <ThemeProvider theme={resolvedTheme === 'dark' ? dark : light} {...props} />
+  return <ThemeProvider theme={resolvedTheme === 'light' ? light : dark} {...props} />
 }
 
 const Providers: React.FC<{ children: any; store: Store }> = ({ children, store }) => {
   return (
     <Provider store={store}>
       <NextThemeProvider>
-        <ToastContextProvider>
-          <StyledThemeProvider>
+        <StyledThemeProvider>
+          <ToastContextProvider>
             <ModalProvider>{children}</ModalProvider>
-          </StyledThemeProvider>
-        </ToastContextProvider>
+          </ToastContextProvider>
+        </StyledThemeProvider>
       </NextThemeProvider>
     </Provider>
   )

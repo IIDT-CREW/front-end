@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import ResetCSS from 'style/ResetCSS'
 import Script from 'next/script'
 import '../style/index.css'
@@ -130,6 +130,25 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
     }
   }, [router.events])
 
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (!mounted) {
+    return (
+      <div style={{ visibility: 'hidden' }}>
+        <Menu />
+        <Layout>
+          {isMenuOpen && <MenuWrapper />}
+          <St.Wrapper style={{ visibility: isMenuOpen ? 'hidden' : 'visible' }}>
+            <Component {...pageProps} />
+          </St.Wrapper>
+        </Layout>
+        <Footer />
+      </div>
+    )
+  }
   return (
     <>
       <Menu />
