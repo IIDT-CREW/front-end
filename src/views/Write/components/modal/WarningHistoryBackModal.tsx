@@ -40,7 +40,7 @@ const WarningHistoryBackModal = ({ onDismiss, ...props }: any) => {
   }
 
   return (
-    <Modal title="일기 작성을 나중에 하시겠어요?" onDismiss={onDismiss} {...props}>
+    <Modal title="일기 작성을 나중에 하시겠어요?" onDismiss={onDismiss} {...props} minWidth="272px">
       <Flex flexDirection="column" justifyContent="center" alignItems="center">
         <Text>일기 작성을 나중에 하시겠어요?</Text>
         <Text fontWeight="600">지금까지 작성된 내용은 저장되지 않습니다</Text>

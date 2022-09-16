@@ -50,13 +50,17 @@ const LoginButton = styled.button<LoginProps>`
         return css`
           background-color: #fee500;
           color: #000000d8;
-          font-size: 14.5px; ;
+          font-size: 14.5px;
+          border-radius: 4px;
         `
       }
       case EType.GOOGLE: {
         return css`
-          background-color: #4285f4;
-          color: #fff;
+          background-color: #ffffff;
+          border: 1px solid #e2e4e6;
+          border-radius: 4px;
+
+          color: black;
           font-size: 14.5px;
           span {
             font-family: 'Roboto', 'Spoqa Han Sans Neo', 'sans-serif';
@@ -128,7 +132,7 @@ const LoginModal: React.FC<ModalProps> = ({ onDismiss, ...props }) => {
   }, [])
 
   return (
-    <Modal title="로그인이 필요해요" onDismiss={onDismiss} {...props} minWidth="586px">
+    <Modal title="로그인이 필요해요" onDismiss={onDismiss} {...props} minWidth="272px">
       <Flex justifyContent="center" alignItems="center" flexDirection="column">
         {/* <LoginButton
         loginType={EType.NAVER}
@@ -146,7 +150,7 @@ const LoginModal: React.FC<ModalProps> = ({ onDismiss, ...props }) => {
           }}
         >
           <LoginIcon loginType={EType.KAKAO} />
-          <span>카카오 로그인</span>
+          <span>카카오 계정으로 시작하기</span>
         </LoginButton>
         <LoginButton
           loginType={EType.GOOGLE}
@@ -155,7 +159,7 @@ const LoginModal: React.FC<ModalProps> = ({ onDismiss, ...props }) => {
           }}
         >
           <LoginIcon loginType={EType.GOOGLE} />
-          <span>Google 로그인</span>
+          <span>Google 계정으로 시작하기</span>
         </LoginButton>
 
         <Box mt="64px" mb="32px">

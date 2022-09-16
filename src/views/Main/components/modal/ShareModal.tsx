@@ -66,11 +66,12 @@ const ShareModal = ({ onDismiss, content, willId, ...props }: any) => {
   }
 
   return (
-    <Modal title="마지막 일기를 공유하세요" onDismiss={onDismiss} {...props}>
+    <Modal title="마지막 일기를 공유하세요" onDismiss={onDismiss} {...props} minWidth="272px">
       <Flex flexDirection="column" justifyContent="center" alignItems="center">
         <Text>마음을 담아서 작성하셨나요?</Text>
         <Text>남들에게도 자신의 마지막 일기를 공유해보세요 </Text>
-        <Text mb="20px">마음이 힘들다면 1577-0199로 전화해주세요. 당신은 그 누구보다 소중합니다.</Text>
+        <Text mb="20px">마음이 힘들다면 1577-0199로 전화해주세요.</Text>
+        <Text mb="20px">당신은 그 누구보다 소중합니다.</Text>
         <Box>
           <Flex justifyContent="center" alignItems="center" flexWrap="wrap" style={{ gap: '10px' }}>
             <CopyToClipboard toCopy={`${API_URL}/will/${willId}`} />

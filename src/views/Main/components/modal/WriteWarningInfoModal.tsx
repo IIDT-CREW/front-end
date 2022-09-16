@@ -34,7 +34,7 @@ const St = {
 
 const WriteWarningInfoModal = ({ onDismiss, ...props }: any) => {
   return (
-    <Modal title="내 삶을 돌아보기위한 마지막 일기입니다" onDismiss={onDismiss} {...props}>
+    <Modal title="내 삶을 돌아보기위한 마지막 일기입니다" onDismiss={onDismiss} {...props} minWidth="272px">
       <Flex flexDirection="column" justifyContent="center" alignItems="center">
         <Text>이 마지막 일기는 그 누구도 아닌 나 자신을 돌아보는 일기입니다.</Text>
         <Text>죽음은 치료할 수 있는 질병이 아니에요. </Text>

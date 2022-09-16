@@ -13,13 +13,15 @@ const SelectPostTypeModal = ({ onClick, onDismiss }: customModalProps) => {
       <Flex flexDirection="column" justifyContent="center" alignItems="center">
         <Box mb="20px">
           <Flex justifyContent="center" flexDirection="column" style={{ textAlign: 'center' }}>
-            <Text> 마지막 일기를 처음 작성하시는 분들을 위해 두 가지의 선택방식을 두었어요.</Text>
-            <Text>편하신 방법을 선택하여, 당신의 마지막 일기를 작성해주세요.</Text>
+            <Text fontSize={['13px', , '18px']}>
+              마지막 일기를 처음 작성하시는 분들을 위해 두 가지의 선택방식을 두었어요.
+            </Text>
+            <Text fontSize={['13px', , '18px']}>편하신 방법을 선택하여, 당신의 마지막 일기를 작성해주세요.</Text>
           </Flex>
         </Box>
 
         <Box mt="20px">
-          <Flex flexDirection="column">
+          <Flex flexDirection="column" style={{ gap: '10px' }}>
             <St.ModalButton onClick={onClick}>질문에 따라 유서를 적고 싶어요</St.ModalButton>
             <St.ModalButton onClick={onDismiss} variant="primary">
               제 마음대로 일기를 적고 싶어요
@@ -41,11 +43,12 @@ const St = {
     justify-content: center;
     align-items: center;
     padding: 14px 16px;
-    gap: 10px;
 
-    width: 335px;
-    height: 50px;
-    margin: 16px 20px;
+    ${({ theme }) => theme.mediaQueries.xs} {
+      width: 225px;
+      font-size: 16px;
+      padding: 12px 14px;
+    }
 
     ${({ variant, theme }) => {
       if (variant === 'primary') {
@@ -65,7 +68,7 @@ const St = {
 
     font-family: 'SUIT';
     font-style: normal;
-    font-weight: 500;
+    font-weight: 600;
     font-size: 18px;
     line-height: 22px;
   `,

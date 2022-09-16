@@ -14,7 +14,7 @@ const Modal: React.FC<ModalProps> = ({
   hideCloseButton = false,
   bodyPadding = '32px',
   headerBackground = 'transparent',
-  minWidth = '320px',
+  minWidth = '272px',
   ...props
 }) => {
   const theme = useTheme()

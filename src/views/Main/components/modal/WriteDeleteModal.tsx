@@ -39,7 +39,7 @@ const WriteDeleteModal = ({ onDismiss, ...props }: any) => {
   }
 
   return (
-    <Modal title="유서를 삭제하시겠어요?" onDismiss={onDismiss} {...props}>
+    <Modal title="유서를 삭제하시겠어요?" onDismiss={onDismiss} {...props} minWidth="272px">
       <Flex flexDirection="column" justifyContent="center" alignItems="center">
         <Text>삭제한 유서는 복구할 수 없어요</Text>
         <Text>하지만 이 유서를 통해 하루하루의 삶이 빛나고 소중해졌다면 삭제해도 좋아요</Text>
