@@ -9,8 +9,6 @@ import { Button } from 'components/Common/Button'
 import MenuItem from 'components/Menu/MenuItem'
 import DropdownMenu from './DropdownMenu'
 import MenuConfig from './config'
-import { useRouter } from 'next/router'
-// import { getActiveMenuItem } from './utils'
 import { naviActions } from 'store/navi'
 import { useIsLogin } from 'store/auth/hooks'
 import useTheme, { THEME_TYPE } from 'hooks/useTheme'
@@ -60,14 +58,8 @@ export const St = {
 
 const MenuWrapper = () => {
   const dispatch = useDispatch()
-  // const { pathname } = useRouter()
-  // const router = useRouter()
   const [showMenu, setShowMenu] = useState(true)
-  //const activeMenuItem = getActiveMenuItem({ menuConfig: MenuConfig, pathname })
-  //const activeSubMenuItem = getActiveSubMenuItem({ menuItem: activeMenuItem, pathname })
   const isLogin = useIsLogin()
-  // const { name, email } = useUserInfo()
-  // const { isMenuOpen } = useNaviState()
   const [presentLoginModal] = useModal(<LoginModal />)
 
   const handleLogin = () => {
@@ -116,18 +108,9 @@ const MenuWrapper = () => {
                 <Box onClick={handleMenu} style={{ cursor: 'pointer' }}>
                   <MenuOutline />
                 </Box>
-                {/* <Box width="40px" height="40px" borderRadius="50%">
-                  <img src="" alt="" style={{ width: '100%', height: '100%' }} />
-                </Box> */}
-                {/* <Text>{name}</Text>
-                <Text>{email}</Text> */}
-                {/* <Button onClick={handleLogout}>로그아웃</Button> */}
               </>
             ) : (
               <>
-                {/* <Box onClick={handleMenu} style={{ cursor: 'pointer' }}>
-                  <MenuOutline />
-                </Box> */}
                 <Button onClick={handleLogin}>시작하기</Button>
               </>
             )}

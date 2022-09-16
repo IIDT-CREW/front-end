@@ -3,7 +3,7 @@ import { NavThemeType } from '../components/Menu/theme'
 import { ModalTheme } from '../components/Common/Modal/types'
 import { Breakpoints, Colors, MediaQueries, Radii, Shadows, Spacing, ZIndices } from './types'
 
-export interface NFTUiKitTheme {
+export interface IIDTUiKitTheme {
   siteWidth: number
   isDark: boolean
   colors: Colors

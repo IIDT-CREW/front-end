@@ -13,6 +13,7 @@ import moment from 'moment'
 import WriteDeleteModal from './modal/WriteDeleteModal'
 import ShareModal from './modal/ShareModal'
 import { useIsLogin, useUserInfo } from 'store/auth/hooks'
+import { Will } from 'api/types'
 
 const St = {
   Container: styled(Box)`
@@ -66,17 +67,7 @@ const MenuItem = ({ presentDeleteModal, presentShareModal, handleEdit }) => {
 }
 
 type WriteCardProps = {
-  will?: {
-    CONTENT: string
-    EDIT_DATE: string
-    IS_DELETE: string
-    IS_PRIVATE: number
-    MEM_IDX: number
-    REG_DATE: string
-    THUMBNAIL: string
-    TITLE: string
-    WILL_ID: string
-  }
+  will?: Will
   handleDelete?: () => void
   handlShare?: () => void
 }
