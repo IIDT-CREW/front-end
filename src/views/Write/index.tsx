@@ -32,8 +32,9 @@ const Write = () => {
   const inputRef = useRef<HTMLFormElement>(null)
   const { memIdx } = useUserInfo()
   const { onToast } = useContext(toastContext)
+  const isEditMode = !!router?.query?.will_id
   const { data, isSuccess } = useQuery('getWill', () => getWill(router.query.will_id as string), {
-    enabled: router.isReady && !!router?.query?.will_id,
+    enabled: router.isReady && isEditMode,
   })
   useEffect(() => {
     if (router.isReady) {
@@ -42,9 +43,16 @@ const Write = () => {
           result: { TITLE, CONTENT, CONTENT_TYPE },
         } = data
         setTitle(TITLE)
-        setContents(CONTENT)
+        if (CONTENT_TYPE === 0) {
+          setContents(CONTENT)
+        } else {
+          setPostType(false)
+          // CONTENT.split(
+          //   new RegExp(`${questionList.map((question) => `${question.replaceAll(/[\?]/g, '\\?')}\\n`).join('|')}`, 'g'),
+          // ).filter((v) => v)
+        }
       }
-      if (!router?.query?.will_id) modal()
+      if (!isEditMode) modal()
     }
   }, [router.isReady, isSuccess])
   const handlePostType = () => {
@@ -143,6 +151,7 @@ const Write = () => {
             })
             .join('\n'),
       will_id: nanoid(),
+      content_type: isDefaultPostType ? 0 : 1,
     }
 
     savePost.mutate(parameter)
@@ -189,7 +198,7 @@ const Write = () => {
             {questionList.map((question, i) => (
               <div key={`${i}-${question}`}>
                 <St.Question>{question}</St.Question>
-                <Contents height="200px" onChange={handleContents}></Contents>
+                <Contents height="200px"></Contents>
               </div>
             ))}
           </form>
