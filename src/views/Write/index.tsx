@@ -1,7 +1,7 @@
 import { TextareaHTMLAttributes, useContext, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { fontSize, FontSizeProps } from 'styled-system'
-import { insertWill } from 'api/will'
+import { getWill, insertWill } from 'api/will'
 import { ArrowLeft } from 'components/Common/Svg'
 import { useRouter } from 'next/router'
 import { useModal } from 'components/Common'
@@ -11,7 +11,7 @@ import WarningHistoryBackModal from 'views/Write/components/modal/WarningHistory
 import { MENU_HEIGHT } from 'config/constants/default'
 import { useUserInfo } from 'store/auth/hooks'
 import { nanoid } from 'nanoid'
-import { useMutation } from 'react-query'
+import { useMutation, useQuery } from 'react-query'
 import { toastContext } from 'contexts/Toast'
 
 const questionList = [
@@ -32,7 +32,21 @@ const Write = () => {
   const inputRef = useRef<HTMLFormElement>(null)
   const { memIdx } = useUserInfo()
   const { onToast } = useContext(toastContext)
-
+  const { data, isSuccess } = useQuery('getWill', () => getWill(router.query.will_id as string), {
+    enabled: router.isReady && !!router?.query?.will_id,
+  })
+  useEffect(() => {
+    if (router.isReady) {
+      if (isSuccess) {
+        const {
+          result: { TITLE, CONTENT, CONTENT_TYPE },
+        } = data
+        setTitle(TITLE)
+        setContents(CONTENT)
+      }
+      if (!router?.query?.will_id) modal()
+    }
+  }, [router.isReady, isSuccess])
   const handlePostType = () => {
     setPostType(false)
     onDismiss()
@@ -74,10 +88,6 @@ const Write = () => {
       window.removeEventListener('popstate', preventGoBack)
     }
   }, [isWriteDownTitleAndContent])
-
-  useEffect(() => {
-    modal()
-  }, [])
 
   const handleTitle = (e) => {
     setTitle(e.target.value)
@@ -148,7 +158,6 @@ const Write = () => {
       })
       .every((value) => value.length)
   }
-
   return (
     <St.Article>
       <St.MenuBar>
