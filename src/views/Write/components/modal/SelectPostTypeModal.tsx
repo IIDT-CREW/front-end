@@ -21,7 +21,7 @@ const SelectPostTypeModal = ({ onClick, onDismiss }: customModalProps) => {
         </Box>
 
         <Box mt="20px">
-          <Flex flexDirection="column" style={{ gap: '10px' }}>
+          <Flex flexDirection="column">
             <St.ModalButton onClick={onClick}>질문에 따라 유서를 적고 싶어요</St.ModalButton>
             <St.ModalButton onClick={onDismiss} variant="primary">
               제 마음대로 일기를 적고 싶어요
@@ -50,6 +50,11 @@ const St = {
       padding: 12px 14px;
     }
 
+    ${({ theme }) => theme.mediaQueries.sm} {
+      width: 335px;
+      font-size: 18px;
+      margin: 16px 20px;
+    }
     ${({ variant, theme }) => {
       if (variant === 'primary') {
         return `
