@@ -1,7 +1,7 @@
 import { TextareaHTMLAttributes, useContext, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { fontSize, FontSizeProps } from 'styled-system'
-import { getWill, insertWill } from 'api/will'
+import { getWill, insertWill, updateWill } from 'api/will'
 import { ArrowLeft } from 'components/Common/Svg'
 import { useRouter } from 'next/router'
 import { useModal } from 'components/Common'
@@ -14,7 +14,7 @@ import { nanoid } from 'nanoid'
 import { useMutation, useQuery } from 'react-query'
 import { toastContext } from 'contexts/Toast'
 
-const questionList = [
+const QUESTION_LIST = [
   '1. 살아오면서 가장 기뻤던 일은?',
   '2. 부끄러워서 친구들에게 하지 못한 말은?',
   '3. 부끄러워서 가족들에게 하지 못한 말은?',
@@ -23,6 +23,12 @@ const questionList = [
   '6. 과거로 돌아간다면 바꾸고 싶은 것은?',
   '7. 지금 가장 생각나는 사람 세명에게',
 ]
+
+const DEFAULT_TITLE = `${new Date().toLocaleDateString('ko-KR', {
+  year: '2-digit',
+  month: 'long',
+  day: 'numeric',
+})}에 쓰는 마지막 일기`
 
 const Write = () => {
   const [title, setTitle] = useState('')
@@ -33,28 +39,34 @@ const Write = () => {
   const { memIdx } = useUserInfo()
   const { onToast } = useContext(toastContext)
   const isEditMode = !!router?.query?.will_id
-  const { data, isSuccess } = useQuery('getWill', () => getWill(router.query.will_id as string), {
+  const { data, isSuccess: isPostLoaded } = useQuery('getWill', () => getWill(router.query.will_id as string), {
     enabled: router.isReady && isEditMode,
   })
-  useEffect(() => {
-    if (router.isReady) {
-      if (isSuccess) {
-        const {
-          result: { TITLE, CONTENT, CONTENT_TYPE },
-        } = data
-        setTitle(TITLE)
-        if (CONTENT_TYPE === 0) {
-          setContents(CONTENT)
-        } else {
-          setPostType(false)
-          // CONTENT.split(
-          //   new RegExp(`${questionList.map((question) => `${question.replaceAll(/[\?]/g, '\\?')}\\n`).join('|')}`, 'g'),
-          // ).filter((v) => v)
-        }
-      }
-      if (!isEditMode) modal()
+
+  const setPostWhenEditMode = () => {
+    const {
+      result: { TITLE, CONTENT, CONTENT_TYPE },
+    } = data
+    setTitle(TITLE)
+    if (CONTENT_TYPE === 0) {
+      setContents(CONTENT)
+    } else {
+      setPostType(false)
+      // CONTENT.split(
+      //   new RegExp(`${questionList.map((question) => `${question.replaceAll(/[\?]/g, '\\?')}\\n`).join('|')}`, 'g'),
+      // ).filter((v) => v)
     }
-  }, [router.isReady, isSuccess])
+  }
+  useEffect(
+    function initialScreenDependingOnEditMode() {
+      if (router.isReady) {
+        if (isEditMode && isPostLoaded) setPostWhenEditMode()
+        if (!isEditMode) modal()
+      }
+    },
+    [router.isReady, isPostLoaded, isEditMode],
+  )
+
   const handlePostType = () => {
     setPostType(false)
     onDismiss()
@@ -124,7 +136,7 @@ const Write = () => {
     }
     router.push('main')
   }
-  const savePost = useMutation(insertWill, {
+  const addPost = useMutation(insertWill, {
     onSuccess: () => {
       onToast({
         type: '',
@@ -136,10 +148,21 @@ const Write = () => {
       goToBack()
     },
   })
-
+  const updatePost = useMutation(updateWill, {
+    onSuccess: () => {
+      onToast({
+        type: '',
+        message: '수정이 완료 되었어요',
+        option: {
+          position: 'top-center',
+        },
+      })
+      goToBack()
+    },
+  })
   const handleSave = () => {
     const parameter = {
-      title,
+      title: title.length ? title : DEFAULT_TITLE,
       thumbnail: 'title',
       mem_idx: memIdx,
       content: isDefaultPostType
@@ -150,11 +173,10 @@ const Write = () => {
               return `${div.textContent}\n${(textarea as HTMLTextAreaElement).value}`
             })
             .join('\n'),
-      will_id: nanoid(),
+      will_id: isEditMode ? (router.query.will_id as string) : nanoid(),
       content_type: isDefaultPostType ? 0 : 1,
     }
-
-    savePost.mutate(parameter)
+    isEditMode ? updatePost.mutate(parameter) : addPost.mutate(parameter)
   }
 
   const isDisabledSave = () => {
@@ -185,18 +207,14 @@ const Write = () => {
           fontSize={'26px'}
           height="30px"
           marginBottom="24px"
-          placeholder={`${new Date().toLocaleDateString('ko-KR', {
-            year: '2-digit',
-            month: 'long',
-            day: 'numeric',
-          })}에 쓰는 마지막 일기`}
+          placeholder={DEFAULT_TITLE}
         ></Title>
         {isDefaultPostType ? (
           <Contents value={content} onChange={handleContents}></Contents>
         ) : (
           <form ref={inputRef}>
-            {questionList.map((question, i) => (
-              <div key={`${i}-${question}`}>
+            {QUESTION_LIST.map((question, i) => (
+              <div key={`${question}`}>
                 <St.Question>{question}</St.Question>
                 <Contents height="200px"></Contents>
               </div>
