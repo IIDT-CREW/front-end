@@ -1,20 +1,20 @@
-import { TextareaHTMLAttributes, useContext, useEffect, useRef, useState } from 'react'
+import { TextareaHTMLAttributes, useContext, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { fontSize, FontSizeProps } from 'styled-system'
-import { insertWill } from 'api/will'
+import { getWill, insertWill, updateWill } from 'api/will'
 import { ArrowLeft } from 'components/Common/Svg'
 import { useRouter } from 'next/router'
-import { useModal } from 'components/Common'
+import { Flex, useModal } from 'components/Common'
 import SelectPostTypeModal from 'views/Write/components/modal/SelectPostTypeModal'
 import WarningHistoryBackModal from 'views/Write/components/modal/WarningHistoryBackModal'
-
-import { MENU_HEIGHT } from 'config/constants/default'
+import { FOOTER_HEIGHT, MENU_HEIGHT } from 'config/constants/default'
 import { useUserInfo } from 'store/auth/hooks'
 import { nanoid } from 'nanoid'
-import { useMutation } from 'react-query'
+import { useMutation, useQuery, useQueryClient } from 'react-query'
 import { toastContext } from 'contexts/Toast'
+import ProgressBar from 'components/Common/ProgressBar'
 
-const questionList = [
+const QUESTION_LIST = [
   '1. 살아오면서 가장 기뻤던 일은?',
   '2. 부끄러워서 친구들에게 하지 못한 말은?',
   '3. 부끄러워서 가족들에게 하지 못한 말은?',
@@ -24,37 +24,69 @@ const questionList = [
   '7. 지금 가장 생각나는 사람 세명에게',
 ]
 
+const DEFAULT_TITLE = `${new Date().toLocaleDateString('ko-KR', {
+  year: '2-digit',
+  month: 'long',
+  day: 'numeric',
+})}에 쓰는 마지막 일기`
+
 const Write = () => {
   const [title, setTitle] = useState('')
-  const [content, setContents] = useState('')
-  const router = useRouter()
+  const [contents, setContent] = useState(QUESTION_LIST.map((_) => ''))
   const [isDefaultPostType, setPostType] = useState(true)
-  const inputRef = useRef<HTMLFormElement>(null)
+  const [page, setPage] = useState(0)
+  const router = useRouter()
   const { memIdx } = useUserInfo()
   const { onToast } = useContext(toastContext)
+
+  const queryClient = useQueryClient()
+  const content = isDefaultPostType ? contents[page] : contents.map((v, i) => `${QUESTION_LIST[i]}\n${v}`).join('\n')
+  const isEditMode = !!router?.query?.will_id
+  const willId = router?.query?.will_id as string
+  const { data, isSuccess: isPostLoaded } = useQuery(['getWill', willId], () => getWill(willId), {
+    enabled: router.isReady && isEditMode,
+  })
+
+  const setPostWhenEditMode = () => {
+    const {
+      result: { TITLE, CONTENT, CONTENT_TYPE },
+    } = data
+    setTitle(TITLE)
+    if (CONTENT_TYPE === 0) {
+      contents[page] = CONTENT
+      return setContent(contents)
+    }
+    setPostType(false)
+    setContent(
+      CONTENT.split(
+        new RegExp(`${QUESTION_LIST.map((question) => `${question.replaceAll(/[\?]/g, '\\?')}\\n`).join('|')}`, 'g'),
+      )
+        .filter((v) => v)
+        .map((v) => v.replace('\n', '')),
+    )
+  }
+  useEffect(
+    function initialScreenByEditMode() {
+      if (router.isReady) {
+        if (isEditMode && isPostLoaded) setPostWhenEditMode()
+        if (!isEditMode) modal()
+      }
+    },
+    [router.isReady, isPostLoaded, isEditMode],
+  )
 
   const handlePostType = () => {
     setPostType(false)
     onDismiss()
   }
-  const goToBack = () => {
-    router.push('/main')
-  }
+  const goToBack = () => router.push('/main')
 
-  const isWriteDown = () => {
-    if (inputRef.current === null) return false
-    return ![...inputRef.current.children]
-      .map((element) => {
-        const [, textarea] = element.children
-        return (textarea as HTMLTextAreaElement).value
-      })
-      .every((value) => value.length === 0)
-  }
+  const isWriteDown = () => !contents.every((value) => value.length === 0)
 
   const [modal, onDismiss] = useModal(<SelectPostTypeModal onClick={handlePostType} />)
   const [presentWarningHistoryBackModal] = useModal(<WarningHistoryBackModal goToBack={goToBack} />)
 
-  const isWriteDownTitleAndContent = title !== '' || content !== '' || isWriteDown()
+  const isWriteDownTitleAndContent = title !== '' || contents[page] !== '' || isWriteDown()
 
   const preventGoBack = () => {
     if (isWriteDownTitleAndContent) {
@@ -75,27 +107,17 @@ const Write = () => {
     }
   }, [isWriteDownTitleAndContent])
 
-  useEffect(() => {
-    modal()
-  }, [])
-
   const handleTitle = (e) => {
     setTitle(e.target.value)
   }
 
   const handleContents = (e) => {
-    setContents(e.target.value)
-  }
-
-  const handleClick = (e) => {
-    setContents((contents) => {
-      return `${contents} ${new Date().toLocaleTimeString([], { timeStyle: 'medium', hour12: false })} `
-    })
+    setContent(contents.map((content, i) => (i === page ? e.target.value : content)))
   }
 
   const goToMain = () => {
     if (isDefaultPostType) {
-      if (title !== '' || content !== ' ') {
+      if (title !== '' || contents[page] !== '') {
         presentWarningHistoryBackModal()
         return
       }
@@ -106,7 +128,7 @@ const Write = () => {
     }
     router.push('main')
   }
-  const savePost = useMutation(insertWill, {
+  const addPost = useMutation(insertWill, {
     onSuccess: () => {
       onToast({
         type: '',
@@ -118,35 +140,49 @@ const Write = () => {
       goToBack()
     },
   })
-
+  const updatePost = useMutation(updateWill, {
+    onSuccess: () => {
+      queryClient.setQueryData(['myWill', 0], content)
+      queryClient.setQueryData(['getWill', willId], content)
+      onToast({
+        type: '',
+        message: '수정이 완료 되었어요',
+        option: {
+          position: 'top-center',
+        },
+      })
+      goToBack()
+    },
+  })
   const handleSave = () => {
     const parameter = {
-      title,
+      title: title.length ? title : DEFAULT_TITLE,
       thumbnail: 'title',
       mem_idx: memIdx,
-      content: isDefaultPostType
-        ? content
-        : [...inputRef.current.children]
-            .map((element) => {
-              const [div, textarea] = element.children
-              return `${div.textContent}\n${(textarea as HTMLTextAreaElement).value}`
-            })
-            .join('\n'),
-      will_id: nanoid(),
+      content,
+      will_id: isEditMode ? willId : nanoid(),
+      content_type: isDefaultPostType ? 0 : 1,
     }
-
-    savePost.mutate(parameter)
+    isEditMode ? updatePost.mutate(parameter) : addPost.mutate(parameter)
   }
 
-  const isDisabledSave = () => {
-    if (isDefaultPostType) return content.length ? false : true
-    if (inputRef.current === null) return true
-    return ![...inputRef.current.children]
-      .map((element) => {
-        const [, textarea] = element.children
-        return (textarea as HTMLTextAreaElement).value
-      })
-      .every((value) => value.length)
+  const isDisabledSave = () => (contents[page].length ? false : true)
+  const createMenuButton = (text, handleClick, disabled, variant: variant = 'primary') => (
+    <St.MenuButton variant={variant} onClick={handleClick} disabled={disabled}>
+      {text}
+    </St.MenuButton>
+  )
+
+  const createMenuButtons = () => {
+    if (isDefaultPostType) return createMenuButton('작성 완료', handleSave, isDisabledSave())
+    return (
+      <Flex style={{ gap: '10px' }}>
+        {page !== 0 && createMenuButton('이전 질문', () => setPage((page) => page - 1), false, 'secondary')}
+        {page !== QUESTION_LIST.length - 1
+          ? createMenuButton('다음 질문', () => setPage((page) => page + 1), isDisabledSave())
+          : createMenuButton('작성 완료', handleSave, isDisabledSave())}
+      </Flex>
+    )
   }
 
   return (
@@ -156,43 +192,30 @@ const Write = () => {
           <ArrowLeft fill="none" />내 기록
         </St.GoToHistoryButton>
         {/* <button onClick={handleClick}>시간</button> */}
-        <St.SaveButton onClick={handleSave} disabled={isDisabledSave()}>
-          작성 완료
-        </St.SaveButton>
+        {createMenuButtons()}
       </St.MenuBar>
       <St.Editor>
         <Title
           value={title}
           onChange={handleTitle}
-          fontSize={'26px'}
+          fontSize={[, '16px', '26px']}
           height="30px"
           marginBottom="24px"
-          placeholder={`${new Date().toLocaleDateString('ko-KR', {
-            year: '2-digit',
-            month: 'long',
-            day: 'numeric',
-          })}에 쓰는 마지막 일기`}
+          placeholder={DEFAULT_TITLE}
         ></Title>
-        {isDefaultPostType ? (
-          <Contents value={content} onChange={handleContents}></Contents>
-        ) : (
-          <form ref={inputRef}>
-            {questionList.map((question, i) => (
-              <div key={`${i}-${question}`}>
-                <St.Question>{question}</St.Question>
-                <Contents height="200px" onChange={handleContents}></Contents>
-              </div>
-            ))}
-          </form>
-        )}
+        {isDefaultPostType || <St.Question fontSize={[, '16px', '26px']}>{QUESTION_LIST[page]}</St.Question>}
+        <Contents isDefaultPostType={isDefaultPostType} value={contents[page]} onChange={handleContents} />
       </St.Editor>
+      {isDefaultPostType || <ProgressBar value={page + 1} max={QUESTION_LIST.length} />}
     </St.Article>
   )
 }
 interface TextAreaProps extends FontSizeProps, TextareaHTMLAttributes<HTMLTextAreaElement> {
   height?: string
   marginBottom?: string
+  isDefaultPostType?: boolean
 }
+type variant = 'primary' | 'secondary'
 const Title = ({ ...props }: TextAreaProps) => {
   return <St.Textarea {...props} />
 }
@@ -202,18 +225,21 @@ const Contents = ({ ...props }: TextAreaProps) => {
 const St = {
   Editor: styled.section`
     padding: ${MENU_HEIGHT}px 24px 0 24px;
+    height: 100%;
   `,
-  Question: styled.div`
+  Question: styled.div<FontSizeProps>`
     font-family: 'Nanum Myeongjo';
     font-style: normal;
     font-weight: 700;
     font-size: 26px;
     margin: 10px 0 16px 0;
     color: ${({ theme }) => theme.colors.grayscale6};
+    ${fontSize}
   `,
   Article: styled.article`
     margin-top: ${MENU_HEIGHT}px;
     position: relative;
+    height: calc(100vh - ${MENU_HEIGHT}px - ${FOOTER_HEIGHT}px);
   `,
   MenuBar: styled.nav`
     border: none;
@@ -241,7 +267,7 @@ const St = {
       margin-left: 7px;
     }
   `,
-  SaveButton: styled.button`
+  MenuButton: styled.button<{ variant?: variant }>`
     width: 76px;
     height: 38px;
     display: flex;
@@ -256,9 +282,20 @@ const St = {
     border-radius: 4px;
     border: none;
     line-height: 18px;
-    color: ${({ theme }) => theme.colors.grayscale0};
-    background-color: ${({ theme }) => theme.colors.grayscale7};
     cursor: pointer;
+    ${({ variant, theme }) => {
+      if (variant === 'primary') {
+        return `
+        background-color: ${theme.colors.grayscale7};
+        color: ${theme.colors.grayscale0};
+        `
+      }
+      return `
+        border: 1px solid ${theme.colors.grayscale7};
+        background-color: ${theme.colors.grayscale0};
+        color: ${theme.colors.grayscale7};
+      `
+    }}
     :disabled {
       color: ${({ theme }) => theme.colors.grayscale5};
       background-color: ${({ theme }) => theme.colors.grayscale1};
@@ -275,7 +312,8 @@ const St = {
     font-family: 'Nanum Myeongjo';
     padding: unset;
     color: ${({ theme }) => theme.colors.grayscale7};
-    height: ${({ height }) => `${height || 'calc(100vh - 72px - 78px)'}`};
+    height: ${({ height, isDefaultPostType }) =>
+      `${height || `calc(100% - 57px${isDefaultPostType ? '' : ' - 52px'})`}`};
     line-height: 28px;
     ::placeholder {
       color: ${({ theme }) => theme.colors.grayscale5};
