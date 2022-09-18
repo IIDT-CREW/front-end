@@ -1,4 +1,4 @@
-import { TextareaHTMLAttributes, useContext, useEffect, useRef, useState } from 'react'
+import { TextareaHTMLAttributes, useContext, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { fontSize, FontSizeProps } from 'styled-system'
 import { getWill, insertWill, updateWill } from 'api/will'
@@ -8,11 +8,12 @@ import { Flex, useModal } from 'components/Common'
 import SelectPostTypeModal from 'views/Write/components/modal/SelectPostTypeModal'
 import WarningHistoryBackModal from 'views/Write/components/modal/WarningHistoryBackModal'
 
-import { MENU_HEIGHT } from 'config/constants/default'
+import { FOOTER_HEIGHT, MENU_HEIGHT } from 'config/constants/default'
 import { useUserInfo } from 'store/auth/hooks'
 import { nanoid } from 'nanoid'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 import { toastContext } from 'contexts/Toast'
+import ProgressBar from 'components/Common/ProgressBar'
 
 const QUESTION_LIST = [
   '1. 살아오면서 가장 기뻤던 일은?',
@@ -197,20 +198,22 @@ const Write = () => {
         <Title
           value={title}
           onChange={handleTitle}
-          fontSize={'26px'}
+          fontSize={[, '16px', '26px']}
           height="30px"
           marginBottom="24px"
           placeholder={DEFAULT_TITLE}
         ></Title>
-        {isDefaultPostType || <St.Question>{QUESTION_LIST[page]}</St.Question>}
-        <Contents value={contents[page]} onChange={handleContents}></Contents>
+        {isDefaultPostType || <St.Question fontSize={[, '16px', '26px']}>{QUESTION_LIST[page]}</St.Question>}
+        <Contents isDefaultPostType={isDefaultPostType} value={contents[page]} onChange={handleContents} />
       </St.Editor>
+      {isDefaultPostType || <ProgressBar value={page + 1} max={QUESTION_LIST.length} />}
     </St.Article>
   )
 }
 interface TextAreaProps extends FontSizeProps, TextareaHTMLAttributes<HTMLTextAreaElement> {
   height?: string
   marginBottom?: string
+  isDefaultPostType?: boolean
 }
 type variant = 'primary' | 'secondary'
 const Title = ({ ...props }: TextAreaProps) => {
@@ -222,18 +225,21 @@ const Contents = ({ ...props }: TextAreaProps) => {
 const St = {
   Editor: styled.section`
     padding: ${MENU_HEIGHT}px 24px 0 24px;
+    height: 100%;
   `,
-  Question: styled.div`
+  Question: styled.div<FontSizeProps>`
     font-family: 'Nanum Myeongjo';
     font-style: normal;
     font-weight: 700;
     font-size: 26px;
     margin: 10px 0 16px 0;
     color: ${({ theme }) => theme.colors.grayscale6};
+    ${fontSize}
   `,
   Article: styled.article`
     margin-top: ${MENU_HEIGHT}px;
     position: relative;
+    height: calc(100vh - ${MENU_HEIGHT}px - ${FOOTER_HEIGHT}px);
   `,
   MenuBar: styled.nav`
     border: none;
@@ -306,7 +312,8 @@ const St = {
     font-family: 'Nanum Myeongjo';
     padding: unset;
     color: ${({ theme }) => theme.colors.grayscale7};
-    height: ${({ height }) => `${height || 'calc(100vh - 72px - 78px)'}`};
+    height: ${({ height, isDefaultPostType }) =>
+      `${height || `calc(100% - 57px${isDefaultPostType ? '' : ' - 52px'})`}`};
     line-height: 28px;
     ::placeholder {
       color: ${({ theme }) => theme.colors.grayscale5};
