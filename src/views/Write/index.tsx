@@ -2,19 +2,15 @@ import { TextareaHTMLAttributes, useContext, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { fontSize, FontSizeProps } from 'styled-system'
 import { getWill, insertWill, updateWill } from 'api/will'
-
 import { ArrowLeft } from 'components/Common/Svg'
 import { useRouter } from 'next/router'
 import { Flex, useModal } from 'components/Common'
 import SelectPostTypeModal from 'views/Write/components/modal/SelectPostTypeModal'
 import WarningHistoryBackModal from 'views/Write/components/modal/WarningHistoryBackModal'
-
 import { FOOTER_HEIGHT, MENU_HEIGHT } from 'config/constants/default'
 import { useUserInfo } from 'store/auth/hooks'
 import { nanoid } from 'nanoid'
-
 import { useMutation, useQuery, useQueryClient } from 'react-query'
-
 import { toastContext } from 'contexts/Toast'
 import ProgressBar from 'components/Common/ProgressBar'
 
@@ -110,10 +106,6 @@ const Write = () => {
       window.removeEventListener('popstate', preventGoBack)
     }
   }, [isWriteDownTitleAndContent])
-
-  useEffect(() => {
-    modal()
-  }, [])
 
   const handleTitle = (e) => {
     setTitle(e.target.value)
