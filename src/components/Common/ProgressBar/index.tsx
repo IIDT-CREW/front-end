@@ -14,6 +14,7 @@ const ProgressBar = ({ max, value }: ProgressProps) => {
 }
 const St = {
   Wrapper: styled.div<ProgressProps>`
+    transition: all 0.3s;
     width: 100%;
     height: 2px;
     background-color: ${({ theme }) => theme.colors.grayscale2};
