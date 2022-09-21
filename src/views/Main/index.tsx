@@ -74,7 +74,7 @@ const Main = () => {
   }
 
   const { data, isLoading, isError } = useQuery(
-    'myWill',
+    ['myWill', isLogin],
     () =>
       isLogin &&
       getMyWill({
@@ -99,11 +99,11 @@ const Main = () => {
     },
   })
 
-  useEffect(() => {
-    if (isLogin) {
-      queryClient.invalidateQueries('myWill')
-    }
-  }, [isLogin, queryClient])
+  // useEffect(() => {
+  //   if (isLogin) {
+  //     queryClient.invalidateQueries('myWill')
+  //   }
+  // }, [isLogin, queryClient])
 
   return (
     <St.Container mt="78px">
