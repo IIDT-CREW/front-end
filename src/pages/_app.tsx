@@ -56,6 +56,7 @@ function MyApp(props: AppProps) {
         <meta name="twitter:description" content="-" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="" />
+        <meta name="google-site-verification" content="PTFzfhsg8i8wffMXA_9m6MPEBWiP7uHIIcXZo2_unOI" />
         <title>IIDT</title>
       </Head>
       <QueryClientProvider client={queryClient}>
