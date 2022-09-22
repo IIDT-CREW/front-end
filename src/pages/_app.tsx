@@ -57,6 +57,8 @@ function MyApp(props: AppProps) {
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="" />
         <meta name="google-site-verification" content="PTFzfhsg8i8wffMXA_9m6MPEBWiP7uHIIcXZo2_unOI" />
+        <meta name="naver-site-verification" content="42db81bfd2d4d29a8e0074a206cdf9532048a969" />
+
         <title>IIDT</title>
       </Head>
       <QueryClientProvider client={queryClient}>
