@@ -83,7 +83,7 @@ const Home: React.FC = () => {
           mb="24px"
           textAlign="center"
         >
-          Tommorow
+          Tomorrow
         </Text>
         <Clock />
 
