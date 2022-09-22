@@ -73,11 +73,13 @@ type WriteCardProps = {
 }
 
 const WriteCard = ({ will, handleDelete, handlShare }: WriteCardProps) => {
-  const { CONTENT: content, EDIT_DATE: editDate, MEM_IDX, REG_DATE: regDate, THUMBNAIL, TITLE, WILL_ID } = will
+  const { CONTENT: content, EDIT_DATE: editDate, MEM_IDX, REG_DATE: regDate, THUMBNAIL, TITLE: title, WILL_ID } = will
   const router = useRouter()
   const isLogin = useIsLogin()
   const [presentDeleteModal] = useModal(<WriteDeleteModal handleDelete={handleDelete} />)
-  const [presentShareModal] = useModal(<ShareModal handlShare={handlShare} content={content} willId={WILL_ID} />)
+  const [presentShareModal] = useModal(
+    <ShareModal handlShare={handlShare} content={content} willId={WILL_ID} title={title} />,
+  )
 
   const [targetRef, setTargetRef] = useState<HTMLDivElement | null>(null)
   const [tooltipRef, setTooltipRef] = useState<HTMLDivElement | null>(null)
@@ -118,7 +120,7 @@ const WriteCard = ({ will, handleDelete, handlShare }: WriteCardProps) => {
 
       <Box>
         <Text fontWeight="600" mb="8px">
-          {TITLE ? TITLE : '22년 9월 1일에 쓰는 마지막 일기'}
+          {title ? title : '22년 9월 1일에 쓰는 마지막 일기'}
         </Text>
         <St.Contents>{content}</St.Contents>
       </Box>

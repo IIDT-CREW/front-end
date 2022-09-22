@@ -5,7 +5,7 @@ import CopyToClipboard from 'views/Will/components/CopyToClipboard'
 import { API_URL } from 'config/constants/api'
 import { useRouter } from 'next/router'
 
-const ShareModal = ({ onDismiss, content, willId, ...props }: any) => {
+const ShareModal = ({ onDismiss, content, willId, title, ...props }: any) => {
   const router = useRouter()
 
   function kakaoShareFix() {
@@ -37,7 +37,7 @@ const ShareModal = ({ onDismiss, content, willId, ...props }: any) => {
         objectType: 'feed',
         content: {
           title: '마지막 일기',
-          description: content,
+          description: `${title}\n${content}`,
           imageUrl: 'https://www.if-i-die-tomorrow.com/images/home/patrick-ryan-3kUIaB2EPp8-unsplash.jpg',
           imageWidth: 1200,
           imageHeight: 630,
