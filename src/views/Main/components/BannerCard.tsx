@@ -61,10 +61,10 @@ const BannerCard = ({ height = '231px' }) => {
   const timer: any = useRef(null)
 
   const [time, setTime] = useState('')
-  const [bannerIndex, setBannerIndex] = useState(0)
+  const [bannerIndex, setBannerIndex] = useState(5)
   useEffect(() => {
     setTime(moment().format('HH:mm:ss'))
-    setBannerIndex(Math.floor(Math.random() * 5) + 1)
+    // setBannerIndex(Math.floor(Math.random() * 5) + 1)
     timer.current = setInterval(() => {
       setTime(moment().format('HH:mm:ss'))
     }, 1000)
