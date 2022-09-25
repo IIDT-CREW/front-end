@@ -3,11 +3,12 @@ import { useState, useEffect, useRef } from 'react'
 import { Box, Text, Flex } from 'components/Common'
 import styled from 'styled-components'
 import StyledImage from 'components/Common/Image/StyledImage'
+import { fontSize, FontSizeProps, style } from 'styled-system'
 
 const St = {
   TextWrapper: styled(Text)`
-    background: ${({ theme }) => (theme.isDark ? theme.colors.backgroundAlt : '')};
     padding: ${({ theme }) => (theme.isDark ? '0px 10px' : '')};
+    color: inherit;
   `,
 }
 
@@ -60,10 +61,10 @@ const BannerCard = ({ height = '231px' }) => {
   const timer: any = useRef(null)
 
   const [time, setTime] = useState('')
-  const [bannerIndex, setBannerIndex] = useState(0)
+  const [bannerIndex, setBannerIndex] = useState(5)
   useEffect(() => {
     setTime(moment().format('HH:mm:ss'))
-    setBannerIndex(Math.floor(Math.random() * 5) + 1)
+    // setBannerIndex(Math.floor(Math.random() * 5) + 1)
     timer.current = setInterval(() => {
       setTime(moment().format('HH:mm:ss'))
     }, 1000)
@@ -77,21 +78,22 @@ const BannerCard = ({ height = '231px' }) => {
   return (
     <Box paddingTop="">
       <Box width="100%" height={height} position="relative">
-        <StyledImage
-          isFill
-          src={imagePath}
-          alt={'road'}
-          style={{
-            position: 'absolute',
-            width: '100%',
-            height: '100%',
-            zIndex: '-1',
-            objectFit: 'cover',
-            background: 'linear-gradient(0deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2))',
-          }}
-        />
-        <Box width="100%" height={height} position="relative">
-          <Flex flexDirection="column" justifyContent="center" alignItems="center" height="100%" position="relative">
+        <Box width="100%" height={height} position="relative" background={`url(${imagePath}) 50%/ cover`}>
+          <Flex
+            flexDirection="column"
+            justifyContent="center"
+            alignItems="center"
+            height="100%"
+            position="relative"
+            background="inherit"
+            style={{
+              color: 'transparent',
+              WebkitBackgroundClip: 'text',
+              backgroundClip: 'text',
+              textAlign: 'center',
+              filter: 'invert(1) grayscale(1) contrast(2) drop-shadow(3px 3px 5px black)',
+            }}
+          >
             <St.TextWrapper fontSize={['14px', null, null, '18px']} bold>
               {firstLine}
             </St.TextWrapper>
@@ -101,11 +103,9 @@ const BannerCard = ({ height = '231px' }) => {
             <St.TextWrapper fontSize={['14px', null, null, '18px']} bold>
               {author}
             </St.TextWrapper>
-            <Box>
-              <Text bold fontSize="48px">
-                {time}
-              </Text>
-            </Box>
+            <Text bold fontSize="48px" textAlign="center" color="inherit">
+              {time}
+            </Text>
           </Flex>
         </Box>
       </Box>
