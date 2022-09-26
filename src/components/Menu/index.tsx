@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import { useState, useEffect, useRef } from 'react'
+import { useMemo, useState, useEffect, useRef } from 'react'
 import { useDispatch } from 'react-redux'
 import styled, { css } from 'styled-components'
 import Flex from '../Common/Box/Flex'
@@ -75,6 +75,7 @@ export const St = {
     transform: ${({ isScrollDown }) => (isScrollDown ? 'translate3d(0px, -100%, 0px)' : 'translate3d(0px, 0px, 0px)')};
   `,
 }
+const DELTA = 3
 const isServer = typeof window === 'undefined'
 const MenuWrapper = () => {
   const router = useRouter()
@@ -99,8 +100,8 @@ const MenuWrapper = () => {
   }
 
   let lastScrollTop = 0
-  const delta = 3
-  let fixBox = null
+
+  const fixBox = useRef(null)
   const fixBoxHeight = useRef(0)
   const didScroll = useRef(false)
 
@@ -110,7 +111,7 @@ const MenuWrapper = () => {
       return
     }
     const nowScrollTop = window.scrollY
-    if (Math.abs(lastScrollTop - nowScrollTop) <= delta) return
+    if (Math.abs(lastScrollTop - nowScrollTop) <= DELTA) return
     if (nowScrollTop > lastScrollTop && nowScrollTop > fixBoxHeight.current) {
       setIsScrollDown(true)
     } else {
@@ -124,9 +125,9 @@ const MenuWrapper = () => {
   }
 
   useEffect(() => {
-    fixBox = document.querySelector('app-bar') as HTMLElement
-    if (fixBox) {
-      fixBoxHeight.current = fixBox.offsetHeight
+    fixBox.current = document.querySelector('app-bar') as HTMLElement
+    if (fixBox.current) {
+      fixBoxHeight.current = fixBox.current.offsetHeight
     }
     window.addEventListener('scroll', onScroll)
 
@@ -141,7 +142,15 @@ const MenuWrapper = () => {
       window.removeEventListener('scroll', onScroll)
     }
   }, [])
-  const isSharePage = router.route === '/will/[id]'
+
+  const isSharePage = useMemo(() => {
+    return router.route === '/will/[id]'
+  }, [router])
+
+  useEffect(() => {
+    setIsScrollDown(true)
+  }, [isSharePage])
+
   return (
     <St.Wrapper>
       <St.FixedContainer showMenu={showMenu} height={MENU_HEIGHT} isScrollDown={isScrollDown} id="app-bar">
