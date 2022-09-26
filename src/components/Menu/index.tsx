@@ -111,6 +111,7 @@ const MenuWrapper = () => {
       return
     }
     const nowScrollTop = window.scrollY
+
     if (Math.abs(lastScrollTop - nowScrollTop) <= DELTA) return
     if (nowScrollTop > lastScrollTop && nowScrollTop > fixBoxHeight.current) {
       setIsScrollDown(true)
@@ -148,7 +149,7 @@ const MenuWrapper = () => {
   }, [router])
 
   useEffect(() => {
-    setIsScrollDown(true)
+    if (isSharePage) setIsScrollDown(true)
   }, [isSharePage])
 
   return (

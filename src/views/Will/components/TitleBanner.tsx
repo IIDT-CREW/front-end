@@ -9,11 +9,17 @@ type DateTextWrapperProps = {
 }
 const St = {
   TextWrapper: styled(Text)`
-    background: ${({ theme }) => (theme.isDark ? theme.colors.backgroundAlt : '')};
+    background: #000000;    
+    color : #fff
     padding: ${({ theme }) => (theme.isDark ? '0px 10px' : '')};
+    width: 80%;
+    text-align: center;
+    span{
+        color : #fff
+    }
   `,
   DateTextWrapper: styled(Text)`
-    background: ${({ theme }) => (theme.isDark ? theme.colors.backgroundAlt : '')};
+    color: #fff;
     padding: ${({ theme }) => (theme.isDark ? '0px 10px' : '')};
     opacity: 0;
     transition: all 1s;

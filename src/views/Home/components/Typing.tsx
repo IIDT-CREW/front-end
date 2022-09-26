@@ -4,7 +4,7 @@ import * as Hangul from 'hangul-js'
 const assemble = (slice) => {
   return Hangul.assemble(slice)
 }
-const TIME_INTERVAL = 140
+const TIME_INTERVAL = 100
 function timeResist(timeInterval = TIME_INTERVAL) {
   return new Promise(function (resolve, reject) {
     setTimeout(function () {
@@ -50,6 +50,10 @@ const TypingTest = ({ str = '타이핑 컴포넌트 입니다', handleStatus, st
     dis()
   }, [disassembled, handleStatus])
 
-  return <div className={classNames({ 'typing_with-blinking-cursor': status !== 'is_done' })}>{result}</div>
+  return (
+    <span style={{ height: '100%' }} className={classNames({ 'typing_with-blinking-cursor': status !== 'is_done' })}>
+      {result}
+    </span>
+  )
 }
 export default TypingTest

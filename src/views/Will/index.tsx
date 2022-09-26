@@ -83,7 +83,7 @@ const WillPage = () => {
               {!isLoading && data.result && <WillCard will={data?.result} />}
             </Flex>
           </Flex>
-          <Box mt="50px">
+          <Box mt="50px" mb="50px">
             <Flex flexDirection="column" justifyContent="center" alignItems="center">
               <Flex flexDirection="column" justifyContent="center" alignItems="center">
                 <Text bold data-aos="fade-up" data-aos-duration="1000">
