@@ -3,7 +3,8 @@ import { useState, useEffect, useRef } from 'react'
 import { Box, Text, Flex } from 'components/Common'
 import styled from 'styled-components'
 import StyledImage from 'components/Common/Image/StyledImage'
-
+import useProgressiveImage from 'hooks/useProgressiveImage';
+import { Skeleton } from 'components/Common/Skeleton'
 const St = {
   TextWrapper: styled(Text)`
     padding: ${({ theme }) => (theme.isDark ? '0px 10px' : '')};
@@ -74,10 +75,12 @@ const BannerCard = ({ height = '231px' }) => {
   }, [])
 
   const { firstLine, secondLine, author, imagePath } = bannerJson[bannerIndex]
+  const loaded = useProgressiveImage(imagePath)
   return (
     <Box paddingTop="">
       <Box width="100%" height={height} position="relative">
-        <Box width="100%" height={height} position="relative" background={`url(${imagePath}) 50%/ cover`}>
+        <Box width="100%" height={height} position="relative" background={`url(${loaded}) 50%/ cover`}>
+        {!loaded && <Skeleton animation={'pulse'} width='100%' height='100%' />}
           <Flex
             flexDirection="column"
             justifyContent="center"
