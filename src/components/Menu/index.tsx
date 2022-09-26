@@ -1,6 +1,7 @@
-import { useState, useEffect, useRef } from 'react'
+import { useRouter } from 'next/router'
+import { useMemo, useState, useEffect, useRef } from 'react'
 import { useDispatch } from 'react-redux'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import Flex from '../Common/Box/Flex'
 import { Heading } from '../Common'
 import Link from 'next/link'
@@ -18,13 +19,28 @@ import { MENU_HEIGHT } from 'config/constants/default'
 import MenuOutline from 'components/Common/Svg/Icons/MenuOutline'
 import LoginModal from 'components/LoginModal'
 
+type StyledNavigationProps = {
+  isSharePage: boolean
+}
+const navigationBackgroundCss = css`
+  background-color: rgba(19, 23, 64, 0.5);
+  backdrop-filter: blur(8px);
+  border: none;
+
+  div {
+    color: #fff !important;
+  }
+  svg {
+    fill: #fff;
+  }
+`
 export const St = {
   Wrapper: styled.div`
     position: relative;
     width: 100%;
     z-index: 10;
   `,
-  StyledNav: styled.nav`
+  StyledNav: styled.nav<StyledNavigationProps>`
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -35,6 +51,10 @@ export const St = {
     transform: translate3d(0, 0, 0);
     padding-left: 16px;
     padding-right: 16px;
+
+    ${({ isSharePage }) => {
+      return isSharePage ? `${navigationBackgroundCss}` : null
+    }}
   `,
   NavigationInner: styled.div`
     display: flex;
@@ -55,8 +75,10 @@ export const St = {
     transform: ${({ isScrollDown }) => (isScrollDown ? 'translate3d(0px, -100%, 0px)' : 'translate3d(0px, 0px, 0px)')};
   `,
 }
+const DELTA = 3
 const isServer = typeof window === 'undefined'
 const MenuWrapper = () => {
+  const router = useRouter()
   const dispatch = useDispatch()
   const [showMenu, setShowMenu] = useState(true)
   const isLogin = useIsLogin()
@@ -78,8 +100,8 @@ const MenuWrapper = () => {
   }
 
   let lastScrollTop = 0
-  const delta = 3
-  let fixBox = null
+
+  const fixBox = useRef(null)
   const fixBoxHeight = useRef(0)
   const didScroll = useRef(false)
 
@@ -89,15 +111,10 @@ const MenuWrapper = () => {
       return
     }
     const nowScrollTop = window.scrollY
-    if (Math.abs(lastScrollTop - nowScrollTop) <= delta) {
-      return
-    }
+    if (Math.abs(lastScrollTop - nowScrollTop) <= DELTA) return
     if (nowScrollTop > lastScrollTop && nowScrollTop > fixBoxHeight.current) {
-      //Scroll down
-      //console.log('scroll down')
       setIsScrollDown(true)
     } else {
-      //console.log('scroll up')
       setIsScrollDown(false)
     }
     lastScrollTop = nowScrollTop
@@ -108,11 +125,12 @@ const MenuWrapper = () => {
   }
 
   useEffect(() => {
-    fixBox = document.querySelector('app-bar') as HTMLElement
-    if (fixBox) {
-      fixBoxHeight.current = fixBox.offsetHeight
+    fixBox.current = document.querySelector('app-bar') as HTMLElement
+    if (fixBox.current) {
+      fixBoxHeight.current = fixBox.current.offsetHeight
     }
     window.addEventListener('scroll', onScroll)
+
     setInterval(() => {
       if (didScroll.current) {
         hasScrolled()
@@ -125,10 +143,18 @@ const MenuWrapper = () => {
     }
   }, [])
 
+  const isSharePage = useMemo(() => {
+    return router.route === '/will/[id]'
+  }, [router])
+
+  useEffect(() => {
+    setIsScrollDown(true)
+  }, [isSharePage])
+
   return (
     <St.Wrapper>
       <St.FixedContainer showMenu={showMenu} height={MENU_HEIGHT} isScrollDown={isScrollDown} id="app-bar">
-        <St.StyledNav>
+        <St.StyledNav isSharePage={isSharePage}>
           <Flex justifyContent="center" alignItems="center">
             <Flex style={{ cursor: 'pointer' }}>
               <Link href={isLogin ? '/main' : '/'}>
@@ -137,16 +163,15 @@ const MenuWrapper = () => {
                 </Heading>
               </Link>
             </Flex>
-            {MenuConfig &&
-              MenuConfig.map((menuItem, i) => {
-                return (
-                  <DropdownMenu key={`${menuItem}-${i}`} items={menuItem.items}>
-                    <MenuItem isActive={false} href={menuItem.href}>
-                      {menuItem.label}
-                    </MenuItem>
-                  </DropdownMenu>
-                )
-              })}
+            {MenuConfig?.map((menuItem, i) => {
+              return (
+                <DropdownMenu key={`${menuItem}-${i}`} items={menuItem.items}>
+                  <MenuItem isActive={false} href={menuItem.href}>
+                    {menuItem.label}
+                  </MenuItem>
+                </DropdownMenu>
+              )
+            })}
           </Flex>
           <Flex justifyContent="center" alignItems="center">
             <Box width="40px" height="40px" borderRadius="50%"></Box>
@@ -154,7 +179,7 @@ const MenuWrapper = () => {
             {isLogin ? (
               <>
                 <Box onClick={handleMenu} style={{ cursor: 'pointer' }}>
-                  <MenuOutline />
+                  <MenuOutline stroke={isSharePage && '#fff'} />
                 </Box>
               </>
             ) : (
