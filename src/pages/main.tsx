@@ -12,7 +12,7 @@ const MainPage = () => {
 export default MainPage
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const queryClient = new QueryClient()
-  const token = context.req?.cookies
+  // const token = context.req?.cookies
   // console.log('token = ', token)
   // console.log('token = ', token?.accessToken)
   // await queryClient.prefetchQuery('getMyWill', () => getMyWill({
