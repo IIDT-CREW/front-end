@@ -1,11 +1,29 @@
+import { useCallback, useState } from 'react'
 import { Box, Text, Flex } from 'components/Common'
 import moment from 'moment'
 import styled from 'styled-components'
 import StyledImage from 'components/Common/Image/StyledImage'
+import Typing from 'views/Home/components/Typing'
+type DateTextWrapperProps = {
+  isStart: boolean
+}
 const St = {
   TextWrapper: styled(Text)`
     background: ${({ theme }) => (theme.isDark ? theme.colors.backgroundAlt : '')};
     padding: ${({ theme }) => (theme.isDark ? '0px 10px' : '')};
+  `,
+  DateTextWrapper: styled(Text)`
+    background: ${({ theme }) => (theme.isDark ? theme.colors.backgroundAlt : '')};
+    padding: ${({ theme }) => (theme.isDark ? '0px 10px' : '')};
+    opacity: 0;
+    transition: all 1s;
+    transform: translate3d(0px, 15px, 0px);
+    ${({ isStart }: DateTextWrapperProps) => {
+      return isStart
+        ? `opacity: 1;
+         transform: translate3d(0px,0px,0px);`
+        : null
+    }}
   `,
 }
 
@@ -16,13 +34,18 @@ type TitleBannerProps = {
   imagePath: string
 }
 const TitleBanner = ({ height, title, date, imagePath }: TitleBannerProps) => {
+  const [status, setStatus] = useState<'is_done' | 'is_init'>('is_init')
+
+  const handleStatus = useCallback((status: 'is_done' | 'is_init') => {
+    setStatus(status)
+  }, [])
+
   return (
     <Box paddingTop="">
       <Box width="100%" height={height} position="relative">
         <StyledImage
           isFill
           src={imagePath}
-          //src="/images/home/jms-ZfVqAKZ4YRQ-unsplash.jpg"
           alt={'jms-ZfVqAKZ4YRQ-unsplash'}
           style={{
             position: 'absolute',
@@ -36,11 +59,11 @@ const TitleBanner = ({ height, title, date, imagePath }: TitleBannerProps) => {
         <Box width="100%" height={height} position="relative">
           <Flex flexDirection="column" justifyContent="center" alignItems="center" height="100%" position="relative">
             <St.TextWrapper fontSize={['18px', null, null, '32px']} bold>
-              {title}
+              <Typing str={title} handleStatus={handleStatus} status={status} />
             </St.TextWrapper>
-            <St.TextWrapper fontSize={['14px', null, null, '18px']} bold>
+            <St.DateTextWrapper fontSize={['14px', null, null, '18px']} bold isStart={status === 'is_done'}>
               {moment(date).format('YYYY년 MM월 DD일 hh시 mm분')}
-            </St.TextWrapper>
+            </St.DateTextWrapper>
           </Flex>
         </Box>
       </Box>

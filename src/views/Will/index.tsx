@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import { useCallback } from 'react'
+import { useEffect, useCallback } from 'react'
 import { useRouter } from 'next/router'
 import Page from 'components/Layout/Page'
 import { Flex, Box, Text } from 'components/Common'
@@ -13,6 +13,7 @@ import { useQuery } from 'react-query'
 import LoginModal from 'components/LoginModal'
 import { useModal } from 'components/Common'
 import { useIsLogin } from 'store/auth/hooks'
+import AOS from 'aos'
 
 declare global {
   interface Window {
@@ -51,6 +52,11 @@ const WillPage = () => {
   const { data, isLoading, isError } = useQuery('getWill', () => getWill(router.query.id as string))
   const [presentLoginModal] = useModal(<LoginModal />)
 
+  useEffect(() => {
+    AOS.init()
+    AOS.refresh()
+  }, [])
+
   if (isError) {
     return <div>error</div>
   }
@@ -77,16 +83,21 @@ const WillPage = () => {
               {!isLoading && data.result && <WillCard will={data?.result} />}
             </Flex>
           </Flex>
-
-          <Flex flexDirection="column" justifyContent="center" alignItems="center">
-            <Box>
-              <Text>한번 당신도 생각을 정리해보시겠어요? </Text>
-              <Text>좋은 경험이 될 수 있어요 </Text>
-            </Box>
-            <Box mt="20px">
-              <MainButton onClick={handleWrite}>네. 작성해보겠습니다.</MainButton>
-            </Box>
-          </Flex>
+          <Box mt="50px">
+            <Flex flexDirection="column" justifyContent="center" alignItems="center">
+              <Flex flexDirection="column" justifyContent="center" alignItems="center">
+                <Text bold data-aos="fade-up" data-aos-duration="1000">
+                  한번 마지막일기를 적어보시겠어요?
+                </Text>
+                <Text bold data-aos="fade-up" data-aos-duration="1500">
+                  좋은 경험이 될거에요.
+                </Text>
+              </Flex>
+              <Box mt="30px" data-aos="fade" data-aos-duration="3000">
+                <MainButton onClick={handleWrite}>네. 작성해보겠습니다.</MainButton>
+              </Box>
+            </Flex>
+          </Box>
         </St.Container>
       </Page>
     </>
