@@ -68,7 +68,7 @@ const Image: React.FC<ImageProps> = ({ src, alt, width, height, isFill = false, 
             objectFit={objectFit}
           />
           {!isImageLoaded && !isImageLoadError && (
-            <Skeleton animation={'waves'} width={isFill ? '100%' : width} height={isFill ? '100%' : height} />
+            <Skeleton animation={'pulse'} width={isFill ? '100%' : width} height={isFill ? '100%' : height} />
           )}
         </>
       )}
