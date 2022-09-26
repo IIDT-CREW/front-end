@@ -9,11 +9,12 @@ import Placeholder from './Placeholder'
 type StyledImageProps = {
   isImageLoaded: boolean
   objectFit: string
+  position: 'absolute' | 'fixed'
 }
 const StyledImage = styled.img<StyledImageProps>`
   height: 100%;
   left: 0;
-  position: absolute;
+  position: ${({ position }) => position};
   top: 0;
   width: 100%;
   transition: opacity 0.6s;
@@ -22,7 +23,16 @@ const StyledImage = styled.img<StyledImageProps>`
   object-fit: ${({ objectFit }) => objectFit};
 `
 
-const Image: React.FC<ImageProps> = ({ src, alt, width, height, isFill = false, objectFit = 'cover', ...props }) => {
+const Image: React.FC<ImageProps> = ({
+  src,
+  alt,
+  width,
+  height,
+  isFill = false,
+  objectFit = 'cover',
+  position = 'absolute',
+  ...props
+}) => {
   const imgRef = useRef<HTMLDivElement>(null)
   const [isLoaded, setIsLoaded] = useState(false)
   const [isImageLoaded, setIsImageLoaded] = useState(false)
@@ -66,6 +76,7 @@ const Image: React.FC<ImageProps> = ({ src, alt, width, height, isFill = false, 
             onLoad={() => setIsImageLoaded(true)}
             onError={() => setIsImageLoadError(true)}
             objectFit={objectFit}
+            position={position}
           />
           {!isImageLoaded && !isImageLoadError && (
             <Skeleton animation={'pulse'} width={isFill ? '100%' : width} height={isFill ? '100%' : height} />

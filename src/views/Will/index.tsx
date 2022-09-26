@@ -68,13 +68,13 @@ const WillPage = () => {
 
   return (
     <>
-      <Page title={data?.result.TITLE} content={data.result.CONTENT} isFullPage>
+      <Page title={data?.result?.TITLE} content={data.result?.CONTENT} isFullPage>
         <St.Container>
           <Box mb="36px">
             <TitleBanner
               height="100vh"
-              title={data.result.TITLE}
-              date={data.result.REG_DATE}
+              title={data?.result?.TITLE}
+              date={data?.result?.REG_DATE}
               imagePath="https://images.unsplash.com/photo-1436891620584-47fd0e565afb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1287&q=80"
             />
           </Box>

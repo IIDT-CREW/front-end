@@ -53,6 +53,7 @@ const TitleBanner = ({ height, title, date, imagePath }: TitleBannerProps) => {
           isFill
           src={imagePath}
           alt={'jms-ZfVqAKZ4YRQ-unsplash'}
+          position="fixed"
           style={{
             position: 'absolute',
             width: '100%',
@@ -60,6 +61,7 @@ const TitleBanner = ({ height, title, date, imagePath }: TitleBannerProps) => {
             zIndex: '-1',
             objectFit: 'cover',
             background: 'linear-gradient(0deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2))',
+            clipPath: 'inset(0)',
           }}
         />
         <Box width="100%" height={height} position="relative">
