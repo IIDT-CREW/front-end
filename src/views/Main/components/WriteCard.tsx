@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useRouter } from 'next/router'
 import { Box, Text, Flex } from 'components/Common'
 import { getColor } from 'components/Common/Text/Text'
@@ -8,11 +8,12 @@ import Ellipsis from 'components/Common/Svg/Icons/Ellipsis'
 import Export from 'components/Common/Svg/Icons/Export'
 import Trash from 'components/Common/Svg/Icons/Trash'
 import Edit from 'components/Common/Svg/Icons/Edit'
+import Panorama from 'components/Common/Svg/Icons/Panorama'
 import { useModal } from 'components/Common'
 import moment from 'moment'
 import WriteDeleteModal from './modal/WriteDeleteModal'
 import ShareModal from './modal/ShareModal'
-import { useIsLogin, useUserInfo } from 'store/auth/hooks'
+import { useIsLogin } from 'store/auth/hooks'
 import { Will } from 'api/types'
 
 const St = {
@@ -47,7 +48,7 @@ const St = {
   `,
 }
 
-const MenuItem = ({ presentDeleteModal, presentShareModal, handleEdit }) => {
+const MenuItem = ({ presentDeleteModal, presentShareModal, handleEdit, handlePreview }) => {
   return (
     <Box>
       <Flex padding="8px" style={{ gap: '8px' }} onClick={handleEdit}>
@@ -58,9 +59,13 @@ const MenuItem = ({ presentDeleteModal, presentShareModal, handleEdit }) => {
         <Export />
         <Text>공유하기</Text>
       </Flex>
+      <Flex padding="8px" style={{ gap: '8px' }} onClick={handlePreview}>
+        <Panorama />
+        <Text>미리보기</Text>
+      </Flex>
       <Flex padding="8px" style={{ gap: '8px' }} onClick={presentDeleteModal}>
         <Trash />
-        <Text>삭제하기</Text>
+        <Text color="#F3213B">삭제하기</Text>
       </Flex>
     </Box>
   )
@@ -98,6 +103,10 @@ const WriteCard = ({ will, handleDelete, handlShare }: WriteCardProps) => {
     router.push(`/write?will_id=${WILL_ID}`)
   }
 
+  const handlePreview = () => {
+    router.push(`/will/${WILL_ID}`)
+  }
+
   return (
     <St.CardWrapper mr="24px" ml="24px" mb="40px" padding="20px" minWidth="362px" maxWidth="582px" borderRadius="4px">
       <Box mb="20px">
@@ -111,6 +120,7 @@ const WriteCard = ({ will, handleDelete, handlShare }: WriteCardProps) => {
                   presentDeleteModal={presentDeleteModal}
                   presentShareModal={presentShareModal}
                   handleEdit={handleEdit}
+                  handlePreview={handlePreview}
                 />
               </St.MenuWrapper>
             </Text>
