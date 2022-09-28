@@ -1,9 +1,9 @@
 import { createGlobalStyle } from 'styled-components'
-import { NFTUiKitTheme } from 'theme'
+import { IIDTUiKitTheme } from 'theme'
 
 declare module 'styled-components' {
   /* eslint-disable @typescript-eslint/no-empty-interface */
-  export interface DefaultTheme extends NFTUiKitTheme {}
+  export interface DefaultTheme extends IIDTUiKitTheme {}
 }
 
 const GlobalStyle = createGlobalStyle`
