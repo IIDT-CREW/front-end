@@ -77,12 +77,14 @@ const AuthCallback = () => {
         }
 
         const path = localStorage.getItem('login_path')
-        router.replace(path) // 토큰 받았았고 로그인됐으니 화면 전환시켜줌(메인으로)
+        if (path === '/') router.push('/main')
+        if (path !== '/') router.replace(path)
+
         localStorage.removeItem('login_path')
       }
     } catch (e) {
       alert('오류가 발생했습니다. 로그인 재 시도해주세요')
-      router.replace('/') // 토큰 받았았고 로그인됐으니 화면 전환시켜줌(메인으로)
+      router.replace('/')
       return null
     }
   }

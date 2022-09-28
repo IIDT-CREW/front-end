@@ -9,6 +9,9 @@ export const naviSlice = createSlice({
     menuOnOff: (state) => {
       state.isMenuOpen = !state.isMenuOpen
     },
+    menuOff: (state) => {
+      state.isMenuOpen = false
+    },
   },
 })
 

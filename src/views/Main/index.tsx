@@ -115,7 +115,7 @@ const Main = () => {
           <MainInfo />
 
           <Box mb="55px">
-            <MainButton onClick={handleWrite}> 작성하러가기</MainButton>
+            <MainButton onClick={handleWrite}>작성하러가기</MainButton>
           </Box>
 
           {isLogin &&

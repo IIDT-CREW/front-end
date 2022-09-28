@@ -22,6 +22,9 @@ const MenuWrapper = () => {
     if (router.asPath.includes('/main')) {
       return 0
     }
+    if (router.asPath.includes('/write')) {
+      return 0
+    }
     return MENU_HEIGHT
   }
 
@@ -46,13 +49,21 @@ const MenuWrapper = () => {
     } catch (e) {
       console.log('logout ', e)
     }
-
-    // router.replace('/')
   }
 
+  const handleRoute = (path: string) => {
+    router.push(path)
+    dispatch(naviActions.menuOff())
+  }
   return (
     <Box mt={`${retrunMarginTop()}px`} position="absolute" padding="10px">
       <Box>
+        <St.TextLink mb="24px" onClick={() => handleRoute('/')}>
+          HOME
+        </St.TextLink>
+        <St.TextLink mb="24px" onClick={() => handleRoute('/main')}>
+          MAIN
+        </St.TextLink>
         <St.TextLink mb="24px" onClick={handleLogout}>
           로그아웃
         </St.TextLink>
