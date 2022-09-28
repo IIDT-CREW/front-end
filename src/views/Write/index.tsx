@@ -2,7 +2,7 @@ import { TextareaHTMLAttributes, useContext, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { fontSize, FontSizeProps } from 'styled-system'
 import { getWill, insertWill, updateWill } from 'api/will'
-import { ArrowLeft } from 'components/Common/Svg'
+import { ArrowLeft, ArrowRight } from 'components/Common/Svg'
 import { useRouter } from 'next/router'
 import { Flex, useModal } from 'components/Common'
 import SelectPostTypeModal from 'views/Write/components/modal/SelectPostTypeModal'
@@ -13,6 +13,7 @@ import { nanoid } from 'nanoid'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 import { toastContext } from 'contexts/Toast'
 import ProgressBar from 'components/Common/ProgressBar'
+import useMatchBreakpoints from 'hooks/useMatchBreakpoints'
 
 const QUESTION_LIST = [
   '1. 살아오면서 가장 기뻤던 일은?',
@@ -38,7 +39,7 @@ const Write = () => {
   const router = useRouter()
   const { memIdx } = useUserInfo()
   const { onToast } = useContext(toastContext)
-
+  const { isMobile } = useMatchBreakpoints()
   const queryClient = useQueryClient()
   const content = isDefaultPostType ? contents[page] : contents.map((v, i) => `${QUESTION_LIST[i]}\n${v}`).join('\n')
   const isEditMode = !!router?.query?.will_id
@@ -167,20 +168,25 @@ const Write = () => {
   }
 
   const isDisabledSave = () => (contents[page].length ? false : true)
-  const createMenuButton = (text, handleClick, disabled, variant: variant = 'primary') => (
-    <St.MenuButton variant={variant} onClick={handleClick} disabled={disabled}>
-      {text}
-    </St.MenuButton>
-  )
+  const createMenuButton = (text, handleClick, disabled, variant: variant = 'primary') =>
+    isMobile ? (
+      <St.RoundIconButton onClick={handleClick} disabled={disabled}>
+        {text === '이전 질문' ? <ArrowLeft /> : <ArrowRight />}
+      </St.RoundIconButton>
+    ) : (
+      <St.MenuButton variant={variant} onClick={handleClick} disabled={disabled}>
+        {text}
+      </St.MenuButton>
+    )
 
   const createMenuButtons = () => {
-    if (isDefaultPostType) return createMenuButton('작성 완료', handleSave, isDisabledSave())
+    if (!isMobile && isDefaultPostType) return createMenuButton('작성 완료', handleSave, isDisabledSave())
     return (
       <Flex style={{ gap: '10px' }}>
         {page !== 0 && createMenuButton('이전 질문', () => setPage((page) => page - 1), false, 'secondary')}
         {page !== QUESTION_LIST.length - 1
           ? createMenuButton('다음 질문', () => setPage((page) => page + 1), isDisabledSave())
-          : createMenuButton('작성 완료', handleSave, isDisabledSave())}
+          : !isMobile && createMenuButton('작성 완료', handleSave, isDisabledSave())}
       </Flex>
     )
   }
@@ -189,7 +195,7 @@ const Write = () => {
     <St.Article>
       <St.MenuBar>
         <St.GoToHistoryButton onClick={goToMain}>
-          <ArrowLeft fill="none" />내 기록
+          <ArrowLeft fill="none" width="26px" />내 기록
         </St.GoToHistoryButton>
         {/* <button onClick={handleClick}>시간</button> */}
         {createMenuButtons()}
@@ -223,6 +229,14 @@ const Contents = ({ ...props }: TextAreaProps) => {
   return <St.Textarea fontSize={'18px'} placeholder="내용을 입력하세요" {...props} />
 }
 const St = {
+  RoundIconButton: styled.button`
+    width: 24px;
+    height: 24px;
+    border-radius: 100%;
+    border: 1px solid ${({ theme }) => theme.colors.grayscale2};
+    background-color: ${({ theme }) => theme.colors.grayscale0};
+    padding: 0;
+  `,
   Editor: styled.section`
     padding: ${MENU_HEIGHT}px 24px 0 24px;
     height: 100%;
@@ -263,9 +277,6 @@ const St = {
     padding: unset;
     align-items: center;
     cursor: pointer;
-    svg {
-      margin-left: 7px;
-    }
   `,
   MenuButton: styled.button<{ variant?: variant }>`
     width: 76px;
