@@ -57,7 +57,7 @@ const Home: React.FC = () => {
     AOS.refresh()
   }, [])
   const isLogin = useIsLogin()
-  const { theme } = useTheme()
+  // const { theme } = useTheme()
   // const { accessToken } = useSelector<AppState, AppState['auth']>((state) => state.auth)
 
   return (

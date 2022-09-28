@@ -1,23 +1,12 @@
-import moment from 'moment'
-import { useState, useEffect, useRef } from 'react'
+import useClock from 'hooks/useClock'
 import { Box, Text, Flex } from 'components/Common'
 
 const Clock = ({ height = '300px' }) => {
-  const timer: any = useRef(null)
-  const [time, setTime] = useState('')
-
-  useEffect(() => {
-    setTime(moment().format('HH:mm:ss'))
-    timer.current = setInterval(() => {
-      setTime(moment().format('HH:mm:ss'))
-    }, 1000)
-    return () => {
-      clearInterval(timer.current)
-    }
-  }, [])
+  const { time } = useClock()
   // const nextDay = moment(moment().add(1, 'days').format('YYYY-MM-DD'))
   // const leftTime = nextDay.unix() - time.unix()
   //const formatted = moment.utc(leftTime * 1000).format('HH:mm:ss')
+
   return (
     <Box paddingTop="">
       <Box width="100%" height={height} position="relative">
