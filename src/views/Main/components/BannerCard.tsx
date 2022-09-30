@@ -1,9 +1,9 @@
-import moment from 'moment'
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
+import useClock from 'hooks/useClock'
 import { Box, Text, Flex } from 'components/Common'
 import styled from 'styled-components'
-import StyledImage from 'components/Common/Image/StyledImage'
-import useProgressiveImage from 'hooks/useProgressiveImage';
+// import StyledImage from 'components/Common/Image/StyledImage'
+import useProgressiveImage from 'hooks/useProgressiveImage'
 import { Skeleton } from 'components/Common/Skeleton'
 const St = {
   TextWrapper: styled(Text)`
@@ -58,20 +58,11 @@ const bannerJson = [
 ]
 // const bannerIndex = Math.floor(Math.random() * 5)
 const BannerCard = ({ height = '231px' }) => {
-  const timer: any = useRef(null)
+  const { time } = useClock()
 
-  const [time, setTime] = useState('')
   const [bannerIndex, setBannerIndex] = useState(0)
   useEffect(() => {
-    setTime(moment().format('HH:mm:ss'))
     setBannerIndex(Math.floor(Math.random() * 5) + 1)
-    timer.current = setInterval(() => {
-      setTime(moment().format('HH:mm:ss'))
-    }, 1000)
-
-    return () => {
-      clearInterval(timer.current)
-    }
   }, [])
 
   const { firstLine, secondLine, author, imagePath } = bannerJson[bannerIndex]
@@ -80,7 +71,7 @@ const BannerCard = ({ height = '231px' }) => {
     <Box paddingTop="">
       <Box width="100%" height={height} position="relative">
         <Box width="100%" height={height} position="relative" background={`url(${loaded}) 50%/ cover`}>
-        {!loaded && <Skeleton animation={'pulse'} width='100%' height='100%' />}
+          {!loaded && <Skeleton animation={'pulse'} width="100%" height="100%" />}
           <Flex
             flexDirection="column"
             justifyContent="center"
