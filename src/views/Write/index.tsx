@@ -1,8 +1,8 @@
 import { TextareaHTMLAttributes, useContext, useEffect, useState } from 'react'
-import styled from 'styled-components'
+import styled, { CSSProp, useTheme } from 'styled-components'
 import { fontSize, FontSizeProps } from 'styled-system'
 import { getWill, insertWill, updateWill } from 'api/will'
-import { ArrowLeft } from 'components/Common/Svg'
+import { ArrowLeft, ArrowRight } from 'components/Common/Svg'
 import { useRouter } from 'next/router'
 import { Flex, useModal } from 'components/Common'
 import SelectPostTypeModal from 'views/Write/components/modal/SelectPostTypeModal'
@@ -13,6 +13,7 @@ import { nanoid } from 'nanoid'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 import { toastContext } from 'contexts/Toast'
 import ProgressBar from 'components/Common/ProgressBar'
+import useMatchBreakpoints from 'hooks/useMatchBreakpoints'
 
 const QUESTION_LIST = [
   '1. 살아오면서 가장 기뻤던 일은?',
@@ -38,7 +39,8 @@ const Write = () => {
   const router = useRouter()
   const { memIdx } = useUserInfo()
   const { onToast } = useContext(toastContext)
-
+  const theme = useTheme()
+  const { isMobile } = useMatchBreakpoints()
   const queryClient = useQueryClient()
   const content = isDefaultPostType ? contents[page] : contents.map((v, i) => `${QUESTION_LIST[i]}\n${v}`).join('\n')
   const isEditMode = !!router?.query?.will_id
@@ -167,20 +169,46 @@ const Write = () => {
   }
 
   const isDisabledSave = () => (contents[page].length ? false : true)
-  const createMenuButton = (text, handleClick, disabled, variant: variant = 'primary') => (
-    <St.MenuButton variant={variant} onClick={handleClick} disabled={disabled}>
-      {text}
-    </St.MenuButton>
-  )
+  const handleToastContentIsRequired = (handleClick, disabled) => () => {
+    if (disabled)
+      return onToast({
+        type: 'error',
+        message: '내용을 입력해주세요',
+        option: {
+          position: 'top-center',
+          style: {
+            top: `${MENU_HEIGHT}px`,
+            backgroundColor: `${theme.colors.background}`,
+            color: `${theme.colors.error}`,
+            border: '1px solid #EFEFEF',
+            boxShadow: '0px 0px 1px rgb(0 0 0 / 8%), 0px 2px 6px rgb(0 0 0 / 5%)',
+            borderRadius: '2px',
+            margin: '0 16px',
+          },
+        },
+      })
+    return handleClick()
+  }
+  const createMenuButton = (text, handleClick, disabled, variant: variant = 'primary') =>
+    isMobile ? (
+      <St.RoundIconButton onClick={handleToastContentIsRequired(handleClick, disabled)}>
+        {text === '이전 질문' ? <ArrowLeft /> : <ArrowRight />}
+      </St.RoundIconButton>
+    ) : (
+      <St.MenuButton variant={variant} onClick={handleClick} disabled={disabled}>
+        {text}
+      </St.MenuButton>
+    )
 
   const createMenuButtons = () => {
-    if (isDefaultPostType) return createMenuButton('작성 완료', handleSave, isDisabledSave())
+    if (isDefaultPostType) return !isMobile && createMenuButton('작성 완료', handleSave, isDisabledSave())
+
     return (
       <Flex style={{ gap: '10px' }}>
         {page !== 0 && createMenuButton('이전 질문', () => setPage((page) => page - 1), false, 'secondary')}
         {page !== QUESTION_LIST.length - 1
           ? createMenuButton('다음 질문', () => setPage((page) => page + 1), isDisabledSave())
-          : createMenuButton('작성 완료', handleSave, isDisabledSave())}
+          : !isMobile && createMenuButton('작성 완료', handleSave, isDisabledSave())}
       </Flex>
     )
   }
@@ -189,7 +217,7 @@ const Write = () => {
     <St.Article>
       <St.MenuBar>
         <St.GoToHistoryButton onClick={goToMain}>
-          <ArrowLeft fill="none" />내 기록
+          <ArrowLeft fill="none" width="26px" />내 기록
         </St.GoToHistoryButton>
         {/* <button onClick={handleClick}>시간</button> */}
         {createMenuButtons()}
@@ -199,21 +227,49 @@ const Write = () => {
           value={title}
           onChange={handleTitle}
           fontSize={[, '16px', '26px']}
-          height="30px"
-          marginBottom="24px"
+          rows={1}
+          wrap="off"
           placeholder={DEFAULT_TITLE}
-        ></Title>
+          css={{ height: '30px', marginBottom: '24px', overflow: 'hidden' }}
+        />
+
         {isDefaultPostType || <St.Question fontSize={[, '16px', '26px']}>{QUESTION_LIST[page]}</St.Question>}
-        <Contents isDefaultPostType={isDefaultPostType} value={contents[page]} onChange={handleContents} />
+        <Contents
+          isDefaultPostType={isDefaultPostType}
+          value={contents[page]}
+          onChange={handleContents}
+          css={{ flex: 'auto' }}
+        />
+        {isDefaultPostType && isMobile && (
+          <St.MenuButton
+            isFull={true}
+            variant="primary"
+            onClick={handleSave}
+            disabled={isDisabledSave()}
+            css={{ marginBottom: '16px' }}
+          >
+            {'작성 완료'}
+          </St.MenuButton>
+        )}
+        {!isDefaultPostType && isMobile && page === QUESTION_LIST.length - 1 && (
+          <St.MenuButton
+            isFull={true}
+            variant="primary"
+            onClick={handleSave}
+            disabled={isDisabledSave()}
+            css={{ marginBottom: '16px' }}
+          >
+            {'모두 다 작성했어요'}
+          </St.MenuButton>
+        )}
       </St.Editor>
       {isDefaultPostType || <ProgressBar value={page + 1} max={QUESTION_LIST.length} />}
     </St.Article>
   )
 }
 interface TextAreaProps extends FontSizeProps, TextareaHTMLAttributes<HTMLTextAreaElement> {
-  height?: string
-  marginBottom?: string
   isDefaultPostType?: boolean
+  css?: CSSProp
 }
 type variant = 'primary' | 'secondary'
 const Title = ({ ...props }: TextAreaProps) => {
@@ -223,16 +279,26 @@ const Contents = ({ ...props }: TextAreaProps) => {
   return <St.Textarea fontSize={'18px'} placeholder="내용을 입력하세요" {...props} />
 }
 const St = {
+  RoundIconButton: styled.button`
+    width: 24px;
+    height: 24px;
+    border-radius: 100%;
+    border: 1px solid ${({ theme }) => theme.colors.grayscale2};
+    background-color: ${({ theme }) => theme.colors.grayscale0};
+    padding: 0;
+  `,
   Editor: styled.section`
     padding: ${MENU_HEIGHT}px 24px 0 24px;
     height: 100%;
+    display: flex;
+    flex-direction: column;
   `,
   Question: styled.div<FontSizeProps>`
     font-family: 'Nanum Myeongjo';
     font-style: normal;
     font-weight: 700;
     font-size: 26px;
-    margin: 10px 0 16px 0;
+    margin: 0 0 16px 0;
     color: ${({ theme }) => theme.colors.grayscale6};
     ${fontSize}
   `,
@@ -263,12 +329,9 @@ const St = {
     padding: unset;
     align-items: center;
     cursor: pointer;
-    svg {
-      margin-left: 7px;
-    }
   `,
-  MenuButton: styled.button<{ variant?: variant }>`
-    width: 76px;
+  MenuButton: styled.button<{ variant?: variant; isFull?: boolean; css?: CSSProp }>`
+    width: ${({ isFull }) => (isFull ? '100%' : '76px')};
     height: 38px;
     display: flex;
     flex-direction: row;
@@ -301,6 +364,7 @@ const St = {
       background-color: ${({ theme }) => theme.colors.grayscale1};
       cursor: not-allowed;
     }
+    ${({ css }) => css}
   `,
   Textarea: styled.textarea<TextAreaProps>`
     outline: none;
@@ -312,14 +376,12 @@ const St = {
     font-family: 'Nanum Myeongjo';
     padding: unset;
     color: ${({ theme }) => theme.colors.grayscale7};
-    height: ${({ height, isDefaultPostType }) =>
-      `${height || `calc(100% - 57px${isDefaultPostType ? '' : ' - 52px'})`}`};
     line-height: 28px;
     ::placeholder {
       color: ${({ theme }) => theme.colors.grayscale5};
       ${fontSize}
     }
-    ${({ marginBottom }) => `margin-bottom:${marginBottom}`};
+    ${({ css }) => css}
     ${fontSize}
   `,
 }
