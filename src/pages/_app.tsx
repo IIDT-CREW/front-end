@@ -20,6 +20,7 @@ import { useNaviState } from 'store/navi/hooks'
 import { MENU_HEIGHT, FOOTER_HEIGHT } from 'config/constants/default'
 // import useAuthUserStorage from 'hooks/useAuthUserStorage'
 import useAuthAccessToken from 'hooks/useAuthAccessToken'
+import useFooterDisable from 'hooks/useFooterDisable'
 import * as gtag from 'utils/gtag'
 
 import styled from 'styled-components'
@@ -138,6 +139,7 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
     setMounted(true)
   }, [])
 
+  const isFooterDisable = useFooterDisable()
   if (!mounted) {
     return (
       <div style={{ visibility: 'hidden' }}>
@@ -161,7 +163,7 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
           <Component {...pageProps} />
         </St.Wrapper>
       </Layout>
-      <Footer />
+      {!isFooterDisable && <Footer />}
 
       <ToastContainer
         position="bottom-right"

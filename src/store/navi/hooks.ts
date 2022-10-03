@@ -1,9 +1,8 @@
-import { useSelector, useDispatch } from 'react-redux'
-import { AppDispatch, AppState } from '../index'
-import { naviActions } from './'
+import { useSelector } from 'react-redux'
+import { RootState } from 'store'
 
-export function useNaviState(): AppState['navi'] {
-  return useSelector<AppState, AppState['navi']>((state) => state.navi)
+export function useNaviState(): RootState['navi'] {
+  return useSelector<RootState, RootState['navi']>((state) => state.navi)
 }
 
 // export function useIsLogin(): boolean {
