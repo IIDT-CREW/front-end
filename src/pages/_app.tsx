@@ -10,7 +10,7 @@ import { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { Hydrate, QueryClient, QueryClientProvider } from 'react-query'
 import { ReactQueryDevtools } from 'react-query/devtools'
-import Providers from '../Providers'
+// import Providers from '../Providers'
 import GlobalStyle from '../style/Global'
 import useBaseQueryClient from 'hooks/queries/useBaseQueryClient'
 import Menu from 'components/Menu'
@@ -22,9 +22,16 @@ import { MENU_HEIGHT, FOOTER_HEIGHT } from 'config/constants/default'
 import useAuthAccessToken from 'hooks/useAuthAccessToken'
 import useFooterDisable from 'hooks/useFooterDisable'
 import * as gtag from 'utils/gtag'
-
+import { useDarkMode } from 'hooks/useDarkMode'
 import styled from 'styled-components'
 import { ToastContainer } from 'react-toastify'
+import { light, dark } from 'theme'
+import ModalProvider from 'components/Common/Modal/ModalContext'
+import { Provider } from 'react-redux'
+import { ToastContextProvider } from 'contexts/Toast'
+import { Store } from '@reduxjs/toolkit'
+import { ThemeProvider } from 'styled-components'
+
 import 'style/custom-react-toastify.css'
 import 'aos/dist/aos.css'
 
@@ -49,8 +56,9 @@ function MyApp(props: AppProps) {
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=5, minimum-scale=1, viewport-fit=cover"
         />
-        <meta name="title" content="IIDT" />
-        <meta name="description" content="오늘이 마지막이라면" />
+        <meta name="title" content="IF I DIE TOMORROW" />
+        <meta name="description" content="만약 오늘이 마지막이라면" />
+        <meta name="keywords" content="iidt, if i die tomorrow, 일기, 마지막 일기, 유서, 감성, 죽음"></meta>
         <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)" />
         <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
         <meta name="twitter:image" content="" />
@@ -64,14 +72,11 @@ function MyApp(props: AppProps) {
       </Head>
       <QueryClientProvider client={queryClient}>
         <Hydrate state={pageProps.dehydratedState}>
-          <Providers store={store}>
+          <Provider store={store}>
             <GlobalHooks />
-            <ResetCSS />
-            <GlobalStyle />
             <App {...props} />
-          </Providers>
+          </Provider>
         </Hydrate>
-
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
       <Script
@@ -138,43 +143,40 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
   useEffect(() => {
     setMounted(true)
   }, [])
-
+  const [themeMode, toggleTheme] = useDarkMode()
+  const theme = themeMode === 'light' ? light : dark
   const isFooterDisable = useFooterDisable()
+
   if (!mounted) {
-    return (
-      <div style={{ visibility: 'hidden' }}>
-        <Menu />
-        <Layout>
-          {isMenuOpen && <MenuWrapper />}
-          <St.Wrapper style={{ visibility: isMenuOpen ? 'hidden' : 'visible' }}>
-            <Component {...pageProps} />
-          </St.Wrapper>
-        </Layout>
-        <Footer />
-      </div>
-    )
+    return null
   }
   return (
-    <>
-      <Menu />
-      <Layout>
-        {isMenuOpen && <MenuWrapper />}
-        <St.Wrapper style={{ visibility: isMenuOpen ? 'hidden' : 'visible' }}>
-          <Component {...pageProps} />
-        </St.Wrapper>
-      </Layout>
-      {!isFooterDisable && <Footer />}
+    <ThemeProvider theme={theme}>
+      <ResetCSS />
+      <GlobalStyle />
+      <ToastContextProvider>
+        <ModalProvider>
+          <Layout>
+            <Menu themeMode={themeMode} toggleTheme={toggleTheme} />
+            {isMenuOpen && <MenuWrapper />}
+            <St.Wrapper style={{ visibility: isMenuOpen ? 'hidden' : 'visible' }}>
+              <Component {...pageProps} />
+            </St.Wrapper>
+          </Layout>
+          {!isFooterDisable && <Footer />}
 
-      <ToastContainer
-        position="bottom-right"
-        autoClose={3000}
-        closeOnClick
-        draggable={false}
-        pauseOnHover={false}
-        pauseOnFocusLoss={false}
-        hideProgressBar={true}
-      />
-    </>
+          <ToastContainer
+            position="bottom-right"
+            autoClose={3000}
+            closeOnClick
+            draggable={false}
+            pauseOnHover={false}
+            pauseOnFocusLoss={false}
+            hideProgressBar={true}
+          />
+        </ModalProvider>
+      </ToastContextProvider>
+    </ThemeProvider>
   )
 }
 

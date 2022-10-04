@@ -48,9 +48,15 @@ const St = {
       width: 225px;
       font-size: 16px;
       padding: 12px 14px;
+      margin-bottom: 10px;
     }
 
     ${({ theme }) => theme.mediaQueries.sm} {
+      width: 335px;
+      font-size: 18px;
+      margin: 16px 20px;
+    }
+    ${({ theme }) => theme.mediaQueries.md} {
       width: 335px;
       font-size: 18px;
       margin: 16px 20px;

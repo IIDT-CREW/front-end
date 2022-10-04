@@ -7,7 +7,7 @@ import React, { useEffect } from 'react'
 import AOS from 'aos'
 import Link from 'next/link'
 import { useIsLogin } from 'store/auth/hooks'
-import useMatchBreakpoints from 'hooks/useMatchBreakpoints'
+// import useMatchBreakpoints from 'hooks/useMatchBreakpoints'
 import MainCard from './components/MainCard'
 import Clock from './components/Clock'
 
@@ -51,7 +51,7 @@ export const MainButton = styled.button`
 `
 
 const Home: React.FC = () => {
-  const { isMobile, isDesktop } = useMatchBreakpoints()
+  // const { isMobile, isDesktop } = useMatchBreakpoints()
   useEffect(() => {
     AOS.init()
     AOS.refresh()
@@ -88,7 +88,7 @@ const Home: React.FC = () => {
         <Clock />
 
         <MainCard
-          height={isMobile ? 300 : 469}
+          height={469}
           title="내일이 내생에"
           secondTitle="마지막이라고 생각해보신적 있나요?"
           imagePath="/images/home/patrick-ryan-3kUIaB2EPp8-unsplash.jpg"
@@ -96,7 +96,7 @@ const Home: React.FC = () => {
         />
         <Box mb={'100px'} />
         <MainCard
-          height={isMobile ? 300 : 469}
+          height={469}
           title=" 만약 내일 생을 마감한다면,"
           secondTitle="소중한 이들에게 하고싶은 말이 있나요?"
           imagePath="/images/home/huyen-pham--PTlx55R-KU-unsplash.jpg"

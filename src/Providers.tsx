@@ -4,23 +4,19 @@ import { Provider } from 'react-redux'
 import { ThemeProvider } from 'styled-components'
 import { ToastContextProvider } from './contexts/Toast'
 import { Store } from '@reduxjs/toolkit'
-import { ThemeProvider as NextThemeProvider, useTheme as useNextTheme } from 'next-themes'
-
-const StyledThemeProvider = (props) => {
-  const { resolvedTheme } = useNextTheme()
-  return <ThemeProvider theme={resolvedTheme === 'light' ? light : dark} {...props} />
-}
+import { useDarkMode } from 'hooks/useDarkMode'
 
 const Providers: React.FC<{ children: any; store: Store }> = ({ children, store }) => {
+  const [themeMode, toggleTheme] = useDarkMode()
+  const theme = themeMode === 'light' ? light : dark
+  console.log('themeMode = ', themeMode)
   return (
     <Provider store={store}>
-      <NextThemeProvider>
-        <StyledThemeProvider>
-          <ToastContextProvider>
-            <ModalProvider>{children}</ModalProvider>
-          </ToastContextProvider>
-        </StyledThemeProvider>
-      </NextThemeProvider>
+      <ThemeProvider theme={theme}>
+        <ToastContextProvider>
+          <ModalProvider>{children}</ModalProvider>
+        </ToastContextProvider>
+      </ThemeProvider>
     </Provider>
   )
 }

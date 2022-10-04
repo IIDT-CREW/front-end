@@ -22,15 +22,15 @@ const ThemeToggleButton = (props: ButtonProps | ToggleButtonProps) => {
 }
 
 const StyledButton = styled.button<ToggleButtonProps>`
-  width: 3rem;
-  height: 3rem;
+  width: 2rem;
+  height: 2rem;
   display: flex;
   align-items: center;
   justify-content: center;
   border: none;
   border-radius: 2rem;
-  background-color: rgba(255, 255, 255, 0);
   cursor: pointer;
+  background: transparent;
 `
 const StyledDiv = styled.div<{ visible: boolean }>`
   position: absolute;

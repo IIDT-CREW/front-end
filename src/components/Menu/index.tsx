@@ -12,7 +12,6 @@ import DropdownMenu from './DropdownMenu'
 import MenuConfig from './config'
 import { naviActions } from 'store/navi'
 import { useIsLogin } from 'store/auth/hooks'
-import useTheme, { THEME_TYPE } from 'hooks/useTheme'
 import ThemeToggleButton from '../Common/Button/ThemeToggleButton'
 import { useModal } from 'components/Common'
 import { MENU_HEIGHT } from 'config/constants/default'
@@ -77,7 +76,7 @@ export const St = {
 }
 const DELTA = 3
 const isServer = typeof window === 'undefined'
-const MenuWrapper = () => {
+const MenuWrapper = ({ themeMode, toggleTheme }) => {
   const router = useRouter()
   const dispatch = useDispatch()
   const [showMenu, setShowMenu] = useState(true)
@@ -89,10 +88,8 @@ const MenuWrapper = () => {
     presentLoginModal()
   }
 
-  const { setTheme, isDark } = useTheme()
-
   const handleDark = () => {
-    setTheme(isDark ? THEME_TYPE.LIGHT : THEME_TYPE.DARK)
+    toggleTheme()
   }
 
   const handleMenu = () => {
@@ -176,7 +173,7 @@ const MenuWrapper = () => {
           </Flex>
           <Flex justifyContent="center" alignItems="center">
             <Box width="40px" height="40px" borderRadius="50%"></Box>
-            <ThemeToggleButton selected={isDark} onClick={handleDark} />
+            <ThemeToggleButton selected={themeMode === 'dark'} onClick={handleDark} />
             {isLogin ? (
               <>
                 <Box onClick={handleMenu} style={{ cursor: 'pointer' }}>
