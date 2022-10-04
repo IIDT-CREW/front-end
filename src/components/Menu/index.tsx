@@ -177,7 +177,7 @@ const MenuWrapper = ({ themeMode, toggleTheme }) => {
             {isLogin ? (
               <>
                 <Box onClick={handleMenu} style={{ cursor: 'pointer' }}>
-                  <MenuOutline stroke={isSharePage && '#fff'} />
+                  <MenuOutline stroke={isSharePage && '#fff'} themeMode={themeMode} />
                 </Box>
               </>
             ) : (

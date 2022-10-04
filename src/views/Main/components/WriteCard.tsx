@@ -28,7 +28,7 @@ const St = {
     font-weight: 400;
     line-height: 1.5;
     font-size: 18px;
-    color: ${getColor};
+    color: ${({ theme }) => theme.colors.text};
   `,
   MenuWrapper: styled<any>(Box)`
     width: 200px;

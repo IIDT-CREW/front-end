@@ -19,7 +19,7 @@ const St = {
     line-height: 1.5;
     font-size: 18px;
     padding: 20px;
-    color: ${getColor};
+    color: ${({ theme }) => theme.colors.text};
   `,
 }
 

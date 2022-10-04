@@ -105,13 +105,12 @@ const Home: React.FC = () => {
 
         <Box mb="50px" style={{ textAlign: 'center' }} height="100vh">
           <Flex justifyContent="center" alignItems="center" height="100%" position="relative" flexDirection="column">
-            <Text fontSize={['16px', '16px', '36px', '36px']} color="" data-aos="fade-up" data-aos-duration="1000">
+            <Text fontSize={['16px', '16px', '36px', '36px']} data-aos="fade-up" data-aos-duration="1000">
               만약 내일 생을 마감한다면,
             </Text>
             <Text
               bold
               fontSize={['16px', '16px', '36px', '36px']}
-              color=""
               mb="24px"
               data-aos="fade-up"
               data-aos-duration="3000"
