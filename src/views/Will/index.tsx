@@ -15,14 +15,6 @@ import { useModal } from 'components/Common'
 import { useIsLogin } from 'store/auth/hooks'
 import AOS from 'aos'
 
-declare global {
-  interface Window {
-    Kakao: any
-    gtag: any
-  }
-  const Kakao: any
-}
-
 const St = {
   Container: styled(Box)`
     min-height: calc(100% - 231px);

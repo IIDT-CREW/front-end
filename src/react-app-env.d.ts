@@ -1,3 +1,5 @@
 interface Window {
-  kakao: any
+  Kakao: any
+  gtag: any
 }
+const Kakao: any

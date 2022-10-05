@@ -1,21 +1,6 @@
 import moment from 'moment'
 import { useState, useEffect } from 'react'
 import { Box, Text, Flex } from 'components/Common'
-import styled from 'styled-components'
-
-const St = {
-  ImageWrapper: styled(Box)`
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-
-    img {
-      max-height: 100%;
-      width: auto;
-    }
-  `,
-}
 
 const CountDown = ({ height = '550px', isCountDown = true, text = '' }) => {
   let timer: any = null

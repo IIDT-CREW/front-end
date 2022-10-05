@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { Modal, ModalProps } from 'components/Common'
+import { Modal } from 'components/Common'
 import { Flex, Box, Text } from 'components/Common'
 import CopyToClipboard from 'views/Will/components/CopyToClipboard'
 import { API_URL } from 'config/constants/api'

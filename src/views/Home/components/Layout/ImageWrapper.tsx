@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import styled, { keyframes } from 'styled-components'
-import { ReactElement } from 'react'
+
 const flyingAnim = () => keyframes`
   from {
     transform: translate(0,  0px);

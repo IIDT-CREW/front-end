@@ -3,7 +3,7 @@ const Home = dynamic(import('views/Home'))
 
 // import { withAuthComponent, withAuthServerSideProps } from 'hoc/withAuthServerSide'
 
-const IndexPage = ({ theme }) => {
+const IndexPage = () => {
   return <Home />
 }
 
