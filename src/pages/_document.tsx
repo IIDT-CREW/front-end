@@ -1,7 +1,9 @@
 /* eslint-disable @next/next/no-sync-scripts */
 /* eslint-disable jsx-a11y/iframe-has-title */
 import Document, { Html, Head, Main, NextScript, DocumentContext } from 'next/document'
+import Script from 'next/script'
 import { ServerStyleSheet } from 'styled-components'
+
 class MyDocument extends Document {
   static async getInitialProps(ctx: DocumentContext) {
     const sheet = new ServerStyleSheet()
@@ -38,7 +40,13 @@ class MyDocument extends Document {
           <link rel="manifest" href="/manifest.json" />
           <link href="https://fonts.googleapis.com/css?family=Nanum+Myeongjo&display=swap" rel="stylesheet" />
           <script type="text/javascript" src="https://developers.kakao.com/sdk/js/kakao.min.js" />
-
+          <Script
+            async
+            id="Adsense-id"
+            data-ad-client="ca-pub-1105069678419099"
+            strategy="beforeInteractive"
+            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+          ></Script>
           {/* <script async>
             const preloadScript = document.createElement('script'); preloadScript.src =
             "https://developers.kakao.com/sdk/js/kakao.min.js"; document.body.appendChild(preloadScript);
