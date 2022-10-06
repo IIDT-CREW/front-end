@@ -40,6 +40,7 @@ export const St = {
     z-index: 10;
   `,
   StyledNav: styled.nav<StyledNavigationProps>`
+    transition: background, border 0.5s;
     display: flex;
     justify-content: space-between;
     align-items: center;
