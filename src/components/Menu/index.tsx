@@ -2,6 +2,7 @@ import { useRouter } from 'next/router'
 import { useMemo, useState, useEffect, useRef } from 'react'
 import { useDispatch } from 'react-redux'
 import styled, { css } from 'styled-components'
+import useScrollDown from 'hooks/useScrollDown'
 import Flex from '../Common/Box/Flex'
 import { Heading } from '../Common'
 import Link from 'next/link'
@@ -75,13 +76,13 @@ export const St = {
     transform: ${({ isScrollDown }) => (isScrollDown ? 'translate3d(0px, -100%, 0px)' : 'translate3d(0px, 0px, 0px)')};
   `,
 }
-const DELTA = 3
-const isServer = typeof window === 'undefined'
+
 const MenuWrapper = ({ themeMode, toggleTheme }) => {
   const router = useRouter()
   const dispatch = useDispatch()
   const [showMenu, setShowMenu] = useState(true)
   const isLogin = useIsLogin()
+  const { isScrollDown, setIsScrollDown } = useScrollDown()
   const [presentLoginModal] = useModal(<LoginModal />)
 
   const handleLogin = () => {
@@ -96,51 +97,6 @@ const MenuWrapper = ({ themeMode, toggleTheme }) => {
   const handleMenu = () => {
     dispatch(naviActions.menuOnOff())
   }
-
-  let lastScrollTop = 0
-
-  const fixBox = useRef(null)
-  const fixBoxHeight = useRef(0)
-  const didScroll = useRef(false)
-
-  const [isScrollDown, setIsScrollDown] = useState(false)
-  const hasScrolled = () => {
-    if (isServer) {
-      return
-    }
-    const nowScrollTop = window.scrollY
-
-    if (Math.abs(lastScrollTop - nowScrollTop) <= DELTA) return
-    if (nowScrollTop > lastScrollTop && nowScrollTop > fixBoxHeight.current) {
-      setIsScrollDown(true)
-    } else {
-      setIsScrollDown(false)
-    }
-    lastScrollTop = nowScrollTop
-  }
-
-  const onScroll = () => {
-    didScroll.current = true
-  }
-
-  useEffect(() => {
-    fixBox.current = document.querySelector('app-bar') as HTMLElement
-    if (fixBox.current) {
-      fixBoxHeight.current = fixBox.current.offsetHeight
-    }
-    window.addEventListener('scroll', onScroll)
-
-    setInterval(() => {
-      if (didScroll.current) {
-        hasScrolled()
-        didScroll.current = false
-      }
-    }, 250)
-
-    return () => {
-      window.removeEventListener('scroll', onScroll)
-    }
-  }, [])
 
   const isSharePage = useMemo(() => {
     return router.route === '/will/[id]'
