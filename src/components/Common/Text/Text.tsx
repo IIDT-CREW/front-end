@@ -27,6 +27,7 @@ const Text = styled.div<TextProps>`
   ${layout}
 
   ${({ small }) => small && `font-size: 14px;`}
+  ${({ css }) => css}
 `
 
 Text.defaultProps = {

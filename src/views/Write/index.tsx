@@ -217,7 +217,7 @@ const Write = () => {
     <St.Article>
       <St.MenuBar>
         <St.GoToHistoryButton onClick={goToMain}>
-          <ArrowLeft fill="none" width="26px" />내 기록
+          <ArrowLeft fill="#000" width="22px" />내 기록
         </St.GoToHistoryButton>
         {/* <button onClick={handleClick}>시간</button> */}
         {createMenuButtons()}
@@ -238,6 +238,7 @@ const Write = () => {
           isDefaultPostType={isDefaultPostType}
           value={contents[page]}
           onChange={handleContents}
+          fontSize={[, '16px', '18px']}
           css={{ flex: 'auto' }}
         />
         {isDefaultPostType && isMobile && (
@@ -263,10 +264,11 @@ const Write = () => {
           </St.MenuButton>
         )}
       </St.Editor>
-      {isDefaultPostType || <ProgressBar value={page + 1} max={QUESTION_LIST.length} />}
+      {isDefaultPostType || <ProgressBar value={page + 1} max={QUESTION_LIST.length} wrapperCss={progressStyle} />}
     </St.Article>
   )
 }
+const progressStyle = { marginBottom: '10px' }
 interface TextAreaProps extends FontSizeProps, TextareaHTMLAttributes<HTMLTextAreaElement> {
   isDefaultPostType?: boolean
   css?: CSSProp
@@ -276,7 +278,7 @@ const Title = ({ ...props }: TextAreaProps) => {
   return <St.Textarea {...props} />
 }
 const Contents = ({ ...props }: TextAreaProps) => {
-  return <St.Textarea fontSize={'18px'} placeholder="내용을 입력하세요" {...props} />
+  return <St.Textarea placeholder="내용을 입력하세요" {...props} />
 }
 const St = {
   RoundIconButton: styled.button`
@@ -299,7 +301,7 @@ const St = {
     font-weight: 700;
     font-size: 26px;
     margin: 0 0 16px 0;
-    color: ${({ theme }) => theme.colors.grayscale6};
+    color: ${({ theme }) => theme.colors.textPrimary};
     ${fontSize}
   `,
   Article: styled.article`
@@ -328,6 +330,7 @@ const St = {
     height: 24px;
     padding: unset;
     align-items: center;
+    color: ${({ theme }) => theme.colors.text};
     cursor: pointer;
   `,
   MenuButton: styled.button<{ variant?: variant; isFull?: boolean; css?: CSSProp }>`
@@ -375,8 +378,9 @@ const St = {
     font-weight: 400;
     font-family: 'Nanum Myeongjo';
     padding: unset;
-    color: ${({ theme }) => theme.colors.grayscale7};
+    color: ${({ theme }) => theme.colors.textSecondary};
     line-height: 28px;
+    background-color: inherit;
     ::placeholder {
       color: ${({ theme }) => theme.colors.grayscale5};
       ${fontSize}
