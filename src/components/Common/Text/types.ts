@@ -1,9 +1,11 @@
-import { LayoutProps, SpaceProps, TypographyProps } from "styled-system";
+import { CSSProp } from 'styled-components'
+import { LayoutProps, SpaceProps, TypographyProps } from 'styled-system'
 
 export interface TextProps extends SpaceProps, TypographyProps, LayoutProps {
-  color?: string;
-  bold?: boolean;
-  small?: boolean;
-  ellipsis?: boolean;
-  textTransform?: "uppercase" | "lowercase" | "capitalize";
+  color?: string
+  bold?: boolean
+  small?: boolean
+  ellipsis?: boolean
+  textTransform?: 'uppercase' | 'lowercase' | 'capitalize'
+  css?: CSSProp
 }

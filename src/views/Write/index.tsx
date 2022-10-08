@@ -192,7 +192,11 @@ const Write = () => {
   const createMenuButton = (text, handleClick, disabled, variant: variant = 'primary') =>
     isMobile ? (
       <St.RoundIconButton onClick={handleToastContentIsRequired(handleClick, disabled)}>
-        {text === '이전 질문' ? <ArrowLeft /> : <ArrowRight />}
+        {text === '이전 질문' ? (
+          <ArrowLeft css={{ fill: '#000', width: '21px' }} />
+        ) : (
+          <ArrowRight css={{ fill: '#000', width: '21px' }} />
+        )}
       </St.RoundIconButton>
     ) : (
       <St.MenuButton variant={variant} onClick={handleClick} disabled={disabled}>
@@ -217,7 +221,7 @@ const Write = () => {
     <St.Article>
       <St.MenuBar>
         <St.GoToHistoryButton onClick={goToMain}>
-          <ArrowLeft fill="none" width="26px" />내 기록
+          <ArrowLeft fill={theme.colors.text} width="26px" />내 기록
         </St.GoToHistoryButton>
         {/* <button onClick={handleClick}>시간</button> */}
         {createMenuButtons()}
@@ -238,6 +242,7 @@ const Write = () => {
           isDefaultPostType={isDefaultPostType}
           value={contents[page]}
           onChange={handleContents}
+          fontSize={[, '16px', '18px']}
           css={{ flex: 'auto' }}
         />
         {isDefaultPostType && isMobile && (
@@ -263,10 +268,11 @@ const Write = () => {
           </St.MenuButton>
         )}
       </St.Editor>
-      {isDefaultPostType || <ProgressBar value={page + 1} max={QUESTION_LIST.length} />}
+      {isDefaultPostType || <ProgressBar value={page + 1} max={QUESTION_LIST.length} wrapperCss={progressStyle} />}
     </St.Article>
   )
 }
+const progressStyle = { marginBottom: '10px' }
 interface TextAreaProps extends FontSizeProps, TextareaHTMLAttributes<HTMLTextAreaElement> {
   isDefaultPostType?: boolean
   css?: CSSProp
@@ -276,7 +282,7 @@ const Title = ({ ...props }: TextAreaProps) => {
   return <St.Textarea {...props} />
 }
 const Contents = ({ ...props }: TextAreaProps) => {
-  return <St.Textarea fontSize={'18px'} placeholder="내용을 입력하세요" {...props} />
+  return <St.Textarea placeholder="내용을 입력하세요" {...props} />
 }
 const St = {
   RoundIconButton: styled.button`
@@ -286,6 +292,7 @@ const St = {
     border: 1px solid ${({ theme }) => theme.colors.grayscale2};
     background-color: ${({ theme }) => theme.colors.grayscale0};
     padding: 0;
+    box-sizing: border-box;
   `,
   Editor: styled.section`
     padding: ${MENU_HEIGHT}px 24px 0 24px;
@@ -299,7 +306,7 @@ const St = {
     font-weight: 700;
     font-size: 26px;
     margin: 0 0 16px 0;
-    color: ${({ theme }) => theme.colors.grayscale6};
+    color: ${({ theme }) => theme.colors.textPrimary};
     ${fontSize}
   `,
   Article: styled.article`
@@ -328,6 +335,7 @@ const St = {
     height: 24px;
     padding: unset;
     align-items: center;
+    color: ${({ theme }) => theme.colors.text};
     cursor: pointer;
   `,
   MenuButton: styled.button<{ variant?: variant; isFull?: boolean; css?: CSSProp }>`
@@ -364,6 +372,8 @@ const St = {
       background-color: ${({ theme }) => theme.colors.grayscale1};
       cursor: not-allowed;
     }
+    ${({ theme }) => theme.isDark && 'border: 1px solid rgb(203, 212, 255, 0.5)'};
+
     ${({ css }) => css}
   `,
   Textarea: styled.textarea<TextAreaProps>`
@@ -375,8 +385,9 @@ const St = {
     font-weight: 400;
     font-family: 'Nanum Myeongjo';
     padding: unset;
-    color: ${({ theme }) => theme.colors.grayscale7};
+    color: ${({ theme }) => theme.colors.textSecondary};
     line-height: 28px;
+    background-color: inherit;
     ::placeholder {
       color: ${({ theme }) => theme.colors.grayscale5};
       ${fontSize}

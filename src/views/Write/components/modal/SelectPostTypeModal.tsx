@@ -12,7 +12,7 @@ const SelectPostTypeModal = ({ onClick, onDismiss }: customModalProps) => {
     <Modal title="일기 작성 방식을 선택할 수 있어요" onDismiss={onDismiss}>
       <Flex flexDirection="column" justifyContent="center" alignItems="center">
         <Box mb="20px">
-          <Flex justifyContent="center" flexDirection="column" style={{ textAlign: 'center' }}>
+          <Flex justifyContent="center" flexDirection="column" style={{ textAlign: 'center', wordBreak: 'keep-all' }}>
             <Text fontSize={['13px', , '18px']}>
               마지막 일기를 처음 작성하시는 분들을 위해 두 가지의 선택방식을 두었어요.
             </Text>
@@ -45,7 +45,7 @@ const St = {
     padding: 14px 16px;
 
     ${({ theme }) => theme.mediaQueries.xs} {
-      width: 225px;
+      width: 275px;
       font-size: 16px;
       padding: 12px 14px;
       margin-bottom: 10px;
@@ -76,7 +76,7 @@ const St = {
     cursor: pointer;
     border-radius: 4px;
     border: none;
-
+    ${({ theme }) => theme.isDark && 'border: 1px solid rgb(203, 212, 255, 0.5)'};
     font-family: 'SUIT';
     font-style: normal;
     font-weight: 600;

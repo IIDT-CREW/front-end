@@ -1,13 +1,14 @@
 import { HTMLAttributes } from 'react'
-import styled from 'styled-components'
+import styled, { CSSProp } from 'styled-components'
 
 interface ProgressProps extends HTMLAttributes<HTMLDivElement> {
   max?: number
   value?: number
+  wrapperCss?: CSSProp
 }
-const ProgressBar = ({ max, value }: ProgressProps) => {
+const ProgressBar = ({ max, value, wrapperCss }: ProgressProps) => {
   return (
-    <St.Wrapper>
+    <St.Wrapper wrapperCss={wrapperCss}>
       <St.Progress max={max} value={value} />
     </St.Wrapper>
   )
@@ -17,6 +18,7 @@ const St = {
     width: 100%;
     height: 2px;
     background-color: ${({ theme }) => theme.colors.grayscale2};
+    ${({ wrapperCss }) => wrapperCss}
   `,
   Progress: styled.div<ProgressProps>`
     transition: all 0.3s;

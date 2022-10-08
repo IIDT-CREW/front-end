@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ElementType, SVGAttributes } from 'react'
-import { DefaultTheme } from 'styled-components'
+import { CSSProp, DefaultTheme } from 'styled-components'
 import { SpaceProps } from 'styled-system'
 import { Colors } from 'theme'
 
@@ -8,6 +8,7 @@ export interface SvgProps extends SVGAttributes<HTMLOrSVGElement>, SpaceProps {
   theme?: DefaultTheme
   spin?: boolean
   themeMode?: 'light' | 'dark'
+  css?: CSSProp
 }
 
 export type IconComponentType = {

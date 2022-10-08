@@ -2,7 +2,6 @@ import styled, { css, keyframes } from 'styled-components'
 import { space } from 'styled-system'
 import getThemeValue from '../../../utils/getThemeValue'
 import { SvgProps } from './types'
-
 const rotate = keyframes`
   from {
     transform: rotate(0deg);
@@ -22,7 +21,7 @@ const Svg = styled.svg<SvgProps>`
   flex-shrink: 0;
   ${({ spin }) => spin && spinStyle};
   ${space};
-
+  ${({ css }) => css}
   // Safari fix
   @supports (-webkit-text-size-adjust: none) and (not (-ms-accelerator: true)) and (not (-moz-appearance: none)) {
     filter: none !important;
