@@ -192,7 +192,11 @@ const Write = () => {
   const createMenuButton = (text, handleClick, disabled, variant: variant = 'primary') =>
     isMobile ? (
       <St.RoundIconButton onClick={handleToastContentIsRequired(handleClick, disabled)}>
-        {text === '이전 질문' ? <ArrowLeft /> : <ArrowRight />}
+        {text === '이전 질문' ? (
+          <ArrowLeft css={{ fill: '#000', width: '21px' }} />
+        ) : (
+          <ArrowRight css={{ fill: '#000', width: '21px' }} />
+        )}
       </St.RoundIconButton>
     ) : (
       <St.MenuButton variant={variant} onClick={handleClick} disabled={disabled}>
@@ -217,7 +221,7 @@ const Write = () => {
     <St.Article>
       <St.MenuBar>
         <St.GoToHistoryButton onClick={goToMain}>
-          <ArrowLeft fill="#000" width="22px" />내 기록
+          <ArrowLeft fill={theme.colors.text} width="26px" />내 기록
         </St.GoToHistoryButton>
         {/* <button onClick={handleClick}>시간</button> */}
         {createMenuButtons()}
@@ -288,6 +292,7 @@ const St = {
     border: 1px solid ${({ theme }) => theme.colors.grayscale2};
     background-color: ${({ theme }) => theme.colors.grayscale0};
     padding: 0;
+    box-sizing: border-box;
   `,
   Editor: styled.section`
     padding: ${MENU_HEIGHT}px 24px 0 24px;
@@ -367,6 +372,8 @@ const St = {
       background-color: ${({ theme }) => theme.colors.grayscale1};
       cursor: not-allowed;
     }
+    ${({ theme }) => theme.isDark && 'border: 1px solid rgb(203, 212, 255, 0.5)'};
+
     ${({ css }) => css}
   `,
   Textarea: styled.textarea<TextAreaProps>`

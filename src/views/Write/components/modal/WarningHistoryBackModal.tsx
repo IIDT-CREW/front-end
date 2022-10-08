@@ -1,8 +1,10 @@
 import { Modal } from 'components/Common'
 import { Flex, Box, Text } from 'components/Common'
 import styled from 'styled-components'
+
+type variant = 'primary' | 'secondary'
 const St = {
-  ConfirmButton: styled.div<any>`
+  ConfirmButton: styled.div<{ variant?: variant }>`
     /* Auto layout */
 
     display: flex;
@@ -15,15 +17,26 @@ const St = {
     font-size: 14px;
     width: auto;
     font-weight: 600;
+    color: #fff;
+
     ${({ theme }) => theme.mediaQueries.sm} {
       padding: 14px 16px;
       width: 195px;
       font-size: 16px;
     }
 
-    /* Color/Grayscale 7 */
-
-    background: ${({ background }) => (background ? background : '#000')};
+    ${({ variant, theme }) => {
+      if (variant === 'primary') {
+        return `
+        background-color: ${theme.colors.grayscale7};
+        color: ${theme.colors.grayscale0};
+        `
+      }
+      return `
+        background-color: ${theme.colors.grayscale2};
+        color: ${theme.colors.grayscale7};
+      `
+    }}
     border-radius: 4px;
 
     /* Inside auto layout */
@@ -31,9 +44,9 @@ const St = {
     flex: none;
     order: 0;
     flex-grow: 1;
-    color: #fff;
     cursor: pointer;
     font-family: SUIT;
+    ${({ theme }) => theme.isDark && 'border: 1px solid rgb(203, 212, 255, 0.5)'};
   `,
 }
 
@@ -54,10 +67,10 @@ const WarningHistoryBackModal = ({ onDismiss, ...props }: any) => {
         </Text>
         <Box mt="20px">
           <Flex style={{ gap: '8px' }}>
-            <St.ConfirmButton background="grey" onClick={handleGoToMain}>
-              나중에 다시 쓸게요
+            <St.ConfirmButton onClick={handleGoToMain}>나중에 다시 쓸게요</St.ConfirmButton>
+            <St.ConfirmButton variant="primary" onClick={onDismiss}>
+              지금 계속 쓸게요
             </St.ConfirmButton>
-            <St.ConfirmButton onClick={onDismiss}>지금 계속 쓸게요</St.ConfirmButton>
           </Flex>
         </Box>
       </Flex>

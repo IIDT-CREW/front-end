@@ -76,7 +76,7 @@ const St = {
     cursor: pointer;
     border-radius: 4px;
     border: none;
-
+    ${({ theme }) => theme.isDark && 'border: 1px solid rgb(203, 212, 255, 0.5)'};
     font-family: 'SUIT';
     font-style: normal;
     font-weight: 600;
