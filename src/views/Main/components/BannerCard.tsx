@@ -84,7 +84,7 @@ const BannerCard = ({ height = '231px' }) => {
               WebkitBackgroundClip: 'text',
               backgroundClip: 'text',
               textAlign: 'center',
-              filter: 'invert(1) grayscale(1) contrast(2) drop-shadow(3px 3px 5px black)',
+              filter: 'invert(1) grayscale(1) contrast(7) drop-shadow(2px 2px 2px black)',
             }}
           >
             <St.TextWrapper fontSize={['14px', null, null, '18px']} bold>
