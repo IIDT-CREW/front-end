@@ -142,14 +142,13 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
   useEffect(() => {
     setMounted(true)
   }, [])
+
   const [themeMode, toggleTheme] = useDarkMode()
   const theme = themeMode === 'light' ? light : dark
+
   const isFooterDisable = useFooterDisable()
 
-  if (!mounted) {
-    return null
-  }
-  return (
+  const body = (
     <ThemeProvider theme={theme}>
       <ResetCSS />
       <GlobalStyle />
@@ -177,6 +176,11 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
       </ToastContextProvider>
     </ThemeProvider>
   )
+
+  if (!mounted) {
+    return <div style={{ visibility: 'hidden' }}>{body}</div>
+  }
+  return <>{body}</>
 }
 
 export default MyApp

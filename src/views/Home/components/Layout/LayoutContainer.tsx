@@ -1,9 +1,7 @@
-
 import { Flex } from 'components/Common'
 import useTheme from 'hooks/useTheme'
-import styled,   from 'styled-components'
+import styled from 'styled-components'
 import { ReactElement } from 'react'
-
 
 type LayoutContainerProps = {
   leftChildren: ReactElement
