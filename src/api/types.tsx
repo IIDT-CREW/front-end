@@ -4,6 +4,15 @@ interface DefaultResponse {
   result: any
 }
 
+export interface Meta {
+  pageNo: number
+  pageSize: number
+  totalCount: number
+  totalPageCount: number
+  nextPageNo: number
+  isLast: boolean
+}
+
 export type Will = {
   CONTENT: string
   EDIT_DATE: string
@@ -36,6 +45,8 @@ export type GetWill = Omit<DefaultResponse, 'result'> & {
 export type GetMyWillParams = {
   mem_email: string
   mem_userid: string
+  pageNo: string
+  pageSize: string
 }
 
 export type InsertWillParams = {

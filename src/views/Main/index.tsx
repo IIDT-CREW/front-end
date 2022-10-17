@@ -13,6 +13,9 @@ import { useQuery, useMutation, useQueryClient } from 'react-query'
 import { deleteWill, getMyWill } from 'api/will'
 import { toastContext } from 'contexts/Toast'
 import { useIsLogin, useUserInfo } from 'store/auth/hooks'
+import { DEFAULT_PAGE_NO, DEFAULT_PAGE_SIZE } from 'config/constants/default'
+import useIntersect from './hooks/useIntersect'
+import useInfiniteScroll from 'hooks/useInfiniteScroll'
 
 const St = {
   Container: styled(Box)`
@@ -55,6 +58,7 @@ const Main = () => {
   }, [presentWarningModal])
 
   const router = useRouter()
+
   const handleWrite = () => {
     if (!isLogin) {
       presenLoginModal()
@@ -63,6 +67,7 @@ const Main = () => {
       router.push('write')
     }
   }
+
   const handleToast = ({ message = '' }) => {
     onToast({
       type: 'success',
@@ -73,23 +78,25 @@ const Main = () => {
     })
   }
 
-  const { data, isLoading, isError } = useQuery(
-    ['myWill', isLogin],
-    () =>
-      isLogin &&
-      getMyWill({
-        mem_userid: userid,
-        mem_email: email,
-      }),
-    {
-      select: (data) => {
-        return {
-          ...data,
-          result: data?.result?.slice(0, 1),
-        }
-      },
-    },
-  )
+  // const { data, isLoading, isError } = useQuery(
+  //   ['myWill', isLogin],
+  //   () =>
+  //     isLogin &&
+  //     getMyWill({
+  //       mem_userid: userid,
+  //       mem_email: email,
+  //       pageNo: DEFAULT_PAGE_NO,
+  //       pageSize: DEFAULT_PAGE_SIZE,
+  //     }),
+  //   {
+  //     select: (data) => {
+  //       return {
+  //         ...data,
+  //         result: data?.result?.slice(0, 1),
+  //       }
+  //     },
+  //   },
+  // )
 
   const deleteMutation = useMutation(deleteWill, {
     onSuccess: () => {
@@ -99,12 +106,33 @@ const Main = () => {
     },
   })
 
-  // useEffect(() => {
-  //   if (isLogin) {
-  //     queryClient.invalidateQueries('myWill')
-  //   }
-  // }, [isLogin, queryClient])
+  const {
+    data: myWillData,
+    error,
+    status,
+    isFetching,
+    hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
+  } = useInfiniteScroll({
+    fetch: getMyWill,
+    params: {
+      mem_userid: userid,
+      mem_email: email,
+      pageNo: DEFAULT_PAGE_NO,
+      pageSize: DEFAULT_PAGE_SIZE,
+    },
+    queryKey: ['getMyWill'],
+  })
 
+  const ref = useIntersect(async (entry, observer) => {
+    observer.unobserve(entry.target)
+    if (hasNextPage && !isFetching) {
+      fetchNextPage()
+    }
+  })
+
+  console.log('myWillData = ', myWillData)
   return (
     <St.Container mt="78px">
       <Box mb="36px">
@@ -118,7 +146,7 @@ const Main = () => {
             <MainButton onClick={handleWrite}>작성하러가기</MainButton>
           </Box>
 
-          {isLogin &&
+          {/* {isLogin &&
             !isError &&
             data?.result?.map((myWill, i) => (
               <WriteCard
@@ -126,7 +154,9 @@ const Main = () => {
                 will={myWill}
                 handleDelete={() => deleteMutation.mutate({ will_id: myWill.WILL_ID as string })}
               />
-            ))}
+            ))} */}
+
+          <div ref={ref} />
         </Flex>
       </Flex>
     </St.Container>
