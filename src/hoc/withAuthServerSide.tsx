@@ -7,16 +7,14 @@ import { getUserInfo } from 'api/auth'
 import { authActions } from 'store/auth'
 /* getUser */
 async function getUser(content: any) {
-  // const res = await getUserInfo()
-  // if (res.data && res.data.code === 200) {
-  //   const { data: userInfo } = res.data
-  return {
-    id: 'test',
-    username: 'oo',
-    email: 'test',
+  const res = await getUserInfo()
+  console.log('hello = ', res)
+  if (res.data && res.data.code === '0000') {
+    const { result: userInfo } = res.data
+    console.log('userInfo ', userInfo)
+    return userInfo
   }
-  //}
-  //return null
+  return null
 }
 
 export function withAuthServerSideProps(getServerSidePropsFunc?) {
@@ -24,25 +22,27 @@ export function withAuthServerSideProps(getServerSidePropsFunc?) {
     context.res.setHeader('set-cookie', '')
     const cookie = context.req ? context.req.headers.cookie : ''
     axios.defaults.headers.common.Cookie = ''
-
+    let user = null
     const nookie = nookies.get(context)
     const accessToken = nookie['access_token']
-    if (accessToken) {
-    }
-    if (!accessToken) {
+    const refresh_token = nookie['refresh_token']
+    console.log('context = ', nookie)
+    if (!accessToken && !refresh_token) {
+      return { props: { user, data: { props: { user } } } }
     }
     /* 토큰 세팅 */
     if (context.req && cookie) {
       axios.defaults.headers.common.Cookie = cookie
       const bearer = `Bearer ${accessToken}`
       axios.defaults.headers.common['Authorization'] = bearer
-      if (nookie['refresh_token']) axios.defaults.headers.common['refresh'] = nookie['refresh_token']
+      if (refresh_token) axios.defaults.headers.common['refresh'] = nookie['refresh_token']
+      user = await getUser(context)
     }
 
-    const user = await getUser(context)
     if (getServerSidePropsFunc) {
       return { props: { user, data: await getServerSidePropsFunc(context, user) } }
     }
+
     return { props: { user, data: { props: { user } } } }
   }
 }
@@ -62,10 +62,13 @@ export function withAuthComponent(Component: any, isProtected = true) {
     if (user) {
       dispatch(
         authActions.setAuth({
-          authenticated: true,
+          isAuthenticated: true,
           accessToken: '',
-          name: user.username,
+          name: user.name,
           email: user.email,
+          nickname: user.nickname,
+          userid: user.userid,
+          memIdx: user.memIdx,
         }),
       )
     }

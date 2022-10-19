@@ -19,11 +19,13 @@ export const getWill = async (will_id: string) => {
   return response.data
 }
 
-export const getMyWill = async ({ mem_email, mem_userid }: GetMyWillParams) => {
+export const getMyWill = async ({ mem_email, mem_userid, pageNo, pageSize }: GetMyWillParams) => {
   const response = await authAxios.get<GetMyWill>('api/will/getMyWill', {
     params: {
       mem_userid,
       mem_email,
+      pageNo,
+      pageSize,
     },
   })
   return response.data
