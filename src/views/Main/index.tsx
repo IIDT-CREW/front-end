@@ -1,4 +1,4 @@
-import { useEffect, useContext } from 'react'
+import { useEffect, useContext, useMemo } from 'react'
 import { useRouter } from 'next/router'
 import { Box, Flex } from 'components/Common'
 import BannerCard from './components/BannerCard'
@@ -13,6 +13,10 @@ import { useQuery, useMutation, useQueryClient } from 'react-query'
 import { deleteWill, getMyWill } from 'api/will'
 import { toastContext } from 'contexts/Toast'
 import { useIsLogin, useUserInfo } from 'store/auth/hooks'
+import { DEFAULT_PAGE_NO, DEFAULT_PAGE_SIZE } from 'config/constants/default'
+import useIntersect from './hooks/useIntersect'
+import useInfiniteScroll from 'hooks/useInfiniteScroll'
+import { Skeleton } from 'components/Common/Skeleton'
 
 const St = {
   Container: styled(Box)`
@@ -37,13 +41,85 @@ const St = {
   `,
 }
 
+const WillContainer = () => {
+  const queryClient = useQueryClient()
+  const { name, email, userid } = useUserInfo()
+  const { onToast } = useContext(toastContext)
+
+  const handleToast = ({ message = '' }) => {
+    onToast({
+      type: 'success',
+      message,
+      option: {
+        position: 'top-center',
+      },
+    })
+  }
+
+  const {
+    data: myWillData,
+    error,
+    status,
+    isFetching,
+    hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
+  } = useInfiniteScroll({
+    fetch: getMyWill,
+    params: {
+      mem_userid: userid,
+      mem_email: email,
+      pageNo: DEFAULT_PAGE_NO,
+      pageSize: DEFAULT_PAGE_SIZE,
+    },
+    queryKey: ['getMyWill'],
+  })
+
+  const ref = useIntersect(async (entry, observer) => {
+    observer.unobserve(entry.target)
+    if (hasNextPage && !isFetching) {
+      fetchNextPage()
+    }
+  })
+  const deleteMutation = useMutation(deleteWill, {
+    onSuccess: () => {
+      handleToast({ message: '데이터를 삭제했습니다.' })
+      // myWill로 시작하는 모든 쿼리를 무효화한다
+      queryClient.invalidateQueries('getMyWill')
+    },
+  })
+
+  const willList = useMemo(
+    () => (myWillData ? myWillData.pages.flatMap(({ result }) => result.willList) : []),
+    [myWillData],
+  )
+  return (
+    <>
+      {!error &&
+        willList?.map((myWill, i) => (
+          <WriteCard
+            key={`${i}-${myWill.WILL_ID}`}
+            will={myWill}
+            handleDelete={() => deleteMutation.mutate({ will_id: myWill.WILL_ID as string })}
+          />
+        ))}
+
+      {(status === 'loading' || isFetching) && (
+        <>
+          {Array.from({ length: DEFAULT_PAGE_SIZE }).map((v, index) => {
+            return <Skeleton key={`my-will-${index}`} height="480px" minWidth="362px" maxWidth="582px" />
+          })}
+        </>
+      )}
+
+      <div ref={ref} />
+    </>
+  )
+}
 const Main = () => {
   const isLogin = useIsLogin()
-  const { name, email, userid } = useUserInfo()
-  const queryClient = useQueryClient()
-  const { onToast } = useContext(toastContext)
   const [presentWarningModal] = useModal(<WriteWarningInfoModal />)
-  const [presenLoginModal] = useModal(<LoginModal />)
+  const [presentLoginModal] = useModal(<LoginModal />)
 
   useEffect(() => {
     const isPrecented = localStorage.getItem('isPrecented')
@@ -55,55 +131,11 @@ const Main = () => {
   }, [presentWarningModal])
 
   const router = useRouter()
+
   const handleWrite = () => {
-    if (!isLogin) {
-      presenLoginModal()
-    }
-    if (isLogin) {
-      router.push('write')
-    }
+    if (!isLogin) presentLoginModal()
+    if (isLogin) router.push('write')
   }
-  const handleToast = ({ message = '' }) => {
-    onToast({
-      type: 'success',
-      message,
-      option: {
-        position: 'top-center',
-      },
-    })
-  }
-
-  const { data, isLoading, isError } = useQuery(
-    ['myWill', isLogin],
-    () =>
-      isLogin &&
-      getMyWill({
-        mem_userid: userid,
-        mem_email: email,
-      }),
-    {
-      select: (data) => {
-        return {
-          ...data,
-          result: data?.result?.slice(0, 1),
-        }
-      },
-    },
-  )
-
-  const deleteMutation = useMutation(deleteWill, {
-    onSuccess: () => {
-      handleToast({ message: '데이터를 삭제했습니다.' })
-      // myWill로 시작하는 모든 쿼리를 무효화한다
-      queryClient.invalidateQueries('myWill')
-    },
-  })
-
-  // useEffect(() => {
-  //   if (isLogin) {
-  //     queryClient.invalidateQueries('myWill')
-  //   }
-  // }, [isLogin, queryClient])
 
   return (
     <St.Container mt="78px">
@@ -117,16 +149,7 @@ const Main = () => {
           <Box mb="55px">
             <MainButton onClick={handleWrite}>작성하러가기</MainButton>
           </Box>
-
-          {isLogin &&
-            !isError &&
-            data?.result?.map((myWill, i) => (
-              <WriteCard
-                key={`${i}-${myWill.WILL_ID}`}
-                will={myWill}
-                handleDelete={() => deleteMutation.mutate({ will_id: myWill.WILL_ID as string })}
-              />
-            ))}
+          {isLogin && <WillContainer />}
         </Flex>
       </Flex>
     </St.Container>
