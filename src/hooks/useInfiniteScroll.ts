@@ -1,5 +1,5 @@
 import { useInfiniteQuery } from 'react-query'
-import { DEFAULT_PAGE_COUNT } from 'config/constants/default'
+import { DEFAULT_PAGE_SIZE } from 'config/constants/default'
 
 type UseInfiniteScrollProps = {
   fetch: (props: any) => any
@@ -9,21 +9,20 @@ type UseInfiniteScrollProps = {
 
 const useInfiniteScroll = ({ fetch, params, queryKey = ['queryKey'] }: UseInfiniteScrollProps) => {
   const getFetchForInfiniteScroll = async ({ pageParam = 1 }) => {
-    console.log('pageParam= ', pageParam)
-    const { data } = await fetch({
+    const { result } = await fetch({
       ...params,
       pageNo: pageParam,
-      pageSize: DEFAULT_PAGE_COUNT,
+      pageSize: DEFAULT_PAGE_SIZE,
     })
-    console.log(data)
+
     const {
       // pageNo, pageSize, totalCount, totalPageCount,
       nextPageNo,
       isLast,
-    } = data.meta
+    } = result?.meta
 
     return {
-      result: data,
+      result,
       nextPage: nextPageNo,
       isLast,
     }

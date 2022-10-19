@@ -1,4 +1,4 @@
-import { useEffect, useContext } from 'react'
+import { useEffect, useContext, useMemo } from 'react'
 import { useRouter } from 'next/router'
 import { Box, Flex } from 'components/Common'
 import BannerCard from './components/BannerCard'
@@ -16,6 +16,7 @@ import { useIsLogin, useUserInfo } from 'store/auth/hooks'
 import { DEFAULT_PAGE_NO, DEFAULT_PAGE_SIZE } from 'config/constants/default'
 import useIntersect from './hooks/useIntersect'
 import useInfiniteScroll from 'hooks/useInfiniteScroll'
+import { Skeleton } from 'components/Common/Skeleton'
 
 const St = {
   Container: styled(Box)`
@@ -40,33 +41,10 @@ const St = {
   `,
 }
 
-const Main = () => {
-  const isLogin = useIsLogin()
-  const { name, email, userid } = useUserInfo()
+const WillContainer = () => {
   const queryClient = useQueryClient()
+  const { name, email, userid } = useUserInfo()
   const { onToast } = useContext(toastContext)
-  const [presentWarningModal] = useModal(<WriteWarningInfoModal />)
-  const [presenLoginModal] = useModal(<LoginModal />)
-
-  useEffect(() => {
-    const isPrecented = localStorage.getItem('isPrecented')
-    if (!isPrecented) {
-      localStorage.setItem('isPrecented', 'true')
-      presentWarningModal()
-    }
-    if (isPrecented) return
-  }, [presentWarningModal])
-
-  const router = useRouter()
-
-  const handleWrite = () => {
-    if (!isLogin) {
-      presenLoginModal()
-    }
-    if (isLogin) {
-      router.push('write')
-    }
-  }
 
   const handleToast = ({ message = '' }) => {
     onToast({
@@ -77,34 +55,6 @@ const Main = () => {
       },
     })
   }
-
-  // const { data, isLoading, isError } = useQuery(
-  //   ['myWill', isLogin],
-  //   () =>
-  //     isLogin &&
-  //     getMyWill({
-  //       mem_userid: userid,
-  //       mem_email: email,
-  //       pageNo: DEFAULT_PAGE_NO,
-  //       pageSize: DEFAULT_PAGE_SIZE,
-  //     }),
-  //   {
-  //     select: (data) => {
-  //       return {
-  //         ...data,
-  //         result: data?.result?.slice(0, 1),
-  //       }
-  //     },
-  //   },
-  // )
-
-  const deleteMutation = useMutation(deleteWill, {
-    onSuccess: () => {
-      handleToast({ message: '데이터를 삭제했습니다.' })
-      // myWill로 시작하는 모든 쿼리를 무효화한다
-      queryClient.invalidateQueries('myWill')
-    },
-  })
 
   const {
     data: myWillData,
@@ -131,8 +81,62 @@ const Main = () => {
       fetchNextPage()
     }
   })
+  const deleteMutation = useMutation(deleteWill, {
+    onSuccess: () => {
+      handleToast({ message: '데이터를 삭제했습니다.' })
+      // myWill로 시작하는 모든 쿼리를 무효화한다
+      queryClient.invalidateQueries('getMyWill')
+    },
+  })
 
-  console.log('myWillData = ', myWillData)
+  const willList = useMemo(
+    () => (myWillData ? myWillData.pages.flatMap(({ result }) => result.willList) : []),
+    [myWillData],
+  )
+  return (
+    <>
+      {!error &&
+        willList?.map((myWill, i) => (
+          <WriteCard
+            key={`${i}-${myWill.WILL_ID}`}
+            will={myWill}
+            handleDelete={() => deleteMutation.mutate({ will_id: myWill.WILL_ID as string })}
+          />
+        ))}
+
+      {(status === 'loading' || isFetching) && (
+        <>
+          {Array.from({ length: DEFAULT_PAGE_SIZE }).map((v, index) => {
+            return <Skeleton key={`my-will-${index}`} height="480px" minWidth="362px" maxWidth="582px" />
+          })}
+        </>
+      )}
+
+      <div ref={ref} />
+    </>
+  )
+}
+const Main = () => {
+  const isLogin = useIsLogin()
+  const [presentWarningModal] = useModal(<WriteWarningInfoModal />)
+  const [presentLoginModal] = useModal(<LoginModal />)
+
+  useEffect(() => {
+    const isPrecented = localStorage.getItem('isPrecented')
+    if (!isPrecented) {
+      localStorage.setItem('isPrecented', 'true')
+      presentWarningModal()
+    }
+    if (isPrecented) return
+  }, [presentWarningModal])
+
+  const router = useRouter()
+
+  const handleWrite = () => {
+    if (!isLogin) presentLoginModal()
+    if (isLogin) router.push('write')
+  }
+
   return (
     <St.Container mt="78px">
       <Box mb="36px">
@@ -145,18 +149,7 @@ const Main = () => {
           <Box mb="55px">
             <MainButton onClick={handleWrite}>작성하러가기</MainButton>
           </Box>
-
-          {/* {isLogin &&
-            !isError &&
-            data?.result?.map((myWill, i) => (
-              <WriteCard
-                key={`${i}-${myWill.WILL_ID}`}
-                will={myWill}
-                handleDelete={() => deleteMutation.mutate({ will_id: myWill.WILL_ID as string })}
-              />
-            ))} */}
-
-          <div ref={ref} />
+          {isLogin && <WillContainer />}
         </Flex>
       </Flex>
     </St.Container>
