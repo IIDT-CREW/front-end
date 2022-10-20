@@ -106,7 +106,7 @@ const WillContainer = () => {
 
       {(status === 'loading' || isFetching) && (
         <>
-          {Array.from({ length: DEFAULT_PAGE_SIZE }).map((v, index) => {
+          {Array.from({ length: parseInt(DEFAULT_PAGE_SIZE, 10) }).map((v, index) => {
             return <Skeleton key={`my-will-${index}`} height="480px" minWidth="362px" maxWidth="582px" />
           })}
         </>
