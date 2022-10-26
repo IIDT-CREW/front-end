@@ -37,7 +37,7 @@ const AppleLoginTest = () => {
     const params = {
       clientId: 'com.bundle.sample.client.test',
       redirectURI: 'https://if-i-die-tomorrow.com/oauth/callback/apple',
-      scope: 'name email',
+      scope: 'scope=name email',
     }
     window.AppleID.auth.init(params)
   }, [])
