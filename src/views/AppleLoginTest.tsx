@@ -11,13 +11,13 @@ const AppleLoginTest = () => {
     document.addEventListener('AppleIDSignInOnSuccess', (event) => {
       // Handle successful response.
       console.log('AppleIDSignInOnSuccess event ', event)
-      console.log(event.detail.data)
+      console.log(event.detail.authorization.id_token)
 
       const fetch = async () => {
         try {
           const data = await window.AppleID.auth.signIn()
           // Handle successful response.
-          console.log(data)
+          console.log("" data)
         } catch (error) {
           console.log('error !!')
           // Handle error.
