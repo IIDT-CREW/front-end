@@ -47,6 +47,11 @@ class MyDocument extends Document {
             strategy="beforeInteractive"
             src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
           ></Script>
+          <script
+            type="text/javascript"
+            src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js"
+          />
+
           {/* <script async>
             const preloadScript = document.createElement('script'); preloadScript.src =
             "https://developers.kakao.com/sdk/js/kakao.min.js"; document.body.appendChild(preloadScript);

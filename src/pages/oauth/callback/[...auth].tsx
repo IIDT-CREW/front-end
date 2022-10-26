@@ -39,6 +39,27 @@ const AuthCallback = () => {
 
   async function loginTransaction(coperation: string, code: string) {
     try {
+      if (coperation === 'apple') {
+        const test = async () => {
+          try {
+            //appleid.apple.com/auth/token" -H "Content-Type: application/x-www-form-urlencoded" -d "client_id={client_id}&client_secret={client_secret}&grant_type=authorization_code&code={code}" | json_pp
+
+            const data = {
+              client_id: 'com.bundle.sample.client.test',
+              client_secret: process.env.NEXT_APPLE_SECRET,
+              code: code,
+              grant_type: 'authorization_code',
+            }
+            const res = await axios.post('https://appleid.apple.com/auth/token', data)
+            console.log('res = ', res)
+          } catch (e) {
+            console.log('apple error ! ', e)
+          }
+        }
+        test()
+        return
+      }
+
       const res = await axiosInstance({
         method: 'GET',
         url: `${API_URL}/api/oauth/callback/${coperation}?code=${code}`,
