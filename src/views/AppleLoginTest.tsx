@@ -36,7 +36,7 @@ const AppleLoginTest = () => {
   useEffect(() => {
     const params = {
       clientId: 'com.bundle.sample.client.test',
-      redirectURI: 'https://westkite.dev/oauth/callback/apple',
+      redirectURI: 'https://if-i-die-tomorrow.com/oauth/callback/apple',
       scope: 'name email',
     }
     window.AppleID.auth.init(params)
