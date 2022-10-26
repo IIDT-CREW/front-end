@@ -68,7 +68,7 @@ function MyApp(props: AppProps) {
         <meta name="naver-site-verification" content="42db81bfd2d4d29a8e0074a206cdf9532048a969" />
 
         <meta name="appleid-signin-client-id" content="com.bundle.sample.client.test" />
-        <meta name="appleid-signin-scope" content="scope=name email" />
+        <meta name="appleid-signin-scope" content="name email" />
         <meta name="appleid-signin-redirect-uri" content="https://if-i-die-tomorrow.com/oauth/callback/apple" />
         <meta name="appleid-signin-state" content="signin" />
         <meta name="appleid-signin-use-popup" content="true" />
