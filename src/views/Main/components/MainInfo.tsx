@@ -8,7 +8,7 @@ const MainInfo = () => {
   return (
     <>
       <Text fontSize={['18px']} bold mb="24px">
-        지금까지 작성된 마지막 일기
+        지금까지 작성된 오늘의 유서
       </Text>
       {isLoading || isError ? (
         <SkeletonV2 height="24px" width="24px" mb="24px"></SkeletonV2>

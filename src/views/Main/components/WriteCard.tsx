@@ -130,7 +130,7 @@ const WriteCard = ({ will, handleDelete, handlShare }: WriteCardProps) => {
 
       <Box>
         <Text fontWeight="600" mb="8px">
-          {title ? title : '22년 9월 1일에 쓰는 마지막 일기'}
+          {title ? title : '22년 9월 1일에 쓰는 오늘의 유서'}
         </Text>
         <St.Contents>{content}</St.Contents>
       </Box>

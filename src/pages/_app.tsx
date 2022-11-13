@@ -57,7 +57,10 @@ function MyApp(props: AppProps) {
         />
         <meta name="title" content="IF I DIE TOMORROW" />
         <meta name="description" content="만약 오늘이 마지막이라면" />
-        <meta name="keywords" content="iidt, if i die tomorrow, 일기, 마지막 일기, 유서, 감성, 죽음"></meta>
+        <meta
+          name="keywords"
+          content="iidt, if i die tomorrow, 일기, 마지막 일기, 오늘의 유서, 유서, 감성, 죽음"
+        ></meta>
         <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)" />
         <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
         <meta name="twitter:image" content="" />

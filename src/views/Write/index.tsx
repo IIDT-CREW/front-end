@@ -29,7 +29,7 @@ const DEFAULT_TITLE = `${new Date().toLocaleDateString('ko-KR', {
   year: '2-digit',
   month: 'long',
   day: 'numeric',
-})}에 쓰는 마지막 일기`
+})}에 쓰는 오늘의 유서`
 
 const Write = () => {
   const [title, setTitle] = useState('')
