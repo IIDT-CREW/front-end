@@ -1,8 +1,4 @@
-interface DefaultResponse {
-  code: string
-  reason: string
-  result: any
-}
+import { DefaultResponse } from '../types'
 
 export interface Meta {
   pageNo: number
@@ -37,10 +33,6 @@ export type GetMyWill = Omit<DefaultResponse, 'result'> & {
 export type GetWill = Omit<DefaultResponse, 'result'> & {
   result: Will
 }
-
-// export type InsertWill = {}
-// export type DeleteWill = {}
-// export type UpdateWill = {}
 
 export type GetMyWillParams = {
   mem_email: string

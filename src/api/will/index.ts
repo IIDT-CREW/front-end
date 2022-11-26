@@ -1,5 +1,5 @@
 import axiosDefault from 'axios'
-import authAxios from '.'
+import authAxios from '../'
 import { API_URL } from 'config/constants/api'
 import { GetWillCount, GetWill, GetMyWill, GetMyWillParams, InsertWillParams, DeleteWillParams } from './types'
 const url = API_URL
