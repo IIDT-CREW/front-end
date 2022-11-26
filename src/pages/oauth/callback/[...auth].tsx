@@ -7,7 +7,9 @@ import { getUserInfo } from 'api/auth'
 import LoaderPage from 'components/LoaderPage'
 import { STORAGE_NAME, API_CODE, API_URL } from 'config/constants/api'
 import { encryptWithAES } from 'utils/crypto'
-
+import { Modal } from 'components/Common'
+import { useModal } from 'components/Common'
+import NickNameModal from 'components/NickNameModal'
 // Create axios instance.
 const axiosInstance = axios.create({
   baseURL: API_URL,
@@ -17,6 +19,8 @@ const axiosInstance = axios.create({
 const AuthCallback = () => {
   const router = useRouter()
   const dispatch = useDispatch()
+  //overlay click not dismiss
+  const [presentNickNameModal] = useModal(<NickNameModal />, false)
 
   async function getUser() {
     try {
@@ -36,13 +40,23 @@ const AuthCallback = () => {
       return null
     }
   }
+  const handleNicknameModal = () => {
+    //todo login
+    presentNickNameModal()
+  }
 
-  async function loginTransaction(coperation: string, code: string) {
+  async function loginTransaction(cooperation: string, code: string) {
     try {
       const res = await axiosInstance({
         method: 'GET',
-        url: `${API_URL}/api/oauth/callback/${coperation}?code=${code}`,
+        url: `${API_URL}/api/oauth/callback/${cooperation}?code=${code}`,
       })
+
+      //가입이 안되어있으면
+      if (res.data.code === API_CODE.INVALID_USER) {
+        handleNicknameModal()
+        return
+      }
       if (res) {
         const ACCESS_TOKEN = res.data.accessToken
         const bearer = `Bearer ${ACCESS_TOKEN}`
@@ -97,15 +111,15 @@ const AuthCallback = () => {
 
     if (code || access_token) {
       if (authParams?.length === 0) return
-      const coperation = authParams[0]
+      const cooperation = authParams[0]
       try {
-        loginTransaction(coperation, code)
+        loginTransaction(cooperation, code)
       } catch (e) {
         console.log(e)
       }
 
       //...todo
-      if (coperation === 'apple') {
+      if (cooperation === 'apple') {
       }
     }
   }, [router])
