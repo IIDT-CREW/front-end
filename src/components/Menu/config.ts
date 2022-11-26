@@ -23,13 +23,39 @@ const config = [
   //   // icon: 'SwapIcon',
   //   // fillIcon: 'SwapFillIcon',
   //   showItemsOnMobile: false,
-  //   items: [
-  //     // {
-  //     //   label: 'Grade',
-  //     //   href: '/grade',
-  //     // },
-  //   ],
+  //   // items: [
+  //   //   {
+  //   //     label: 'Grade',
+  //   //     href: '/grade',
+  //   //   },
+  //   // ],
   // },
+  {
+    label: '소개',
+    href: '/about',
+    // icon: 'SwapIcon',
+    // fillIcon: 'SwapFillIcon',
+    showItemsOnMobile: false,
+    items: [
+      // {
+      //   label: 'Grade',
+      //   href: '/grade',
+      // },
+    ],
+  },
+  {
+    label: '하루 유서',
+    href: '/today',
+    // icon: 'SwapIcon',
+    // fillIcon: 'SwapFillIcon',
+    showItemsOnMobile: false,
+    // items: [
+    //   {
+    //     label: 'Grade',
+    //     href: '/grade',
+    //   },
+    // ],
+  },
   // {
   //   label: 'Test2',
   //   href: '/Test2',
