@@ -111,7 +111,7 @@ const MenuWrapper = ({ themeMode, toggleTheme }) => {
       <St.FixedContainer showMenu={showMenu} height={MENU_HEIGHT} isScrollDown={isScrollDown} id="app-bar">
         <St.StyledNav isSharePage={isSharePage}>
           <Flex justifyContent="center" alignItems="center">
-            <Flex style={{ cursor: 'pointer' }}>
+            <Flex style={{ cursor: 'pointer', paddingRight: '20px' }}>
               <Link href={isLogin ? '/main' : '/'}>
                 <Heading scale="lg" style={{ fontFamily: 'Cormorant' }}>
                   IIDT
@@ -120,7 +120,7 @@ const MenuWrapper = ({ themeMode, toggleTheme }) => {
             </Flex>
             {MenuConfig?.map((menuItem, i) => {
               return (
-                <DropdownMenu key={`${menuItem}-${i}`} items={menuItem.items}>
+                <DropdownMenu key={`${menuItem}-${i}`} items={menuItem?.items}>
                   <MenuItem isActive={false} href={menuItem.href}>
                     {menuItem.label}
                   </MenuItem>

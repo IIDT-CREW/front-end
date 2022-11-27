@@ -24,7 +24,7 @@ const StyledButton = styled.button`
   height: 2rem;
   font-size: 0.875rem;
   padding: 0.5rem 1rem;
-  background: grey;
+  background: ${({ theme }) => theme.colors.grayscale7};
   color: white;
   border-radius: 0.25rem;
   line-height: 1;
@@ -38,6 +38,9 @@ const StyledButton = styled.button`
   &:hover {
   }
   &:active {
+  }
+  &:disabled {
+    background: ${({ theme }) => theme.colors.grayscale4};
   }
 `
 

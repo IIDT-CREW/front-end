@@ -11,20 +11,16 @@ import { logout } from 'api/auth'
 
 const St = {
   TextLink: styled(Text)`
-    cursor: pointer; ;
+    cursor: pointer;
   `,
 }
 const MenuWrapper = () => {
   const dispatch = useDispatch()
   const router = useRouter()
 
-  const retrunMarginTop = () => {
-    if (router.asPath.includes('/main')) {
-      return 0
-    }
-    if (router.asPath.includes('/write')) {
-      return 0
-    }
+  const returnMarginTop = () => {
+    if (router.asPath.includes('/main')) return 0
+    if (router.asPath.includes('/write')) return 0
     return MENU_HEIGHT
   }
 
@@ -56,7 +52,7 @@ const MenuWrapper = () => {
     dispatch(naviActions.menuOff())
   }
   return (
-    <Box mt={`${retrunMarginTop()}px`} position="absolute" padding="10px">
+    <Box mt={`${returnMarginTop()}px`} position="absolute" padding="10px">
       <Box>
         <St.TextLink mb="24px" onClick={() => handleRoute('/')}>
           HOME
