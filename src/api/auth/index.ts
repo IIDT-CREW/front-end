@@ -1,4 +1,11 @@
 import axios from '../'
+import { API_URL } from 'config/constants/api'
+import defaultAxios from 'axios'
+const axiosInstance = defaultAxios.create({
+  baseURL: API_URL,
+  withCredentials: true,
+})
+
 import { checkDuplicateNicknameRequest, checkDuplicateNicknameResponse } from './types'
 //* 쿠키의 access_token의 유저 정보 받아오는 api
 export const test = () => axios.get('/api/oauth/test')
@@ -22,3 +29,20 @@ export const checkDuplicateNickname = (params: checkDuplicateNicknameRequest) =>
       },
     })
     .then((res) => res.data)
+
+export const signup = ({ cooperation, code, accessToken, nickname }) => {
+  return axiosInstance.get(`/api/oauth/signup/${cooperation}`, {
+    params: {
+      code,
+      access_token: accessToken,
+      nickname,
+    },
+  })
+}
+export const socialLogin = ({ cooperation, code }) => {
+  return axiosInstance.get(`/api/oauth/callback/${cooperation}`, {
+    params: {
+      code,
+    },
+  })
+}

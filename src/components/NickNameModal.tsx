@@ -1,12 +1,11 @@
 import React, { useEffect, InputHTMLAttributes, useState, useCallback } from 'react'
-import { Modal, ModalProps, Flex, Box, Text, Button, Heading } from 'components/Common'
-import styled, { CSSProp, useTheme } from 'styled-components'
-import { useRouter } from 'next/router'
+import { Modal, ModalProps, Flex, Box, Text, Button } from 'components/Common'
+import styled, { CSSProp } from 'styled-components'
 import { fontSize, FontSizeProps } from 'styled-system'
-import { useMutation, useQuery, useQueryClient } from 'react-query'
+import { useQuery } from 'react-query'
 import { checkDuplicateNickname } from 'api/auth'
 import { API_CODE } from 'config/constants/api'
-import { isNickname } from 'utils/vaild'
+import useLoginTransaction from 'hooks/useLoginTransaction'
 
 interface InputProps extends FontSizeProps, InputHTMLAttributes<HTMLInputElement> {
   isDefaultPostType?: boolean
@@ -37,6 +36,9 @@ const St = {
   `,
 }
 
+type NickNameModalProps = ModalProps & {
+  accessToken: string
+}
 const NickName = ({ ...props }) => {
   return (
     <Flex flexDirection="column">
@@ -45,9 +47,8 @@ const NickName = ({ ...props }) => {
     </Flex>
   )
 }
-const NickNameModal: React.FC<ModalProps> = ({ onDismiss, ...props }) => {
-  const router = useRouter()
-  //const queryClient = useQueryClient()
+const NickNameModal: React.FC<NickNameModalProps> = ({ onDismiss, ...props }) => {
+  const { handleLoginTransaction } = useLoginTransaction()
   const [isFetched, setIsFetched] = useState(false)
   const [isDuplicateNickname, setIsDuplicateNickname] = useState(false)
   const [nickName, setNickName] = useState('')
@@ -82,17 +83,18 @@ const NickNameModal: React.FC<ModalProps> = ({ onDismiss, ...props }) => {
     } else setIsDuplicateNickname(false)
   }, [checkNicknameRes])
 
-  const signUp = () => {
-    //signup sequence
-  }
+  const handleSignUp = useCallback(() => {
+    const { accessToken } = props
+    handleLoginTransaction({ accessToken, isLogin: false, nickName, onDismiss })
+  }, [handleLoginTransaction, nickName, onDismiss, props])
 
   return (
-    <Modal title="마지막으로..." onDismiss={onDismiss} {...props} width="100%" hideCloseButton>
+    <Modal title="마지막으로..." onDismiss={onDismiss} {...props} width="100%" height="100%" hideCloseButton>
       <Flex justifyContent="center" alignItems="center" flexDirection="column">
         <NickName onChange={handleNickName} placeholder="닉네임" />
         {isValidateNickname && !isDuplicateNickname && isFetched ? (
           <Box>
-            <Button onClick={signUp}>[{nickName}]로 결정합니다.</Button>
+            <Button onClick={handleSignUp}>[{nickName}]로 등록할게요!</Button>
           </Box>
         ) : (
           <Button onClick={handleCheckDuplicateNickname} disabled={!isValidateNickname}>
