@@ -44,8 +44,8 @@ const config = [
     ],
   },
   {
-    label: '하루 유서',
-    href: '/today',
+    label: '어느날의 기록',
+    href: '/memorials',
     // icon: 'SwapIcon',
     // fillIcon: 'SwapFillIcon',
     showItemsOnMobile: false,

@@ -31,6 +31,16 @@ export const getMyWill = async ({ mem_email, mem_userid, pageNo, pageSize }: Get
   return response.data
 }
 
+export const getWillList = async ({ pageNo, pageSize }) => {
+  const response = await authAxios.get('api/will/getWillList', {
+    params: {
+      pageNo,
+      pageSize,
+    },
+  })
+  return response.data
+}
+
 export const getWillCount = async () => {
   const response = await axiosInstance.get<GetWillCount>('api/will/getWillCount')
   return response.data
