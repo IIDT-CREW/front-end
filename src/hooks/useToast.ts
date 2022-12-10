@@ -1,14 +1,21 @@
+import { toastContext, ToastType } from 'contexts/Toast'
 import { useContext } from 'react'
-import { ToastsContext } from 'contexts/ToastsContext'
 
 const useToast = () => {
-  const toastContext = useContext(ToastsContext)
-
-  if (toastContext === undefined) {
-    throw new Error('Toasts context undefined')
+  const { onToast } = useContext(toastContext)
+  return ({
+    type = 'info',
+    message = '',
+    option = {
+      position: 'bottom-right',
+    },
+  }: ToastType) => {
+    onToast({
+      type: type,
+      message: message,
+      option: option,
+    })
   }
-
-  return toastContext
 }
 
 export default useToast

@@ -56,6 +56,7 @@ export const ModalContainer = styled(Box)<{ minWidth: string }>`
   z-index: ${({ theme }) => theme.zIndices.modal};
 
   ${({ theme }) => theme.mediaQueries.xs} {
+    width: auto;
     min-width: ${({ minWidth }) => minWidth};
     max-width: 100%;
     margin: 0 10px;
