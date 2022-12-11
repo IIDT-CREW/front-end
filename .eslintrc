@@ -1,62 +1,93 @@
 {
+  "root": true,
   "env": {
     "es6": true,
     "browser": true,
-    "jest": true
+    "node": true
   },
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "sourceType": "module",
-    "allowImportExportEverywhere": true
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 13,
+    "sourceType": "module"
   },
-
-  "plugins": ["lodash", "react", "react-hooks", "@typescript-eslint"],
   "extends": [
-    "plugin:react/jsx-runtime",
-    "plugin:jsx-a11y/recommended",
-    "plugin:@next/next/recommended",
-    "plugin:@typescript-eslint/eslint-recommended",
-    "plugin:@typescript-eslint/recommended"
-  ],
-  "overrides": [
-    {
-      "files": ["*.js", "*.jsx"],
-      "rules": {
-        "@typescript-eslint/explicit-function-return-type": "off"
-      }
-    }
+    "plugin:@typescript-eslint/recommended",
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
+    "plugin:import/recommended",
+    "plugin:prettier/recommended"
   ],
   "rules": {
-    "import/no-unresolved": 0,
-    "no-console": ["warn", { "allow": ["info", "warn", "error", "debug"] }],
-    "no-plusplus": 0,
-    "prefer-destructuring": ["warn", { "object": true, "array": false }],
-    "no-underscore-dangle": 0,
-    "lodash/import-scope": [2, "method"],
-    "@next/next/no-img-element": 0,
-    "no-sparse-arrays": 0,
-    "react-hooks/exhaustive-deps": [
-      "warn",
-      {
-        "additionalHooks": "(useFastRefreshEffect|useSlowRefreshEffect)"
-      }
+    "no-undef": "off",
+    "no-console": "off", // console.log 가능
+    "import/prefer-default-export": "off", // export default 권장
+    "react/react-in-jsx-scope": "off", // jsx를 사용하여도 React를 꼭 import 하지 않아도 됨
+    "react/prop-types": "off", // propTypes를 사용하지 않음
+    "no-control-regex": "off", // 정규식에서 제어 문자 허용
+    "no-unused-vars": "warn", // 사용안한 변수 경고 안 함
+    "no-extra-boolean-cast": "off", // 불필요한 boolean 캐스트
+    "react/jsx-key": "warn", // 반복문으로 생성하는 요소에 key 강제
+    "no-alert": "warn", // alert 사용 금지 경고
+    "react/jsx-no-useless-fragment": "warn", // 불필요한 fragment 사용시 경고
+    "react/jsx-filename-extension": [
+      1,
+      { "extensions": [".jsx", ".tsx"] } // jsx 사용가능한 확장자 설정
     ],
-
-    // Start temporary rules
-    // These rules are here just to keep the lint error to 0 during the migration to the new rule set
-    // They need to be removed and fixed as soon as possible
-    "@typescript-eslint/ban-ts-comment": [1, { "ts-ignore": false, "ts-nocheck": false }],
-    "@typescript-eslint/no-use-before-define": 0,
-    "@typescript-eslint/explicit-module-boundary-types": 0,
-    "@typescript-eslint/no-explicit-any": 0,
-    "radix": 0,
-    "import/no-extraneous-dependencies": 0,
-    "jsx-a11y/media-has-caption": 0,
-    // Exchange
-    "no-param-reassign": ["error", { "props": true, "ignorePropertyModificationsFor": ["state", "memo"] }],
-    "react/require-default-props": 0,
-    "no-nested-ternary": 0,
-    "max-classes-per-file": 0
-    // End temporary rules
+    "@typescript-eslint/no-empty-function": ["error", { "allow": ["arrowFunctions"] }],
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "js": "never",
+        "jsx": "never",
+        "ts": "never",
+        "tsx": "never"
+      } // import 시 확장자명은 사용하지 않는다.
+    ],
+    "react/no-unstable-nested-components": ["warn", { "allowAsProps": true }],
+    "@typescript-eslint/no-explicit-any": "off",
+    "import/no-unresolved": "off"
+  },
+  "ignorePatterns": ["public", "build", ".next", "node_modules", "*.config.js"],
+  "settings": {
+    "import/extensions": [".js", ".jsx", ".ts", ".tsx"],
+    // "react": {
+    //   "version": "detect"
+    // },
+    "import/parsers": {
+      "@typescript-eslint/parser": [".ts", ".tsx"]
+    },
+    "import/resolver": {
+      "node": {
+        "paths": ["src"],
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      }
+      // "typescript": {
+      //   "alwaysTryTypes": true,
+      //   "project": "./tsconfig.json",
+      //   "alias": {
+      //     "map": [
+      //       ["@api", "src/api"],
+      //       ["@components", "src/components"],
+      //       ["@constants", "src/constants"],
+      //       ["@context", "src/context"],
+      //       ["@hoc", "src/hoc"],
+      //       ["@hooks", "src/hooks"],
+      //       ["@pages", "src/pages"],
+      //       ["@store", "src/store"],
+      //       ["@utils", "src/utils"],
+      //       ["@views", "src/views"],
+      //       ["@public", "public/*"]
+      //     ]
+      //   },
+      //   "node": {
+      //     "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      //   }
+      // }
+    }
   }
 }
