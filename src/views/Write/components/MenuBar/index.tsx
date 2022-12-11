@@ -1,7 +1,7 @@
 import { ArrowLeft, ArrowRight } from 'components/Common/Svg'
 import styled, { CSSProp, useTheme } from 'styled-components'
 import { FOOTER_HEIGHT, IS_DEFAULT_MODE, MENU_HEIGHT } from 'config/constants/default'
-import { useState } from 'react'
+import { useCallback } from 'react'
 import { Flex } from 'components/Common'
 import useToast from 'hooks/useToast'
 import { PREV, NEXT, DONE } from 'views/Write/data'
@@ -31,6 +31,12 @@ export const StyleMenuButton = styled.button<{ variant?: Variant; isFull?: boole
   color: ${theme.colors.grayscale0};
   `
     }
+    // if (variant === 'disable') {
+    //   return `
+    //   background-color: ${theme.colors.grayscale5};
+    //   color: ${theme.colors.grayscale0};
+    //   `
+    // }
     return `
   border: 1px solid ${theme.colors.grayscale7};
   background-color: ${theme.colors.grayscale0};
@@ -115,28 +121,36 @@ const MenuButton = ({
   )
 }
 
-type MenuButtonList = {
+type MenuButtonListProps = {
   isMobile: boolean
   handleMenuButton: (e: any) => void
   page: number
   isLastPage: boolean
   isDisabled: boolean
+  isDefaultPostType: boolean
 }
-const MenuButtonList = ({ isMobile, handleMenuButton, page, isLastPage, isDisabled }: MenuButtonList) => {
+const MenuButtonList = ({
+  isMobile,
+  handleMenuButton,
+  page,
+  isLastPage,
+  isDisabled,
+  isDefaultPostType,
+}: MenuButtonListProps) => {
   return (
     <Flex style={{ gap: '10px' }}>
-      {page !== 0 && (
+      {!isDefaultPostType && page !== 0 && (
         <MenuButton
           text="이전 질문"
           isMobile={isMobile}
           handleMenuButton={handleMenuButton}
-          isDisabled={isDisabled}
+          isDisabled={false}
           variant="secondary"
           buttonType={PREV}
         />
       )}
 
-      {!isLastPage ? (
+      {!isDefaultPostType && !isLastPage && (
         <MenuButton
           text="다음 질문"
           isMobile={isMobile}
@@ -144,48 +158,78 @@ const MenuButtonList = ({ isMobile, handleMenuButton, page, isLastPage, isDisabl
           isDisabled={isDisabled}
           buttonType={NEXT}
         />
-      ) : (
-        !isMobile && (
-          <MenuButton
-            text={'작성 완료'}
-            isMobile={isMobile}
-            handleMenuButton={handleMenuButton}
-            isDisabled={isDisabled}
-            buttonType={DONE}
-          />
-        )
+      )}
+
+      {isDefaultPostType && !isMobile && (
+        <MenuButton
+          text={'작성 완료'}
+          isMobile={isMobile}
+          handleMenuButton={handleMenuButton}
+          isDisabled={isDisabled}
+          buttonType={DONE}
+        />
+      )}
+      {!isDefaultPostType && !isMobile && isLastPage && (
+        <MenuButton
+          text={'작성 완료'}
+          isMobile={isMobile}
+          handleMenuButton={handleMenuButton}
+          isDisabled={isDisabled}
+          buttonType={DONE}
+        />
       )}
     </Flex>
   )
 }
-const MenuBar = ({ isMobile, handlePage, handleSave, page, isLastPage, isDisabled }) => {
+
+type MenuBarProps = {
+  isMobile: boolean
+  text: string
+  isDisabled: boolean
+  handlePage: () => void
+  handleUpsert: () => void
+  handleMenuButton: (e: any) => void
+  variant?: Variant
+  buttonType: 'prev' | 'next' | 'done'
+  isDefaultPostType: boolean
+}
+const MenuBar = ({ isMobile, handlePage, handleUpsert, page, isLastPage, isDisabled, isDefaultPostType }) => {
   const goToMain = () => {}
   const theme = useTheme()
   const onToast = useToast()
 
-  const handleMenuButton = (e) => {
-    if (isDisabled)
-      return onToast({
-        type: 'error',
-        message: '내용을 입력해주세요',
-        option: {
-          position: 'top-center',
-          style: {
-            top: `${MENU_HEIGHT}px`,
-            backgroundColor: `${theme.colors.background}`,
-            color: `${theme.colors.error}`,
-            border: '1px solid #EFEFEF',
-            boxShadow: '0px 0px 1px rgb(0 0 0 / 8%), 0px 2px 6px rgb(0 0 0 / 5%)',
-            borderRadius: '2px',
-            margin: '0 16px',
+  const handleMenuButton = useCallback(
+    (e) => {
+      if (isDisabled)
+        return onToast({
+          type: 'error',
+          message: '내용을 입력해주세요',
+          option: {
+            position: 'top-center',
+            style: {
+              top: `${MENU_HEIGHT}px`,
+              backgroundColor: `${theme.colors.background}`,
+              color: `${theme.colors.error}`,
+              border: '1px solid #EFEFEF',
+              boxShadow: '0px 0px 1px rgb(0 0 0 / 8%), 0px 2px 6px rgb(0 0 0 / 5%)',
+              borderRadius: '2px',
+              margin: '0 16px',
+            },
           },
-        },
-      })
-    if (e.target.id === PREV) handlePage(page - 1)
-    if (e.target.id === NEXT) handlePage(page + 1)
+        })
+      if (e.target.id === PREV) {
+        handlePage(page - 1)
+        return
+      }
+      if (e.target.id === NEXT) {
+        handlePage(page + 1)
+        return
+      }
 
-    return handleSave()
-  }
+      return handleUpsert()
+    },
+    [handlePage, handleUpsert, isDisabled, onToast, page, theme.colors.background, theme.colors.error],
+  )
 
   return (
     <St.MenuBar>
@@ -198,6 +242,7 @@ const MenuBar = ({ isMobile, handlePage, handleSave, page, isLastPage, isDisable
         page={page}
         isLastPage={isLastPage}
         isDisabled={isDisabled}
+        isDefaultPostType={isDefaultPostType}
       />
     </St.MenuBar>
   )

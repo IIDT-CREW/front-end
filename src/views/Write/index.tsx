@@ -1,52 +1,22 @@
-import { TextareaHTMLAttributes, useContext, useEffect, useState } from 'react'
+/* eslint-disable no-sparse-arrays */
+import { TextareaHTMLAttributes, useCallback, useContext, useEffect, useState } from 'react'
 import styled, { CSSProp, useTheme } from 'styled-components'
 import { fontSize, FontSizeProps } from 'styled-system'
-import { getWill, insertWill, updateWill } from 'api/will'
 import { useRouter } from 'next/router'
-import { Box, Flex, useModal } from 'components/Common'
+import { useModal } from 'components/Common'
 import SelectPostTypeModal from 'views/Write/components/modal/SelectPostTypeModal'
-import WarningHistoryBackModal from 'views/Write/components/modal/WarningHistoryBackModal'
 import { FOOTER_HEIGHT, MENU_HEIGHT } from 'config/constants/default'
 import { useUserInfo } from 'store/auth/hooks'
 import { nanoid } from 'nanoid'
-import { useMutation, useQuery, useQueryClient } from 'react-query'
 import ProgressBar from 'components/Common/ProgressBar'
-import PrivateToggle from 'components/PrivateToggle'
+
 import useMatchBreakpoints from 'hooks/useMatchBreakpoints'
 import MenuBar, { StyleMenuButton } from 'views/Write/components/MenuBar'
-
-//question number;
-//answer
-const QUESTION_LIST = [
-  {
-    qusIdx: 1,
-    question: '살아오면서 가장 기뻤던 일은?',
-  },
-  {
-    qusIdx: 2,
-    question: '부끄러워서 친구들에게 하지 못한 말은?',
-  },
-  {
-    qusIdx: 3,
-    question: '부끄러워서 친구들에게 하지 못한 말은?',
-  },
-  {
-    qusIdx: 4,
-    question: '살아오면서 후회하는 일은?',
-  },
-  {
-    qusIdx: 5,
-    question: '하지못해서 아쉬운 일은?',
-  },
-  {
-    qusIdx: 6,
-    question: '과거로 돌아간다면 바꾸고 싶은 것은?',
-  },
-  {
-    qusIdx: 7,
-    question: '지금 가장 생각나는 사람 세명에게',
-  },
-]
+import { QUESTION_LIST } from 'views/Write/data'
+import useAddPostMutation from 'hooks/queries/Write/useAddPostMutation'
+import useUpdatePostMutation from 'hooks/queries/Write/useUpdatePostMutation'
+import { useGetWill } from 'hooks/queries/Write/useGetWill'
+import useWarningHistoryBack from './hooks/useWarningHistoryBack'
 
 const DEFAULT_TITLE = `${new Date().toLocaleDateString('ko-KR', {
   year: '2-digit',
@@ -58,56 +28,121 @@ const Write = () => {
   const router = useRouter()
   const { memIdx } = useUserInfo()
   const { isMobile } = useMatchBreakpoints()
-
-  const [presentWarningHistoryBackModal] = useModal(<WarningHistoryBackModal goToBack={goToBack} />)
+  const goToBack = useCallback(() => {
+    router.push('/main')
+  }, [router])
+  const { mutate: addPostMutate } = useAddPostMutation({ goToBack })
+  const { mutate: updatePostMutate } = useUpdatePostMutation({ goToBack })
   const isEditMode = !!router?.query?.will_id
   const willId = router?.query?.will_id as string
   const [isDefaultPostType, setIsDefaultPostType] = useState(true)
   const [page, setPage] = useState(0)
   const [title, setTitle] = useState('')
-  //const content = isDefaultPostType ? contents[page] : contents.map((v, i) => `${QUESTION_LIST[i]}\n${v}`).join('\n')
-  const [contents, setContent] = useState(QUESTION_LIST.map((_) => {}))
+  const [contents, setContent] = useState(
+    QUESTION_LIST.map((question, index) => ({
+      questionIndex: question.qusIdx,
+      answer: '',
+    })),
+  )
+  const [isDisableSave, setIsDisableSave] = useState(true)
 
-  const handlePostType = () => {
+  const { data, isSuccess: isPostLoaded } = useGetWill(willId, {
+    enabled: router.isReady && isEditMode,
+  })
+
+  useWarningHistoryBack({ title, contents, goToBack, page })
+
+  const [isPrivate, setPrivate] = useState(false)
+  const handleSetIsPrivate = useCallback(() => {
+    setPrivate((prev) => !prev)
+  }, [])
+
+  useEffect(() => {
+    setIsDisableSave(contents[page].answer.length ? false : true)
+  }, [contents, page])
+
+  const setPostWhenEditMode = useCallback(() => {
+    const {
+      result: { TITLE, CONTENT, CONTENT_TYPE },
+    } = data
+    setTitle(TITLE)
+    // if (CONTENT_TYPE === 0) {
+    //   contents[page] = CONTENT
+    //   return setContent(contents)
+    // }
+    // setPostType(false)
+    // setContent(
+    //   CONTENT.split(
+    //     new RegExp(`${QUESTION_LIST.map((question) => `${question.replaceAll(/[\?]/g, '\\?')}\\n`).join('|')}`, 'g'),
+    //   )
+    //     .filter((v) => v)
+    //     .map((v) => v.replace('\n', '')),
+    // )
+  }, [data])
+  console.log('contents= ', contents)
+  useEffect(
+    function initialScreenByEditMode() {
+      if (router.isReady) {
+        if (isEditMode && isPostLoaded) setPostWhenEditMode()
+        if (!isEditMode) modal()
+      }
+    },
+    [router.isReady, isPostLoaded, isEditMode],
+  )
+
+  const handlePostType = useCallback(() => {
     setIsDefaultPostType(false)
     onDismiss()
-  }
+  }, [onDismiss])
+
   const [modal, onDismiss] = useModal(<SelectPostTypeModal onClick={handlePostType} />)
 
-  const handleContents = (e) => {
-    //setContent(contents.map((content, i) => (i === page ? e.target.value : content)))
-  }
+  const handleContents = useCallback(
+    (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+      setContent(contents.map((content, i) => (i === page ? { ...content, answer: e.target.value } : content)))
+    },
+    [contents, page],
+  )
 
-  const handleTitle = (e) => {
+  const handleTitle = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setTitle(e.target.value)
-  }
+  }, [])
 
-  const handleContent = () => {}
-  const handlePage = (page: number) => {
+  const handlePage = useCallback((page: number) => {
     setPage(page)
-  }
-  const handleSave = () => {
-    // const parameter = {
-    //   title: title.length ? title : DEFAULT_TITLE,
-    //   thumbnail: 'title',
-    //   mem_idx: memIdx,
-    //   content,
-    //   will_id: isEditMode ? willId : nanoid(),
-    //   content_type: isDefaultPostType ? 0 : 1,
-    // }
-    //isEditMode ? updatePost.mutate(parameter) : addPost.mutate(parameter)
-  }
-  const isDisabledSave = false
+  }, [])
+
+  const handleUpsert = useCallback(() => {
+    const parameter = {
+      title: title.length ? title : DEFAULT_TITLE,
+      thumbnail: 'title',
+      mem_idx: memIdx,
+      content: isDefaultPostType ? contents[0].answer : '',
+      will_id: isEditMode ? willId : nanoid(),
+      is_private: isPrivate,
+      content_type: isDefaultPostType ? 0 : 1,
+      answer_list: isDefaultPostType
+        ? null
+        : contents?.map((content) => ({
+            qs_idx: content.questionIndex.toString(),
+            qs_essay_answer: content.answer,
+          })),
+    }
+    isEditMode ? updatePostMutate(parameter) : addPostMutate(parameter)
+  }, [addPostMutate, contents, isDefaultPostType, isEditMode, isPrivate, memIdx, title, updatePostMutate, willId])
+
   return (
     <St.Article>
       <MenuBar
         isMobile={isMobile}
-        handleSave={handleSave}
+        handleUpsert={handleUpsert}
         handlePage={handlePage}
-        isDisabled={false}
         page={page}
+        isDisabled={isDisableSave}
         isLastPage={page === QUESTION_LIST.length - 1}
+        isDefaultPostType={isDefaultPostType}
       />
+
       <St.Editor>
         <Title
           value={title}
@@ -122,7 +157,7 @@ const Write = () => {
         {isDefaultPostType || <St.Question fontSize={[, '16px', '26px']}>{QUESTION_LIST[page]?.question}</St.Question>}
         <Contents
           isDefaultPostType={isDefaultPostType}
-          value={contents[page]}
+          value={contents[page]?.answer}
           onChange={handleContents}
           fontSize={[, '16px', '18px']}
           css={{ flex: 'auto' }}
@@ -131,26 +166,26 @@ const Write = () => {
           <StyleMenuButton
             isFull={true}
             variant="primary"
-            onClick={handleSave}
-            disabled={isDisabledSave}
+            onClick={handleUpsert}
+            disabled={false}
             css={{ marginBottom: '16px' }}
           >
-            {'작성 완료'}
+            작성 완료
           </StyleMenuButton>
         )}
         {!isDefaultPostType && isMobile && page === QUESTION_LIST.length - 1 && (
           <StyleMenuButton
             isFull={true}
             variant="primary"
-            onClick={handleSave}
-            disabled={isDisabledSave}
+            onClick={handleUpsert}
+            disabled={isDisableSave}
             css={{ marginBottom: '16px' }}
           >
             {'모두 다 작성했어요'}
           </StyleMenuButton>
         )}
       </St.Editor>
-      {isDefaultPostType || <ProgressBar value={page + 1} max={QUESTION_LIST.length} wrapperCss={progressStyle} />}
+      {!isDefaultPostType || <ProgressBar value={page + 1} max={QUESTION_LIST.length} wrapperCss={progressStyle} />}
     </St.Article>
   )
 }
@@ -159,7 +194,7 @@ interface TextAreaProps extends FontSizeProps, TextareaHTMLAttributes<HTMLTextAr
   isDefaultPostType?: boolean
   css?: CSSProp
 }
-type variant = 'primary' | 'secondary'
+
 const Title = ({ ...props }: TextAreaProps) => {
   return <St.Textarea {...props} />
 }
@@ -168,7 +203,7 @@ const Contents = ({ ...props }: TextAreaProps) => {
 }
 const St = {
   Editor: styled.section`
-    margin: ${MENU_HEIGHT}px 24px 0 24px;
+    padding: 0px 24px 0 24px;
     height: 100%;
     display: flex;
     flex-direction: column;
