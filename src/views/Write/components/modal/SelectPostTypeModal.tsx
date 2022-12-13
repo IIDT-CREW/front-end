@@ -1,13 +1,19 @@
+/* eslint-disable no-sparse-arrays */
 import { Modal } from 'components/Common'
 import { Flex, Box, Text } from 'components/Common'
 import styled from 'styled-components'
 import { ButtonHTMLAttributes } from 'react'
 
 interface customModalProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  handlePostType: () => void
   onDismiss?: () => void
 }
 
-const SelectPostTypeModal = ({ onClick, onDismiss }: customModalProps) => {
+const SelectPostTypeModal = ({ handlePostType, onDismiss }: customModalProps) => {
+  const handleButton = () => {
+    handlePostType()
+    onDismiss()
+  }
   return (
     <Modal title="일기 작성 방식을 선택할 수 있어요" onDismiss={onDismiss}>
       <Flex flexDirection="column" justifyContent="center" alignItems="center">
@@ -22,7 +28,7 @@ const SelectPostTypeModal = ({ onClick, onDismiss }: customModalProps) => {
 
         <Box mt="20px">
           <Flex flexDirection="column">
-            <St.ModalButton onClick={onClick}>질문에 따라 유서를 적고 싶어요</St.ModalButton>
+            <St.ModalButton onClick={handleButton}>질문에 따라 유서를 적고 싶어요</St.ModalButton>
             <St.ModalButton onClick={onDismiss} variant="primary">
               제 마음대로 일기를 적고 싶어요
             </St.ModalButton>

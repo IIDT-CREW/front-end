@@ -43,7 +43,7 @@ const St = {
 
 const WillContainer = () => {
   const queryClient = useQueryClient()
-  const { name, email, userid } = useUserInfo()
+  const { name, email, userid, memIdx } = useUserInfo()
   const { onToast } = useContext(toastContext)
 
   const handleToast = ({ message = '' }) => {
@@ -67,8 +67,7 @@ const WillContainer = () => {
   } = useInfiniteScroll({
     fetch: getMyWill,
     params: {
-      mem_userid: userid,
-      mem_email: email,
+      memIdx: memIdx,
       pageNo: DEFAULT_PAGE_NO,
       pageSize: DEFAULT_PAGE_SIZE,
     },

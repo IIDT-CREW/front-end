@@ -14,6 +14,9 @@ import moment from 'moment'
 import WriteDeleteModal from './modal/WriteDeleteModal'
 import ShareModal from './modal/ShareModal'
 import { useIsLogin } from 'store/auth/hooks'
+import { IS_DEFAULT_MODE } from 'config/constants/default'
+import { Will } from '@api/will/types'
+import { QUESTION_LIST } from '@views/Write/data'
 
 const St = {
   Container: styled(Box)`
@@ -85,12 +88,13 @@ const WriteCard = ({ will, handleDelete, handlShare, isPrivate = true }: WriteCa
   const {
     CONTENT: content,
     EDIT_DATE: editDate,
-    MEM_IDX,
+    MEM_NICKNAME: memNickname,
     REG_DATE: regDate,
     THUMBNAIL,
     TITLE: title,
     WILL_ID,
-    MEM_NICKNAME,
+    CONTENT_TYPE: contentType,
+    ANSWER_LIST: answerList,
   } = will
   const router = useRouter()
   const isLogin = useIsLogin()
@@ -120,6 +124,8 @@ const WriteCard = ({ will, handleDelete, handlShare, isPrivate = true }: WriteCa
     router.push(`/will/${WILL_ID}`)
   }, [WILL_ID, router])
 
+  const isDefaultType = contentType === IS_DEFAULT_MODE
+
   return (
     <St.CardWrapper mr="24px" ml="24px" mb="40px" padding="20px" minWidth="362px" maxWidth="582px" borderRadius="4px">
       <Box mb="20px">
@@ -146,12 +152,27 @@ const WriteCard = ({ will, handleDelete, handlShare, isPrivate = true }: WriteCa
       </Box>
 
       <Box>
-        <Text fontWeight="600" mb="8px">
+        <Text fontWeight="600" mb="16px" fontSize="23px">
           {title ? title : '22년 9월 1일에 쓰는 오늘의 유서'}
         </Text>
-        <St.Contents>{content}</St.Contents>
+
+        {isDefaultType ? (
+          <St.Contents>{content}</St.Contents>
+        ) : (
+          <St.Contents>
+            {answerList?.map((answer) => {
+              return (
+                <>
+                  <Text bold>{QUESTION_LIST[parseInt(answer?.question_index)]?.question}</Text>
+                  <Text>{answer?.question_answer}</Text>
+                </>
+              )
+            })}
+          </St.Contents>
+        )}
+
         <Flex mt="18px" justifyContent="end">
-          <St.Author>{MEM_NICKNAME ? MEM_NICKNAME : '익명'} 마침.</St.Author>
+          <St.Author>{memNickname ? memNickname : '익명'} 마침.</St.Author>
         </Flex>
       </Box>
     </St.CardWrapper>

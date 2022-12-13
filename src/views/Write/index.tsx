@@ -80,6 +80,7 @@ const Write = () => {
     // )
   }, [data])
   console.log('contents= ', contents)
+  /* 모달 onOpen */
   useEffect(
     function initialScreenByEditMode() {
       if (router.isReady) {
@@ -92,10 +93,8 @@ const Write = () => {
 
   const handlePostType = useCallback(() => {
     setIsDefaultPostType(false)
-    onDismiss()
-  }, [onDismiss])
-
-  const [modal, onDismiss] = useModal(<SelectPostTypeModal onClick={handlePostType} />)
+  }, [])
+  const [modal, onDismiss] = useModal(<SelectPostTypeModal handlePostType={handlePostType} />)
 
   const handleContents = useCallback(
     (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -128,6 +127,7 @@ const Write = () => {
             qs_essay_answer: content.answer,
           })),
     }
+    // console.log(parameter)
     isEditMode ? updatePostMutate(parameter) : addPostMutate(parameter)
   }, [addPostMutate, contents, isDefaultPostType, isEditMode, isPrivate, memIdx, title, updatePostMutate, willId])
 

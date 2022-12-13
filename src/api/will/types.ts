@@ -1,7 +1,7 @@
 import { DefaultResponse } from '../types'
 export type Answer = {
-  qs_idx: string
-  qs_essay_answer: string
+  question_index: string
+  question_answer: string
 }
 export interface Meta {
   pageNo: number
@@ -24,6 +24,7 @@ export type Will = {
   WILL_ID: string
   CONTENT_TYPE: number
   ANSWER_LIST?: Answer[]
+  MEM_NICKNAME?: string
 }
 
 export type GetWillCount = Omit<DefaultResponse, 'result'> & {
@@ -39,8 +40,7 @@ export type GetWill = Omit<DefaultResponse, 'data'> & {
 }
 
 export type GetMyWillParams = {
-  mem_email: string
-  mem_userid: string
+  memIdx: string
   pageNo: string
   pageSize: string
 }
