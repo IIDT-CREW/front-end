@@ -1,7 +1,7 @@
 import { useEffect, useContext, useMemo } from 'react'
 import { Box, Flex } from 'components/Common'
 import styled from 'styled-components'
-import WriteCard from './components/WriteCard'
+import WillCard from 'components/WillCard'
 import { useMutation, useQueryClient } from 'react-query'
 import { deleteWill, getWillList } from 'api/will'
 import { toastContext } from 'contexts/Toast'
@@ -86,7 +86,7 @@ const WillContainer = () => {
     <>
       {!error &&
         willList?.map((myWill, i) => (
-          <WriteCard
+          <WillCard
             key={`${i}-${myWill.WILL_ID}`}
             isPrivate={false}
             will={myWill}
@@ -110,7 +110,9 @@ const Memorials = () => {
   console.log('Memorials = ')
   return (
     <St.Container mt="78px">
-      <Box mb="36px">[ ] 날의 기록들</Box>
+      <Box mb="36px">
+        <Text>[ ] 날의 기록들</Text>
+      </Box>
       <Flex flexDirection="column" justifyContent="center" alignItems="center">
         <Flex flexDirection="column" justifyContent="center" alignItems="center">
           <WillContainer />

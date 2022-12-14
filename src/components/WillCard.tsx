@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import React, { useState, useCallback } from 'react'
 import { useRouter } from 'next/router'
 import { Box, Text, Flex } from 'components/Common'
 import { getColor } from 'components/Common/Text/Text'
@@ -11,10 +11,12 @@ import Edit from 'components/Common/Svg/Icons/Edit'
 import Panorama from 'components/Common/Svg/Icons/Panorama'
 import { useModal } from 'components/Common'
 import moment from 'moment'
-import WriteDeleteModal from './modal/WriteDeleteModal'
-import ShareModal from './modal/ShareModal'
+import WriteDeleteModal from 'views/Main/components/modal/WriteDeleteModal'
+import ShareModal from 'views/Main/components/modal/ShareModal'
 import { useIsLogin } from 'store/auth/hooks'
-import { Will } from 'api/types'
+import { IS_DEFAULT_MODE } from 'config/constants/default'
+import { Will } from '@api/will/types'
+import { QUESTION_LIST } from '@views/Write/data'
 
 const St = {
   Container: styled(Box)`
@@ -46,6 +48,10 @@ const St = {
   CardWrapper: styled(Box)`
     box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.15), 0px 2px 6px rgba(0, 0, 0, 0.13);
   `,
+
+  Author: styled(Text)`
+    color: ${({ theme }) => theme.colors.grayscale5};
+  `,
 }
 
 const MenuItem = ({ presentDeleteModal, presentShareModal, handleEdit, handlePreview }) => {
@@ -71,19 +77,30 @@ const MenuItem = ({ presentDeleteModal, presentShareModal, handleEdit, handlePre
   )
 }
 
-type WriteCardProps = {
+type WillCardProps = {
   will?: Will
   handleDelete?: () => void
-  handlShare?: () => void
+  handleShare?: () => void
+  isPrivate?: boolean
 }
 
-const WriteCard = ({ will, handleDelete, handlShare }: WriteCardProps) => {
-  const { CONTENT: content, EDIT_DATE: editDate, MEM_IDX, REG_DATE: regDate, THUMBNAIL, TITLE: title, WILL_ID } = will
+const WillCard = ({ will, handleDelete, handleShare, isPrivate = true }: WillCardProps) => {
+  const {
+    CONTENT: content,
+    EDIT_DATE: editDate,
+    MEM_NICKNAME: memNickname,
+    REG_DATE: regDate,
+    THUMBNAIL,
+    TITLE: title,
+    WILL_ID,
+    CONTENT_TYPE: contentType,
+    ANSWER_LIST: answerList,
+  } = will
   const router = useRouter()
   const isLogin = useIsLogin()
   const [presentDeleteModal] = useModal(<WriteDeleteModal handleDelete={handleDelete} />)
   const [presentShareModal] = useModal(
-    <ShareModal handlShare={handlShare} content={content} willId={WILL_ID} title={title} />,
+    <ShareModal handleShare={handleShare} content={content} willId={WILL_ID} title={title} />,
   )
 
   const [targetRef, setTargetRef] = useState<HTMLDivElement | null>(null)
@@ -95,17 +112,19 @@ const WriteCard = ({ will, handleDelete, handlShare }: WriteCardProps) => {
     modifiers: [{ name: 'offset', options: { offset: [0, 0] } }],
   })
 
-  const handleIsOpen = () => {
+  const handleIsOpen = useCallback(() => {
     setIsOpen((prev) => !prev)
-  }
+  }, [])
 
-  const handleEdit = () => {
+  const handleEdit = useCallback(() => {
     router.push(`/write?will_id=${WILL_ID}`)
-  }
+  }, [WILL_ID, router])
 
-  const handlePreview = () => {
+  const handlePreview = useCallback(() => {
     router.push(`/will/${WILL_ID}`)
-  }
+  }, [WILL_ID, router])
+
+  const isDefaultType = contentType === IS_DEFAULT_MODE
 
   return (
     <St.CardWrapper mr="24px" ml="24px" mb="40px" padding="20px" minWidth="362px" maxWidth="582px" borderRadius="4px">
@@ -114,28 +133,52 @@ const WriteCard = ({ will, handleDelete, handlShare }: WriteCardProps) => {
           <Text>{moment(regDate).format('YYYY.MM.DD')}</Text>
           {isLogin && (
             <Text style={{ cursor: 'pointer' }} onClick={handleIsOpen} ref={setTargetRef}>
-              <Ellipsis />
-              <St.MenuWrapper ref={setTooltipRef} style={styles.popper} {...attributes.popper} isOpen={isOpen}>
-                <MenuItem
-                  presentDeleteModal={presentDeleteModal}
-                  presentShareModal={presentShareModal}
-                  handleEdit={handleEdit}
-                  handlePreview={handlePreview}
-                />
-              </St.MenuWrapper>
+              {isPrivate && (
+                <>
+                  <Ellipsis />
+                  {isOpen && (
+                    <St.MenuWrapper ref={setTooltipRef} style={styles.popper} {...attributes.popper} isOpen={isOpen}>
+                      <MenuItem
+                        presentDeleteModal={presentDeleteModal}
+                        presentShareModal={presentShareModal}
+                        handleEdit={handleEdit}
+                        handlePreview={handlePreview}
+                      />
+                    </St.MenuWrapper>
+                  )}
+                </>
+              )}
             </Text>
           )}
         </Flex>
       </Box>
 
       <Box>
-        <Text fontWeight="600" mb="8px">
-          {title ? title : '22년 9월 1일에 쓰는 오늘의 유서'}
+        <Text fontWeight="600" mb="16px" fontSize="23px">
+          {title ? title : `${moment().format('YYYY년 M월 D일')}에 쓰는 하루 유서`}
         </Text>
-        <St.Contents>{content}</St.Contents>
+
+        {isDefaultType ? (
+          <St.Contents>{content}</St.Contents>
+        ) : (
+          <St.Contents>
+            {answerList?.map((answer) => {
+              return (
+                <>
+                  <Text bold>{QUESTION_LIST[parseInt(answer?.question_index)]?.question}</Text>
+                  <Text>{answer?.question_answer}</Text>
+                </>
+              )
+            })}
+          </St.Contents>
+        )}
+
+        <Flex mt="18px" justifyContent="end">
+          <St.Author>{memNickname ? memNickname : '익명'} 마침.</St.Author>
+        </Flex>
       </Box>
     </St.CardWrapper>
   )
 }
 
-export default WriteCard
+export default React.memo(WillCard)

@@ -1,7 +1,7 @@
-import { Box } from 'components/Common'
-import { getColor } from 'components/Common/Text/Text'
+import { Box, Text, Flex } from 'components/Common'
 import styled from 'styled-components'
-import { Will } from 'api/types'
+import { Will } from '@api/will/types'
+import { QUESTION_LIST } from '@views/Write/data'
 
 const St = {
   CardWrapper: styled(Box)`
@@ -21,6 +21,9 @@ const St = {
     padding: 20px;
     color: ${({ theme }) => theme.colors.text};
   `,
+  Author: styled(Text)`
+    color: ${({ theme }) => theme.colors.grayscale5};
+  `,
 }
 
 type WillCardProps = {
@@ -28,15 +31,41 @@ type WillCardProps = {
 }
 
 const WillCard = ({ will }: WillCardProps) => {
-  const { CONTENT: content } = will
+  const {
+    //CONTENT: content,
+    //EDIT_DATE: editDate,
+    MEM_NICKNAME: memNickname,
+    //REG_DATE: regDate,
+    //THUMBNAIL,
+    //TITLE: title,
+    //WILL_ID,
+    //CONTENT_TYPE: contentType,
+    ANSWER_LIST: answerList,
+  } = will
 
   return (
     <St.CardWrapper className="box" mb="40px" padding="20px" minWidth="362px" maxWidth="582px" borderRadius="4px">
       <Box data-aos="fade" data-aos-duration="2500">
-        <St.CardHeader height="25px"></St.CardHeader>
+        <St.CardHeader height="25px">
+          <Text color="#fff" fontSize="18px" textAlign="center">
+            마지막으로...
+          </Text>
+        </St.CardHeader>
         <Box mt="40px">
-          <St.Contents>{content}</St.Contents>
+          <St.Contents>
+            {answerList?.map((answer) => {
+              return (
+                <>
+                  <Text bold>{QUESTION_LIST[parseInt(answer?.question_index)]?.question}</Text>
+                  <Text>{answer?.question_answer}</Text>
+                </>
+              )
+            })}
+          </St.Contents>
         </Box>
+        <Flex mt="18px" justifyContent="end">
+          <St.Author>{memNickname ? memNickname : '익명'} 마침.</St.Author>
+        </Flex>
       </Box>
     </St.CardWrapper>
   )

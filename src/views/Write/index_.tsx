@@ -45,7 +45,7 @@ const DEFAULT_TITLE = `${new Date().toLocaleDateString('ko-KR', {
   year: '2-digit',
   month: 'long',
   day: 'numeric',
-})}에 쓰는 오늘의 유서`
+})}에 쓰는 하루 유서`
 
 const Write = () => {
   const [title, setTitle] = useState('')

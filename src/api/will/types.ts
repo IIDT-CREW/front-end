@@ -1,5 +1,6 @@
 import { DefaultResponse } from '../types'
 export type Answer = {
+  question_essay_index: string
   question_index: string
   question_answer: string
 }
@@ -51,7 +52,7 @@ export type InsertWillParams = {
   thumbnail: string
   mem_idx: number
   will_id: string
-  content_type
+  content_type: number
   is_private: boolean
   answer_list?: Answer[] | null
 }

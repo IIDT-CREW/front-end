@@ -36,7 +36,7 @@ const ShareModal = ({ onDismiss, content, willId, title, ...props }: any) => {
       Kakao.Share.sendDefault({
         objectType: 'feed',
         content: {
-          title: '오늘의 유서',
+          title: '하루 유서',
           description: `${title}\n${content}`,
           imageUrl: 'https://www.if-i-die-tomorrow.com/images/home/patrick-ryan-3kUIaB2EPp8-unsplash.jpg',
           imageWidth: 1200,

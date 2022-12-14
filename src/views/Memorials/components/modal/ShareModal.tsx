@@ -36,7 +36,7 @@ const ShareModal = ({ onDismiss, content, willId, title, ...props }: any) => {
       Kakao.Share.sendDefault({
         objectType: 'feed',
         content: {
-          title: '오늘의 유서',
+          title: '하루 유서',
           description: `${title}\n${content}`,
           imageUrl: 'https://www.if-i-die-tomorrow.com/images/home/patrick-ryan-3kUIaB2EPp8-unsplash.jpg',
           imageWidth: 1200,
@@ -66,16 +66,16 @@ const ShareModal = ({ onDismiss, content, willId, title, ...props }: any) => {
   }
 
   return (
-    <Modal title="마지막 일기를 공유하세요" onDismiss={onDismiss} {...props} minWidth="272px">
+    <Modal title="하루 유서를 공유하세요" onDismiss={onDismiss} {...props} minWidth="272px">
       <Flex flexDirection="column" justifyContent="center" alignItems="center">
         <Text>마음을 담아서 작성하셨나요?</Text>
-        <Text>남들에게도 자신의 마지막 일기를 공유해보세요 </Text>
+        <Text>남들에게도 자신의 하루 유서를 공유해보세요 </Text>
         <Text mb="20px">마음이 힘들다면 1577-0199로 전화해주세요.</Text>
         <Text mb="20px">당신은 그 누구보다 소중합니다.</Text>
         <Box>
           <Flex justifyContent="center" alignItems="center" flexWrap="wrap" style={{ gap: '10px' }}>
             <CopyToClipboard toCopy={`${API_URL}/will/${willId}`} />
-            <div onClick={handleKakao} type="button">
+            <div onClick={handleKakao}>
               <img alt="" src="//developers.kakao.com/assets/img/about/logos/kakaolink/kakaolink_btn_small.png" />
             </div>
           </Flex>

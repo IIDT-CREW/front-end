@@ -53,6 +53,6 @@ export const deleteWill = (data: DeleteWillParams) => {
   return authAxios.post('api/will/deleteWill', data)
 }
 
-export const updateWill = (data: DeleteWillParams) => {
+export const updateWill = (data: InsertWillParams) => {
   return authAxios.post('api/will/updateWill', data)
 }

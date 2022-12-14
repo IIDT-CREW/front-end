@@ -5,7 +5,7 @@ import { fontSize, FontSizeProps } from 'styled-system'
 import { useRouter } from 'next/router'
 import { useModal } from 'components/Common'
 import SelectPostTypeModal from 'views/Write/components/modal/SelectPostTypeModal'
-import { FOOTER_HEIGHT, MENU_HEIGHT } from 'config/constants/default'
+import { FOOTER_HEIGHT, IS_DEFAULT_MODE, MENU_HEIGHT } from 'config/constants/default'
 import { useUserInfo } from 'store/auth/hooks'
 import { nanoid } from 'nanoid'
 import ProgressBar from 'components/Common/ProgressBar'
@@ -22,7 +22,7 @@ const DEFAULT_TITLE = `${new Date().toLocaleDateString('ko-KR', {
   year: '2-digit',
   month: 'long',
   day: 'numeric',
-})}에 쓰는 오늘의 유서`
+})}에 쓰는 하루 유서`
 
 const Write = () => {
   const router = useRouter()
@@ -38,8 +38,8 @@ const Write = () => {
   const [isDefaultPostType, setIsDefaultPostType] = useState(true)
   const [page, setPage] = useState(0)
   const [title, setTitle] = useState('')
-  const [contents, setContent] = useState(
-    QUESTION_LIST.map((question, index) => ({
+  const [contents, setContents] = useState(
+    QUESTION_LIST.map((question) => ({
       questionIndex: question.qusIdx,
       answer: '',
     })),
@@ -63,23 +63,26 @@ const Write = () => {
 
   const setPostWhenEditMode = useCallback(() => {
     const {
-      result: { TITLE, CONTENT, CONTENT_TYPE },
+      result: { TITLE: title, CONTENT: content, CONTENT_TYPE: contentType, ANSWER_LIST: answerList },
     } = data
-    setTitle(TITLE)
-    // if (CONTENT_TYPE === 0) {
-    //   contents[page] = CONTENT
-    //   return setContent(contents)
-    // }
-    // setPostType(false)
-    // setContent(
-    //   CONTENT.split(
-    //     new RegExp(`${QUESTION_LIST.map((question) => `${question.replaceAll(/[\?]/g, '\\?')}\\n`).join('|')}`, 'g'),
-    //   )
-    //     .filter((v) => v)
-    //     .map((v) => v.replace('\n', '')),
-    // )
-  }, [data])
-  console.log('contents= ', contents)
+
+    setTitle(title)
+    if (contentType === IS_DEFAULT_MODE) {
+      const answer = [{ questionIndex: 1, answer: content }, ...contents.slice(1)]
+      return setContents(answer)
+    }
+    /* 질문 타입  */
+    setIsDefaultPostType(false)
+    const answer = answerList?.map((answer) => {
+      return {
+        questionEssayIndex: answer.question_essay_index,
+        questionIndex: answer.question_index,
+        answer: answer.question_answer,
+      }
+    })
+    setContents(answer)
+  }, [contents, data])
+
   /* 모달 onOpen */
   useEffect(
     function initialScreenByEditMode() {
@@ -88,6 +91,7 @@ const Write = () => {
         if (!isEditMode) modal()
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [router.isReady, isPostLoaded, isEditMode],
   )
 
@@ -98,7 +102,7 @@ const Write = () => {
 
   const handleContents = useCallback(
     (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-      setContent(contents.map((content, i) => (i === page ? { ...content, answer: e.target.value } : content)))
+      setContents(contents.map((content, i) => (i === page ? { ...content, answer: e.target.value } : content)))
     },
     [contents, page],
   )
@@ -123,6 +127,7 @@ const Write = () => {
       answer_list: isDefaultPostType
         ? null
         : contents?.map((content) => ({
+            qs_essay_idx: content.questionEssayIndex,
             qs_idx: content.questionIndex.toString(),
             qs_essay_answer: content.answer,
           })),
@@ -181,7 +186,7 @@ const Write = () => {
             disabled={isDisableSave}
             css={{ marginBottom: '16px' }}
           >
-            {'모두 다 작성했어요'}
+            모두 다 작성했어요
           </StyleMenuButton>
         )}
       </St.Editor>

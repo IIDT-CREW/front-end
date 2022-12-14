@@ -8,7 +8,7 @@ import { MainButton } from '../Home'
 import { useModal } from 'components/Common'
 import WriteWarningInfoModal from './components/modal/WriteWarningInfoModal'
 import LoginModal from 'components/LoginModal'
-import WriteCard from './components/WriteCard'
+import WillCard from 'components/WillCard'
 import { useQuery, useMutation, useQueryClient } from 'react-query'
 import { deleteWill, getMyWill } from 'api/will'
 import { toastContext } from 'contexts/Toast'
@@ -96,7 +96,7 @@ const WillContainer = () => {
     <>
       {!error &&
         willList?.map((myWill, i) => (
-          <WriteCard
+          <WillCard
             key={`${i}-${myWill.WILL_ID}`}
             will={myWill}
             handleDelete={() => deleteMutation.mutate({ will_id: myWill.WILL_ID as string })}
@@ -144,7 +144,6 @@ const Main = () => {
       <Flex flexDirection="column" justifyContent="center" alignItems="center">
         <Flex flexDirection="column" justifyContent="center" alignItems="center">
           <MainInfo />
-
           <Box mb="55px">
             <MainButton onClick={handleWrite}>작성하러가기</MainButton>
           </Box>
