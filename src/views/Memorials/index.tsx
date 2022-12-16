@@ -1,5 +1,5 @@
 import { useEffect, useContext, useMemo } from 'react'
-import { Box, Flex } from 'components/Common'
+import { Box, Flex, Text } from 'components/Common'
 import styled from 'styled-components'
 import WillCard from 'components/WillCard'
 import { useMutation, useQueryClient } from 'react-query'
@@ -9,6 +9,8 @@ import { DEFAULT_PAGE_NO, DEFAULT_PAGE_SIZE } from 'config/constants/default'
 import useIntersect from './hooks/useIntersect'
 import useInfiniteScroll from 'hooks/useInfiniteScroll'
 import { Skeleton } from 'components/Common/Skeleton'
+import moment from 'moment'
+import { Will } from '@api/will/types'
 
 const St = {
   Container: styled(Box)`
@@ -32,7 +34,74 @@ const St = {
   `};
   `,
 }
-
+const makeDateList = (year, nextYear) => {
+  const dateList = [
+    {
+      title: '이른 봄',
+      fromDate: `${year}-02-04`,
+      toDate: `${year}-03-04`,
+    },
+    {
+      title: '봄',
+      fromDate: `${year}-03-05`,
+      toDate: `${year}-05-04`,
+    },
+    {
+      title: '이른 여름',
+      fromDate: `${year}-05-05`,
+      toDate: `${year}-06-04`,
+    },
+    {
+      title: '여름',
+      fromDate: `${year}-06-05`,
+      toDate: `${year}-08-07`,
+    },
+    {
+      title: '이른 가을',
+      fromDate: `${year}-08-08`,
+      toDate: `${year}-09-08`,
+    },
+    {
+      title: '가을',
+      fromDate: `${year}-09-08`,
+      toDate: `${year}-11-03`,
+    },
+    {
+      title: '이른 겨울',
+      fromDate: `${year}-11-04`,
+      toDate: `${year}-12-03`,
+    },
+    {
+      title: '겨울',
+      fromDate: `${year}-11-05`,
+      toDate: `${nextYear}-02-03`,
+    },
+  ]
+  return dateList
+}
+const getWillTitle = (will) => {
+  const targetDate = moment(will?.EDIT_DATE ?? will?.REG_DATE)
+  const year = targetDate.format('YYYY')
+  const nextYear = moment(will?.EDIT_DATE ?? will?.REG_DATE)
+    .add(1, 'y')
+    .format('YYYY')
+  const dateList = makeDateList(year, nextYear)
+  let title = ''
+  dateList.forEach((date) => {
+    if (moment(targetDate.format('YYYY-MM-DD')).isBetween(date.fromDate, date.toDate)) {
+      console.log('[seo] date.title', date.title)
+      title = date.title
+    }
+  })
+  return `${year}년 ${title}`
+}
+// const WillContainerHeader = ({ will }: Will) => {
+//   return (
+//     <Box>
+//       <Text>{`어느 ${title}날의 기록`}</Text>
+//     </Box>
+//   )
+// }
 const WillContainer = () => {
   const queryClient = useQueryClient()
   const { onToast } = useContext(toastContext)
@@ -82,10 +151,26 @@ const WillContainer = () => {
     () => (myWillData ? myWillData.pages.flatMap(({ result }) => result.willList) : []),
     [myWillData],
   )
+
+  const dateGroupingWillList = {}
+  //전체를 돌면서
+  willList.map((will) => {
+    //그룹별로 지정
+
+    const title = getWillTitle(will)
+    dateGroupingWillList[title] = dateGroupingWillList[title]
+      ? dateGroupingWillList[title].concat(will)
+      : (dateGroupingWillList[title] = [])
+  })
+  console.log(
+    'dateGroupingWillList= ',
+    dateGroupingWillList,
+    // dateGroupingWillList?.map((item) => console.log(item)),
+  )
   return (
     <>
       {!error &&
-        willList?.map((myWill, i) => (
+        willList?.map((myWill: Will, i) => (
           <WillCard
             key={`${i}-${myWill.WILL_ID}`}
             isPrivate={false}
@@ -93,7 +178,13 @@ const WillContainer = () => {
             handleDelete={() => deleteMutation.mutate({ will_id: myWill.WILL_ID as string })}
           />
         ))}
-
+      {/* {dateGroupingWillList.map((group, i) => (
+         <React.Fragment key={i}>
+           {group.projects.map(project => (
+             <p key={project.id}>{project.name}</p>
+           ))}
+         </React.Fragment>
+       ))} */}
       {(status === 'loading' || isFetching) && (
         <>
           {Array.from({ length: parseInt(DEFAULT_PAGE_SIZE, 10) }).map((v, index) => {
@@ -106,13 +197,10 @@ const WillContainer = () => {
     </>
   )
 }
+
 const Memorials = () => {
-  console.log('Memorials = ')
   return (
     <St.Container mt="78px">
-      <Box mb="36px">
-        <Text>[ ] 날의 기록들</Text>
-      </Box>
       <Flex flexDirection="column" justifyContent="center" alignItems="center">
         <Flex flexDirection="column" justifyContent="center" alignItems="center">
           <WillContainer />

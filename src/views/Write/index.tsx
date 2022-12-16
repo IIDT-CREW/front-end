@@ -40,6 +40,7 @@ const Write = () => {
   const [title, setTitle] = useState('')
   const [contents, setContents] = useState(
     QUESTION_LIST.map((question) => ({
+      questionEssayIndex: '',
       questionIndex: question.qusIdx,
       answer: '',
     })),

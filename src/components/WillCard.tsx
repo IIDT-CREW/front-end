@@ -155,7 +155,7 @@ const WillCard = ({ will, handleDelete, handleShare, isPrivate = true }: WillCar
 
       <Box>
         <Text fontWeight="600" mb="16px" fontSize="23px">
-          {title ? title : `${moment().format('YYYY년 M월 D일')}에 쓰는 하루 유서`}
+          {title ? title : `${moment(regDate).format('YYYY년 M월 D일')}에 쓰는 하루 유서`}
         </Text>
 
         {isDefaultType ? (

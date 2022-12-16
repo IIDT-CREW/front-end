@@ -2,11 +2,12 @@
 import { updateWill } from 'api/will'
 import { InsertWillParams } from 'api/will/types'
 import { AxiosError } from 'axios'
-import { useMutation, UseMutationResult } from 'react-query'
+import { useMutation, UseMutationResult, useQueryClient } from 'react-query'
 import useToast from 'hooks/useToast'
 
 export default function useUpdatePostMutation({ goToBack }): UseMutationResult<any, AxiosError, InsertWillParams> {
   const onToast = useToast()
+  const queryClient = useQueryClient()
   return useMutation(updateWill, {
     onSuccess: (data) => {
       onToast({
@@ -16,6 +17,7 @@ export default function useUpdatePostMutation({ goToBack }): UseMutationResult<a
           position: 'top-center',
         },
       })
+      queryClient.invalidateQueries(['getWill'])
       goToBack()
     },
 
