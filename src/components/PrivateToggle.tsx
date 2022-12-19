@@ -12,18 +12,17 @@ type PrivateToggleProps = {
 }
 const PrivateToggle = ({ isPrivate, handleSetIsPrivate }: PrivateToggleProps) => {
   return (
-    <>
-      <St.Wrapper onClick={handleSetIsPrivate} isPrivate={isPrivate}>
-        <>
-          <EarthIcon />
-          {/* {isPrivate && '게시하기'} */}
-        </>
-        <>
-          <LockIcon />
-          {/* {!isPrivate && '비공개'} */}
-        </>
-      </St.Wrapper>
-    </>
+    <St.Wrapper onClick={handleSetIsPrivate} isPrivate={isPrivate}>
+      <>
+        <EarthIcon />
+
+        {/* {isPrivate && '게시하기'} */}
+      </>
+      <>
+        <LockIcon />
+        {/* {!isPrivate && '비공개'} */}
+      </>
+    </St.Wrapper>
   )
 }
 
@@ -32,7 +31,8 @@ type WrapperProps = {
 }
 const St = {
   Wrapper: styled.button<WrapperProps>`
-    background: ${({ isPrivate, theme }) => (isPrivate ? theme.colors.grayscale7 : theme.colors.grayscale5)};
+    margin: 0px 5px;
+    background: ${({ isPrivate, theme }) => (!isPrivate ? theme.colors.grayscale7 : theme.colors.grayscale5)};
     transition: all 0.25s ease 0.1s;
     border: 1px solid #d1d5da;
     border-radius: 30px;
@@ -50,13 +50,13 @@ const St = {
     right: 1.3rem;
     svg {
       &:first-child {
-        opacity: ${({ isPrivate }) => (isPrivate ? '1' : '0')};
-        transform: ${({ isPrivate }) => (isPrivate ? 'translateX(0)' : 'translateX(2rem)')};
+        opacity: ${({ isPrivate }) => (!isPrivate ? '1' : '0')};
+        transform: ${({ isPrivate }) => (!isPrivate ? 'translateX(0)' : 'translateX(2rem)')};
         transition: all 0.25s ease 0.1s;
       }
       &:nth-child(2) {
-        opacity: ${({ isPrivate }) => (!isPrivate ? '1' : '0')};
-        transform: ${({ isPrivate }) => (!isPrivate ? 'translateX(0)' : 'translateX(-2rem)')};
+        opacity: ${({ isPrivate }) => (isPrivate ? '1' : '0')};
+        transform: ${({ isPrivate }) => (isPrivate ? 'translateX(0)' : 'translateX(-2rem)')};
         transition: all 0.25s ease 0.1s;
       }
     }

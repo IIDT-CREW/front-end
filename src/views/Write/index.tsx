@@ -64,10 +64,17 @@ const Write = () => {
 
   const setPostWhenEditMode = useCallback(() => {
     const {
-      result: { TITLE: title, CONTENT: content, CONTENT_TYPE: contentType, ANSWER_LIST: answerList },
+      result: {
+        TITLE: title,
+        CONTENT: content,
+        CONTENT_TYPE: contentType,
+        ANSWER_LIST: answerList,
+        IS_PRIVATE: isPrivate,
+      },
     } = data
 
     setTitle(title)
+    setPrivate(isPrivate)
     if (contentType === IS_DEFAULT_MODE) {
       const answer = [{ questionIndex: 1, answer: content }, ...contents.slice(1)]
       return setContents(answer)
@@ -147,6 +154,8 @@ const Write = () => {
         isDisabled={isDisableSave}
         isLastPage={page === QUESTION_LIST.length - 1}
         isDefaultPostType={isDefaultPostType}
+        isPrivate={isPrivate}
+        handleSetIsPrivate={handleSetIsPrivate}
       />
 
       <St.Editor>

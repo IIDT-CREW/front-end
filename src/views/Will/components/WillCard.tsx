@@ -2,6 +2,7 @@ import { Box, Text, Flex } from 'components/Common'
 import styled from 'styled-components'
 import { Will } from '@api/will/types'
 import { QUESTION_LIST } from '@views/Write/data'
+import { IS_DEFAULT_MODE } from 'config/constants/default'
 
 const St = {
   CardWrapper: styled(Box)`
@@ -32,16 +33,18 @@ type WillCardProps = {
 
 const WillCard = ({ will }: WillCardProps) => {
   const {
-    //CONTENT: content,
+    CONTENT: content,
     //EDIT_DATE: editDate,
     MEM_NICKNAME: memNickname,
     //REG_DATE: regDate,
     //THUMBNAIL,
     //TITLE: title,
     //WILL_ID,
-    //CONTENT_TYPE: contentType,
+    CONTENT_TYPE: contentType,
     ANSWER_LIST: answerList,
   } = will
+
+  const isDefaultType = contentType === IS_DEFAULT_MODE
 
   return (
     <St.CardWrapper className="box" mb="40px" padding="20px" minWidth="362px" maxWidth="582px" borderRadius="4px">
@@ -52,16 +55,20 @@ const WillCard = ({ will }: WillCardProps) => {
           </Text>
         </St.CardHeader>
         <Box mt="40px">
-          <St.Contents>
-            {answerList?.map((answer) => {
-              return (
-                <>
-                  <Text bold>{QUESTION_LIST[parseInt(answer?.question_index)]?.question}</Text>
-                  <Text>{answer?.question_answer}</Text>
-                </>
-              )
-            })}
-          </St.Contents>
+          {isDefaultType ? (
+            <St.Contents>{content}</St.Contents>
+          ) : (
+            <St.Contents>
+              {answerList?.map((answer) => {
+                return (
+                  <>
+                    <Text bold>{QUESTION_LIST[parseInt(answer?.question_index)]?.question}</Text>
+                    <Text>{answer?.question_answer}</Text>
+                  </>
+                )
+              })}
+            </St.Contents>
+          )}
         </Box>
         <Flex mt="18px" justifyContent="end">
           <St.Author>{memNickname ? memNickname : '익명'} 마침.</St.Author>

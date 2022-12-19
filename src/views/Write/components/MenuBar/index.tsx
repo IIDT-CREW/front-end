@@ -5,7 +5,7 @@ import { useCallback } from 'react'
 import { Flex } from 'components/Common'
 import useToast from 'hooks/useToast'
 import { PREV, NEXT, DONE } from 'views/Write/data'
-
+import PrivateToggle from '@components/PrivateToggle'
 type Variant = 'primary' | 'secondary'
 
 export const StyleMenuButton = styled.button<{ variant?: Variant; isFull?: boolean; css?: CSSProp }>`
@@ -192,8 +192,20 @@ type MenuBarProps = {
   variant?: Variant
   buttonType: 'prev' | 'next' | 'done'
   isDefaultPostType: boolean
+  isPrivate: boolean
+  handleSetIsPrivate: () => void
 }
-const MenuBar = ({ isMobile, handlePage, handleUpsert, page, isLastPage, isDisabled, isDefaultPostType }) => {
+const MenuBar = ({
+  isMobile,
+  handlePage,
+  handleUpsert,
+  page,
+  isLastPage,
+  isDisabled,
+  isDefaultPostType,
+  isPrivate,
+  handleSetIsPrivate,
+}) => {
   const goToMain = () => {}
   const theme = useTheme()
   const onToast = useToast()
@@ -236,14 +248,17 @@ const MenuBar = ({ isMobile, handlePage, handleUpsert, page, isLastPage, isDisab
       <St.GoToHistoryButton onClick={goToMain}>
         <ArrowLeft fill={theme.colors.text} width="26px" />내 기록
       </St.GoToHistoryButton>
-      <MenuButtonList
-        handleMenuButton={handleMenuButton}
-        isMobile={isMobile}
-        page={page}
-        isLastPage={isLastPage}
-        isDisabled={isDisabled}
-        isDefaultPostType={isDefaultPostType}
-      />
+      <Flex justifyContent={'center'} alignItems="center">
+        <PrivateToggle isPrivate={isPrivate} handleSetIsPrivate={handleSetIsPrivate} />
+        <MenuButtonList
+          handleMenuButton={handleMenuButton}
+          isMobile={isMobile}
+          page={page}
+          isLastPage={isLastPage}
+          isDisabled={isDisabled}
+          isDefaultPostType={isDefaultPostType}
+        />
+      </Flex>
     </St.MenuBar>
   )
 }

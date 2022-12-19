@@ -1,4 +1,4 @@
-import { useEffect, useContext, useMemo } from 'react'
+import { useEffect, useContext, useMemo, useState } from 'react'
 import { Box, Flex, Text } from 'components/Common'
 import styled from 'styled-components'
 import WillCard from 'components/WillCard'
@@ -11,6 +11,7 @@ import useInfiniteScroll from 'hooks/useInfiniteScroll'
 import { Skeleton } from 'components/Common/Skeleton'
 import moment from 'moment'
 import { Will } from '@api/will/types'
+import isEmpty from 'lodash/isEmpty'
 
 const St = {
   Container: styled(Box)`
@@ -152,39 +153,47 @@ const WillContainer = () => {
     [myWillData],
   )
 
-  const dateGroupingWillList = {}
-  //전체를 돌면서
-  willList.map((will) => {
-    //그룹별로 지정
+  const [dateGroupingWillList, setDateGroupingWillList] = useState({})
+  useEffect(() => {
+    console.log('willList= ', willList)
+    if (willList.length === 0) return
+    const dateGroupingWillList = {}
+    willList.map((will) => {
+      //그룹별로 지정
+      const title = getWillTitle(will)
+      dateGroupingWillList[title] = dateGroupingWillList[title]
+        ? dateGroupingWillList[title].concat(will)
+        : (dateGroupingWillList[title] = [will])
+    })
+    setDateGroupingWillList(dateGroupingWillList)
+  }, [willList])
 
-    const title = getWillTitle(will)
-    dateGroupingWillList[title] = dateGroupingWillList[title]
-      ? dateGroupingWillList[title].concat(will)
-      : (dateGroupingWillList[title] = [])
-  })
-  console.log(
-    'dateGroupingWillList= ',
-    dateGroupingWillList,
-    // dateGroupingWillList?.map((item) => console.log(item)),
-  )
   return (
     <>
       {!error &&
-        willList?.map((myWill: Will, i) => (
-          <WillCard
-            key={`${i}-${myWill.WILL_ID}`}
-            isPrivate={false}
-            will={myWill}
-            handleDelete={() => deleteMutation.mutate({ will_id: myWill.WILL_ID as string })}
-          />
-        ))}
-      {/* {dateGroupingWillList.map((group, i) => (
-         <React.Fragment key={i}>
-           {group.projects.map(project => (
-             <p key={project.id}>{project.name}</p>
-           ))}
-         </React.Fragment>
-       ))} */}
+        !isEmpty(dateGroupingWillList) &&
+        Object.keys(dateGroupingWillList)?.map((dateTitle, key) => {
+          return (
+            <>
+              <Box key={`${dateTitle}_${key}`} mt="20px" mb="20px">
+                <Text bold fontSize="32px">
+                  어느 {dateTitle}에 남겨진 기억.
+                </Text>
+              </Box>
+              {dateGroupingWillList[dateTitle]?.map((will, i) => {
+                return (
+                  <WillCard
+                    key={`${i}-${will.WILL_ID}`}
+                    isPrivate={false}
+                    will={will}
+                    handleDelete={() => deleteMutation.mutate({ will_id: will.WILL_ID as string })}
+                  />
+                )
+              })}
+            </>
+          )
+        })}
+
       {(status === 'loading' || isFetching) && (
         <>
           {Array.from({ length: parseInt(DEFAULT_PAGE_SIZE, 10) }).map((v, index) => {
