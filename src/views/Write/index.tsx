@@ -1,6 +1,6 @@
 /* eslint-disable no-sparse-arrays */
-import { TextareaHTMLAttributes, useCallback, useContext, useEffect, useState } from 'react'
-import styled, { CSSProp, useTheme } from 'styled-components'
+import { TextareaHTMLAttributes, useCallback, useEffect, useState } from 'react'
+import styled, { CSSProp } from 'styled-components'
 import { fontSize, FontSizeProps } from 'styled-system'
 import { useRouter } from 'next/router'
 import { useModal } from 'components/Common'
@@ -9,7 +9,6 @@ import { FOOTER_HEIGHT, IS_DEFAULT_MODE, MENU_HEIGHT } from 'config/constants/de
 import { useUserInfo } from 'store/auth/hooks'
 import { nanoid } from 'nanoid'
 import ProgressBar from 'components/Common/ProgressBar'
-
 import useMatchBreakpoints from 'hooks/useMatchBreakpoints'
 import MenuBar, { StyleMenuButton } from 'views/Write/components/MenuBar'
 import { QUESTION_LIST } from 'views/Write/data'
@@ -106,7 +105,7 @@ const Write = () => {
   const handlePostType = useCallback(() => {
     setIsDefaultPostType(false)
   }, [])
-  const [modal, onDismiss] = useModal(<SelectPostTypeModal handlePostType={handlePostType} />)
+  const [modal, onDismiss] = useModal(<SelectPostTypeModal handlePostType={handlePostType} />, false)
 
   const handleContents = useCallback(
     (e: React.ChangeEvent<HTMLTextAreaElement>) => {

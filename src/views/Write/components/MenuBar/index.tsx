@@ -1,11 +1,13 @@
 import { ArrowLeft, ArrowRight } from 'components/Common/Svg'
 import styled, { CSSProp, useTheme } from 'styled-components'
 import { FOOTER_HEIGHT, IS_DEFAULT_MODE, MENU_HEIGHT } from 'config/constants/default'
-import { useCallback } from 'react'
+import React, { useCallback } from 'react'
 import { Flex } from 'components/Common'
 import useToast from 'hooks/useToast'
 import { PREV, NEXT, DONE } from 'views/Write/data'
 import PrivateToggle from '@components/PrivateToggle'
+import { useRouter } from 'next/router'
+import MenuButton from '@views/Write/components/MenuBar/MenuButton'
 type Variant = 'primary' | 'secondary'
 
 export const StyleMenuButton = styled.button<{ variant?: Variant; isFull?: boolean; css?: CSSProp }>`
@@ -75,50 +77,6 @@ const St = {
     color: ${({ theme }) => theme.colors.text};
     cursor: pointer;
   `,
-  RoundIconButton: styled.button`
-    width: 24px;
-    height: 24px;
-    border-radius: 100%;
-    border: 1px solid ${({ theme }) => theme.colors.grayscale2};
-    background-color: ${({ theme }) => theme.colors.grayscale0};
-    padding: 0;
-    box-sizing: border-box;
-  `,
-}
-
-type MenuButtonProps = {
-  isMobile: boolean
-  text: string
-  isDisabled: boolean
-  handleMenuButton: (e: any) => void
-  variant?: Variant
-  buttonType: 'prev' | 'next' | 'done'
-}
-
-const MenuButton = ({
-  handleMenuButton,
-  isMobile,
-  text,
-  isDisabled,
-  variant = 'primary',
-  buttonType,
-}: MenuButtonProps) => {
-  if (isMobile) {
-    return (
-      <St.RoundIconButton onClick={handleMenuButton} id={buttonType}>
-        {buttonType === PREV ? (
-          <ArrowLeft css={{ fill: '#000', width: '21px' }} />
-        ) : (
-          <ArrowRight css={{ fill: '#000', width: '21px' }} />
-        )}
-      </St.RoundIconButton>
-    )
-  }
-  return (
-    <StyleMenuButton id={buttonType} variant={variant} onClick={handleMenuButton} disabled={isDisabled}>
-      {text}
-    </StyleMenuButton>
-  )
 }
 
 type MenuButtonListProps = {
@@ -206,13 +164,16 @@ const MenuBar = ({
   isPrivate,
   handleSetIsPrivate,
 }) => {
-  const goToMain = () => {}
+  const router = useRouter()
+  const goToMain = useCallback(() => {
+    router.push('/main')
+  }, [router])
   const theme = useTheme()
   const onToast = useToast()
 
   const handleMenuButton = useCallback(
-    (e) => {
-      if (isDisabled)
+    (buttonType: 'prev' | 'next' | 'done') => {
+      if (isDisabled && buttonType !== PREV)
         return onToast({
           type: 'error',
           message: '내용을 입력해주세요',
@@ -229,11 +190,11 @@ const MenuBar = ({
             },
           },
         })
-      if (e.target.id === PREV) {
+      if (buttonType === PREV) {
         handlePage(page - 1)
         return
       }
-      if (e.target.id === NEXT) {
+      if (buttonType === NEXT) {
         handlePage(page + 1)
         return
       }
