@@ -20,9 +20,6 @@ cypress/fixtures/example.json
 out/
 .idea/
 
-# next-sitemap Generated files
-public/robots.txt
-public/sitemap*.xml
 
 # production
 build
