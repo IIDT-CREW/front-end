@@ -16,8 +16,7 @@ const St = {
   Icon: styled.i<StyledIconProps>`
     cursor: pointer;
     transition: all 0.35s ease;
-    transform: ${({ isSubMenuOpen }) =>
-      isSubMenuOpen ? 'rotate(-180deg) !important' : 'rotate(0deg) !important'};
+    transform: ${({ isSubMenuOpen }) => (isSubMenuOpen ? 'rotate(-180deg) !important' : 'rotate(0deg) !important')};
   `,
   Title: styled.div`
     font-weight: bold;
@@ -56,14 +55,14 @@ const Collapse = ({ title, children, noIcon }: any) => {
     <div style={{ marginBottom: '12px' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div style={{ display: 'flex', padding: '5px 0' }}>
-          {!noIcon && <St.IconWrapper>{iconMap.AlignLeftOutlined}</St.IconWrapper>}
+          {!noIcon && <St.IconWrapper>{iconMap?.AlignLeftOutlined}</St.IconWrapper>}
           <Text fontSize="16px" bold>
             {title}
           </Text>
         </div>
 
         <St.Icon onClick={handleButtonClick} isSubMenuOpen={isSubMenuOpen}>
-          {iconMap.UpOutlined}
+          {iconMap?.UpOutlined}
         </St.Icon>
       </div>
 

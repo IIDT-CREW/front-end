@@ -6,7 +6,6 @@ export * from './Heading'
 export * from './Layouts'
 export * from './Modal'
 export * from './Input'
-export * from './Collapse'
 export * from './Checkbox'
 // Theme
 // export { default as ResetCSS } from './ResetCSS'

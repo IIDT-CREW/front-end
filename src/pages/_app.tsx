@@ -1,10 +1,9 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, Fragment } from 'react'
 import ResetCSS from 'style/ResetCSS'
 import Script from 'next/script'
 import '../style/index.css'
 import type { AppProps } from 'next/app'
 import Head from 'next/head'
-import { Fragment } from 'react'
 import store from 'store'
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
@@ -23,13 +22,12 @@ import useAuthAccessToken from 'hooks/useAuthAccessToken'
 import useFooterDisable from 'hooks/useFooterDisable'
 import * as gtag from 'utils/gtag'
 import { useDarkMode } from 'hooks/useDarkMode'
-import styled from 'styled-components'
+import styled, { ThemeProvider } from 'styled-components'
 import { ToastContainer } from 'react-toastify'
 import { light, dark } from 'theme'
 import ModalProvider from 'components/Common/Modal/ModalContext'
 import { Provider } from 'react-redux'
 import { ToastContextProvider } from 'contexts/Toast'
-import { ThemeProvider } from 'styled-components'
 
 import 'style/custom-react-toastify.css'
 import 'aos/dist/aos.css'
@@ -57,10 +55,6 @@ function MyApp(props: AppProps) {
         />
         <meta name="title" content="IF I DIE TOMORROW" />
         <meta name="description" content="만약 오늘이 마지막이라면" />
-        <meta
-          name="keywords"
-          content="iidt, if i die tomorrow, 일기, 마지막 일기, 오늘의 유서, 유서, 감성, 죽음"
-        ></meta>
         <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)" />
         <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
         <meta name="twitter:image" content="" />

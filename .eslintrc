@@ -19,8 +19,10 @@
     "plugin:react/recommended",
     "plugin:react-hooks/recommended",
     "plugin:import/recommended",
-    "plugin:prettier/recommended"
+    "plugin:prettier/recommended",
+    "plugin:import/typescript"
   ],
+
   "rules": {
     "no-undef": "off",
     "no-console": "off", // console.log 가능
@@ -37,6 +39,7 @@
       1,
       { "extensions": [".jsx", ".tsx"] } // jsx 사용가능한 확장자 설정
     ],
+
     "@typescript-eslint/no-empty-function": ["error", { "allow": ["arrowFunctions"] }],
     "import/extensions": [
       "error",
