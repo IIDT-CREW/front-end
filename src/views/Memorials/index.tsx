@@ -1,5 +1,5 @@
 import { useEffect, useContext, useMemo, useState } from 'react'
-import { Box, Flex, Text } from 'components/Common'
+import { Box, Flex, Text, Heading } from 'components/Common'
 import styled from 'styled-components'
 import WillCard from 'components/WillCard'
 import { useMutation, useQueryClient } from 'react-query'
@@ -96,13 +96,14 @@ const getWillTitle = (will) => {
   })
   return `${year}년 ${title}`
 }
-// const WillContainerHeader = ({ will }: Will) => {
-//   return (
-//     <Box>
-//       <Text>{`어느 ${title}날의 기록`}</Text>
-//     </Box>
-//   )
-// }
+
+const WillContainerHeader = ({ dateTitle }) => {
+  return (
+    <Box mt="20px" mb="20px">
+      <Heading>어느 {dateTitle}에 남겨진 기억.</Heading>
+    </Box>
+  )
+}
 const WillContainer = () => {
   const queryClient = useQueryClient()
   const { onToast } = useContext(toastContext)
@@ -131,7 +132,7 @@ const WillContainer = () => {
       pageNo: DEFAULT_PAGE_NO,
       pageSize: DEFAULT_PAGE_SIZE,
     },
-    queryKey: ['willList'],
+    queryKey: ['willList', 'get_willList_all'],
   })
 
   const ref = useIntersect(async (entry, observer) => {
@@ -144,7 +145,7 @@ const WillContainer = () => {
     onSuccess: () => {
       handleToast({ message: '데이터를 삭제했습니다.' })
       // myWill로 시작하는 모든 쿼리를 무효화한다
-      queryClient.invalidateQueries('getMyWill')
+      queryClient.invalidateQueries(['willList', 'get_willList_all'])
     },
   })
 
@@ -155,7 +156,6 @@ const WillContainer = () => {
 
   const [dateGroupingWillList, setDateGroupingWillList] = useState({})
   useEffect(() => {
-    console.log('willList= ', willList)
     if (willList.length === 0) return
     const dateGroupingWillList = {}
     willList.map((will) => {
@@ -174,12 +174,8 @@ const WillContainer = () => {
         !isEmpty(dateGroupingWillList) &&
         Object.keys(dateGroupingWillList)?.map((dateTitle, key) => {
           return (
-            <>
-              <Box key={`${dateTitle}_${key}`} mt="20px" mb="20px">
-                <Text bold fontSize="32px">
-                  어느 {dateTitle}에 남겨진 기억.
-                </Text>
-              </Box>
+            <Box key={`${dateTitle}_${key}`}>
+              <WillContainerHeader dateTitle={dateTitle} />
               {dateGroupingWillList[dateTitle]?.map((will, i) => {
                 return (
                   <WillCard
@@ -190,7 +186,7 @@ const WillContainer = () => {
                   />
                 )
               })}
-            </>
+            </Box>
           )
         })}
 

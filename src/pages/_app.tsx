@@ -6,7 +6,7 @@ import type { AppProps } from 'next/app'
 import Head from 'next/head'
 import store from 'store'
 import { NextPage } from 'next'
-import { useRouter } from 'next/router'
+import Router, { useRouter } from 'next/router'
 import { Hydrate, QueryClientProvider } from 'react-query'
 import { ReactQueryDevtools } from 'react-query/devtools'
 // import Providers from '../Providers'
@@ -28,13 +28,59 @@ import { light, dark } from 'theme'
 import ModalProvider from 'components/Common/Modal/ModalContext'
 import { Provider } from 'react-redux'
 import { ToastContextProvider } from 'contexts/Toast'
-
 import 'style/custom-react-toastify.css'
 import 'aos/dist/aos.css'
-
+const scrollMemories: { [asPath: string]: number } = {}
 // if (process.env.NODE_ENV === 'development') {
 //   import('mocks')
 // }
+
+scrollPositionRestorer()
+
+/* 스크롤 restore  */
+function scrollPositionRestorer() {
+  console.log('scrollMemories= ', scrollMemories)
+  let isPop = false
+
+  if (process.browser) {
+    window.history.scrollRestoration = 'manual'
+    window.onpopstate = () => {
+      isPop = true
+    }
+  }
+
+  Router.events.on('routeChangeStart', () => {
+    console.log('routeChangeStart')
+    saveScroll()
+  })
+
+  Router.events.on('routeChangeComplete', () => {
+    console.log('routeChangeComplete is pop', isPop)
+    if (isPop) {
+      restoreScroll()
+      isPop = false
+    } else {
+      scrollToTop()
+    }
+  })
+
+  function saveScroll() {
+    console.log('save scroll ', Router.asPath, window.scrollY)
+    scrollMemories[Router.asPath] = window.scrollY
+  }
+
+  function restoreScroll() {
+    const prevScrollY = scrollMemories[Router.asPath]
+    console.log('restoreScroll ', prevScrollY)
+    if (prevScrollY !== undefined) {
+      window.requestAnimationFrame(() => window.scrollTo(0, prevScrollY))
+    }
+  }
+
+  function scrollToTop() {
+    window.requestAnimationFrame(() => window.scrollTo(0, 0))
+  }
+}
 
 function GlobalHooks() {
   // useAuthUserStorage()

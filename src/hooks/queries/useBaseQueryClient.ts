@@ -12,7 +12,7 @@ const useBaseQueryClient = (): QueryClientState => {
       new QueryClient({
         defaultOptions: {
           queries: {
-            retry: 0,
+            retry: 1,
             useErrorBoundary: true,
           },
           mutations: {

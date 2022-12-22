@@ -162,12 +162,12 @@ const WillCard = ({ will, handleDelete, handleShare, isPrivate = true }: WillCar
           <St.Contents>{content}</St.Contents>
         ) : (
           <St.Contents>
-            {answerList?.map((answer) => {
+            {answerList?.map((answer, index) => {
               return (
-                <>
+                <Box key={`anwser_${index}`}>
                   <Text bold>{QUESTION_LIST[parseInt(answer?.question_index)]?.question}</Text>
                   <Text>{answer?.question_answer}</Text>
-                </>
+                </Box>
               )
             })}
           </St.Contents>

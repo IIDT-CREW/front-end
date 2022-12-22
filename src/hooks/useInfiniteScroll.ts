@@ -39,7 +39,7 @@ const useInfiniteScroll = ({ fetch, params, queryKey = ['queryKey'] }: UseInfini
       refetchOnWindowFocus: false,
       refetchOnMount: true,
       refetchOnReconnect: false,
-      staleTime: 3000,
+      staleTime: 1000 * 20,
     })
 
   return {

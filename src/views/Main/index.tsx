@@ -71,7 +71,7 @@ const WillContainer = () => {
       pageNo: DEFAULT_PAGE_NO,
       pageSize: DEFAULT_PAGE_SIZE,
     },
-    queryKey: ['getMyWill'],
+    queryKey: ['willList', 'getMyWill'],
   })
 
   const ref = useIntersect(async (entry, observer) => {
@@ -83,8 +83,8 @@ const WillContainer = () => {
   const deleteMutation = useMutation(deleteWill, {
     onSuccess: () => {
       handleToast({ message: '데이터를 삭제했습니다.' })
-      // myWill로 시작하는 모든 쿼리를 무효화한다
-      queryClient.invalidateQueries('getMyWill')
+      // willList로 시작하는 모든 쿼리를 무효화한다
+      queryClient.invalidateQueries(['willList'])
     },
   })
 

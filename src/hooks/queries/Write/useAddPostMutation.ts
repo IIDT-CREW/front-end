@@ -22,7 +22,9 @@ export default function useAddPostMutation({ goToBack }): UseMutationResult<any,
       queryClient.invalidateQueries(['willList'])
       goToBack()
     },
-
+    onSettled: () => {
+      goToBack()
+    }, // 완료
     onError: (error) => {
       // mutation 이 에러가 났을 경우 error를 받을 수 있다.
       console.error(error)

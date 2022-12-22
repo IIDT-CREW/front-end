@@ -34,7 +34,6 @@ const MenuButton = ({
   variant = 'primary',
   buttonType,
 }: MenuButtonProps) => {
-  console.log('buttonType= ', buttonType)
   if (isMobile) {
     return (
       <St.RoundIconButton onClick={() => handleMenuButton(buttonType)}>
@@ -47,7 +46,12 @@ const MenuButton = ({
     )
   }
   return (
-    <StyleMenuButton id={buttonType} variant={variant} onClick={handleMenuButton} disabled={isDisabled}>
+    <StyleMenuButton
+      id={buttonType}
+      variant={variant}
+      onClick={() => handleMenuButton(buttonType)}
+      disabled={isDisabled}
+    >
       {text}
     </StyleMenuButton>
   )
