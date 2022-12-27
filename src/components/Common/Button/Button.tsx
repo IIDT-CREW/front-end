@@ -22,7 +22,7 @@ const StyledButton = styled.button`
   border: none;
   box-sizing: border-box;
   height: 2rem;
-  font-size: 0.875rem;
+  font-size: 12px;
   padding: 0.5rem 1rem;
   background: ${({ theme }) => theme.colors.grayscale7};
   color: white;
@@ -30,6 +30,9 @@ const StyledButton = styled.button`
   line-height: 1;
   font-weight: 600;
   cursor: pointer;
+  ${({ theme }) => theme.mediaQueries.xl} {
+    font-size: 0.875rem;
+  }
   ${variant({
     variants: styleVariants,
   })};
