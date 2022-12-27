@@ -28,6 +28,9 @@ const Heading = styled(Text).attrs({ bold: true })<HeadingProps>`
   ${({ theme }) => theme.mediaQueries.lg} {
     font-size: ${({ scale }) => style[scale || scales.MD].fontSizeLg};
   }
+  ${({ theme }) => theme.mediaQueries.xl} {
+    font-size: ${({ scale }) => style[scale || scales.LG].fontSizeLg};
+  }
 `
 
 export default Heading

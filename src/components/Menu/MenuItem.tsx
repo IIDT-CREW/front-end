@@ -6,6 +6,7 @@ type StyledMenuItemProps = {
 }
 const St = {
   StyledMenuItem: styled.div<StyledMenuItemProps>`
+    font-size: 12px;
     margin: 0 10px;
     align-items: center;
     cursor: pointer;
@@ -14,6 +15,13 @@ const St = {
       background: ${({ theme }) => theme.colors.tertiary};
     }
     z-index: 9999;
+
+    ${({ theme }) => theme.mediaQueries.sm} {
+      font-size: 14px;
+    }
+    ${({ theme }) => theme.mediaQueries.lg} {
+      font-size: 18px;
+    }
   `,
 }
 type MenuItemProps = {

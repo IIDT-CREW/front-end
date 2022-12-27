@@ -58,7 +58,7 @@ const useLoginTransaction = () => {
 
         //가입이 안되어있으면
         if (res.data.code === API_CODE.INVALID_USER) {
-          console.log('setting ,res.data.result.access_token ', res.data.result.access_token)
+          //console.log('setting ,res.data.result.access_token ', res.data.result.access_token)
           setAccessToken(res.data.result.access_token)
           handleNicknameModal()
           return

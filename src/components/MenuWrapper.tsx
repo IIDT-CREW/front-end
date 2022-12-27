@@ -63,8 +63,8 @@ const MenuWrapper = () => {
         <St.TextLink mb="24px" onClick={handleLogout}>
           로그아웃
         </St.TextLink>
-        <St.TextLink mb="24px">개인정보 처리방침</St.TextLink>
-        <St.TextLink mb="24px">서비스 이용약관</St.TextLink>
+        {/* <St.TextLink mb="24px">개인정보 처리방침</St.TextLink>
+        <St.TextLink mb="24px">서비스 이용약관</St.TextLink> */}
       </Box>
     </Box>
   )

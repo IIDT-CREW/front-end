@@ -12,7 +12,7 @@ export const QUESTION_LIST = [
   },
   {
     qusIdx: 3,
-    question: '부끄러워서 친구들에게 하지 못한 말은?',
+    question: '부끄러워서 가족들에게 하지 못한 말은?',
   },
   {
     qusIdx: 4,

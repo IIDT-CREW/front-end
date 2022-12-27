@@ -90,7 +90,7 @@ const getWillTitle = (will) => {
   let title = ''
   dateList.forEach((date) => {
     if (moment(targetDate.format('YYYY-MM-DD')).isBetween(date.fromDate, date.toDate)) {
-      console.log('[seo] date.title', date.title)
+      //console.log('[seo] date.title', date.title)
       title = date.title
     }
   })
@@ -100,7 +100,7 @@ const getWillTitle = (will) => {
 const WillContainerHeader = ({ dateTitle }) => {
   return (
     <Box mt="20px" mb="20px">
-      <Heading>어느 {dateTitle}에 남겨진 기억.</Heading>
+      <Heading textAlign={'center'}>어느 {dateTitle}에 남겨진 기억.</Heading>
     </Box>
   )
 }

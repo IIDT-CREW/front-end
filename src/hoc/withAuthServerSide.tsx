@@ -8,10 +8,10 @@ import { authActions } from 'store/auth'
 /* getUser */
 async function getUser(content: any) {
   const res = await getUserInfo()
-  console.log('hello = ', res)
+
   if (res.data && res.data.code === '0000') {
     const { result: userInfo } = res.data
-    console.log('userInfo ', userInfo)
+
     return userInfo
   }
   return null
@@ -26,7 +26,7 @@ export function withAuthServerSideProps(getServerSidePropsFunc?) {
     const nookie = nookies.get(context)
     const accessToken = nookie['access_token']
     const refresh_token = nookie['refresh_token']
-    console.log('context = ', nookie)
+    //console.log('context = ', nookie)
     if (!accessToken && !refresh_token) {
       return { props: { user, data: { props: { user } } } }
     }

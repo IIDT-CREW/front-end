@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import { useMemo, useState, useEffect, useRef } from 'react'
+import { useMemo, useState, useEffect, useRef, useCallback } from 'react'
 import { useDispatch } from 'react-redux'
 import styled, { css } from 'styled-components'
 import useScrollDown from 'hooks/useScrollDown'
@@ -85,18 +85,18 @@ const MenuWrapper = ({ themeMode, toggleTheme }) => {
   const { isScrollDown, setIsScrollDown } = useScrollDown()
   const [presentLoginModal] = useModal(<LoginModal />)
 
-  const handleLogin = () => {
+  const handleLogin = useCallback(() => {
     //todo login
     presentLoginModal()
-  }
+  }, [presentLoginModal])
 
-  const handleDark = () => {
+  const handleDark = useCallback(() => {
     toggleTheme()
-  }
+  }, [toggleTheme])
 
-  const handleMenu = () => {
+  const handleMenu = useCallback(() => {
     dispatch(naviActions.menuOnOff())
-  }
+  }, [dispatch])
 
   const isSharePage = useMemo(() => {
     return router.route === '/will/[id]'
@@ -104,7 +104,7 @@ const MenuWrapper = ({ themeMode, toggleTheme }) => {
 
   useEffect(() => {
     if (isSharePage) setIsScrollDown(true)
-  }, [isSharePage])
+  }, [isSharePage, setIsScrollDown])
 
   return (
     <St.Wrapper>
@@ -113,15 +113,13 @@ const MenuWrapper = ({ themeMode, toggleTheme }) => {
           <Flex justifyContent="center" alignItems="center">
             <Flex style={{ cursor: 'pointer', paddingRight: '20px' }}>
               <Link href={isLogin ? '/main' : '/'}>
-                <Heading scale="lg" style={{ fontFamily: 'Cormorant' }}>
-                  IIDT
-                </Heading>
+                <Heading style={{ fontFamily: 'Cormorant' }}>IIDT</Heading>
               </Link>
             </Flex>
             {MenuConfig?.map((menuItem, i) => {
               return (
                 <DropdownMenu key={`${menuItem}-${i}`} items={menuItem?.items}>
-                  <MenuItem isActive={false} href={menuItem.href}>
+                  <MenuItem isActive={router?.asPath?.includes(menuItem?.href)} href={menuItem.href}>
                     {menuItem.label}
                   </MenuItem>
                 </DropdownMenu>
@@ -132,15 +130,11 @@ const MenuWrapper = ({ themeMode, toggleTheme }) => {
             <Box width="40px" height="40px" borderRadius="50%"></Box>
             <ThemeToggleButton selected={themeMode === 'dark'} onClick={handleDark} />
             {isLogin ? (
-              <>
-                <Box onClick={handleMenu} style={{ cursor: 'pointer' }}>
-                  <MenuOutline stroke={isSharePage && '#fff'} themeMode={themeMode} />
-                </Box>
-              </>
+              <Box onClick={handleMenu} style={{ cursor: 'pointer' }}>
+                <MenuOutline stroke={isSharePage && '#fff'} themeMode={themeMode} />
+              </Box>
             ) : (
-              <>
-                <Button onClick={handleLogin}>시작하기</Button>
-              </>
+              <Button onClick={handleLogin}>시작하기</Button>
             )}
           </Flex>
         </St.StyledNav>
