@@ -4,9 +4,10 @@ import { useDispatch } from 'react-redux'
 import styled, { css } from 'styled-components'
 import useScrollDown from 'hooks/useScrollDown'
 import Flex from '../Common/Box/Flex'
+import { Box, Text, useModal } from 'components/Common'
 import { Heading } from '../Common'
 import Link from 'next/link'
-import { Box } from '../Common/Box'
+
 import { Button } from 'components/Common/Button'
 import MenuItem from 'components/Menu/MenuItem'
 import DropdownMenu from './DropdownMenu'
@@ -14,10 +15,15 @@ import MenuConfig from './config'
 import { naviActions } from 'store/navi'
 import { useIsLogin } from 'store/auth/hooks'
 import ThemeToggleButton from '../Common/Button/ThemeToggleButton'
-import { useModal } from 'components/Common'
+
 import { MENU_HEIGHT } from 'config/constants/default'
 import MenuOutline from 'components/Common/Svg/Icons/MenuOutline'
 import LoginModal from 'components/LoginModal'
+import { STORAGE_NAME } from 'config/constants/api'
+import axios from 'api'
+import { authActions } from '@store/auth'
+import { useNaviState } from '@store/navi/hooks'
+import useOnClickOutside from '@hooks/useOnClickOutside'
 
 type StyledNavigationProps = {
   isSharePage: boolean
@@ -75,8 +81,121 @@ export const St = {
     width: 100%;
     transform: ${({ isScrollDown }) => (isScrollDown ? 'translate3d(0px, -100%, 0px)' : 'translate3d(0px, 0px, 0px)')};
   `,
+  TextLink: styled(Text)`
+    cursor: pointer;
+  `,
+  MobileMenuBoxWrapper: styled(Box)`
+    border-radius: 4px;
+    background: ${({ theme }) => theme.colors.background};
+    position: absolute;
+    width: 192px;
+    padding: 16px 16px;
+    display: flex;
+    align-items: center;
+    transform: translateX(-190px) translateY(25px);
+    box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.08), 0px 16px 30px 4px rgba(0, 0, 0, 0.1);
+  `,
+  MenuBoxWrapper: styled(Box)`
+    border-radius: 4px;
+    background: ${({ theme }) => theme.colors.background};
+    position: absolute;
+    width: 192px;
+    padding: 16px 16px;
+    display: flex;
+    align-items: center;
+    transform: translateX(-190px) translateY(25px);
+    box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.08), 0px 16px 30px 4px rgba(0, 0, 0, 0.1);
+  `,
+
+  MenuFlex: styled(Flex)`
+    display: none;
+    ${({ theme }) => theme.mediaQueries.sm} {
+      display: flex;
+    }
+  `,
 }
 
+const MobileMenuBox = () => {
+  const dispatch = useDispatch()
+  const router = useRouter()
+  const handleRoute = (path: string) => {
+    router.push(path)
+    dispatch(naviActions.menuOff())
+  }
+  return (
+    <St.MobileMenuBoxWrapper>
+      <Flex flexDirection={'column'}>
+        <St.TextLink mb="24px" onClick={() => handleRoute('/')}>
+          HOME
+        </St.TextLink>
+        <St.TextLink mb="24px" onClick={() => handleRoute('/main')}>
+          MAIN
+        </St.TextLink>
+        <St.TextLink mb="24px" onClick={() => handleRoute('/about')}>
+          소개
+        </St.TextLink>
+        <St.TextLink mb="24px" onClick={() => handleRoute('/memorials')}>
+          어느날의 기록
+        </St.TextLink>
+        {/* <St.TextLink mb="24px" onClick={handleLogout}>
+          로그아웃
+        </St.TextLink> */}
+      </Flex>
+    </St.MobileMenuBoxWrapper>
+  )
+}
+const MenuBox = () => {
+  const dispatch = useDispatch()
+  const router = useRouter()
+  const handleLogout = async () => {
+    try {
+      //...todo
+      //await logout()
+      axios.defaults.headers.common.Authorization = ''
+      axios.defaults.headers.common.refresh = ''
+      localStorage.removeItem(STORAGE_NAME.USER)
+      sessionStorage.removeItem(STORAGE_NAME.USER)
+      dispatch(
+        authActions.setAuth({
+          isAuthenticated: false,
+          accessToken: '',
+          refreshToken: '',
+          name: '',
+          email: '',
+        }),
+      )
+      dispatch(naviActions.menuOnOff())
+    } catch (e) {
+      console.log('logout ', e)
+    }
+  }
+
+  const handleRoute = (path: string) => {
+    router.push(path)
+    dispatch(naviActions.menuOff())
+  }
+  return (
+    <St.MenuBoxWrapper>
+      <Flex flexDirection={'column'}>
+        <St.TextLink mb="24px" onClick={() => handleRoute('/')}>
+          HOME
+        </St.TextLink>
+        <St.TextLink mb="24px" onClick={() => handleRoute('/main')}>
+          MAIN
+        </St.TextLink>
+        <St.TextLink mb="24px" onClick={() => handleRoute('/about')}>
+          소개
+        </St.TextLink>
+        <St.TextLink mb="24px" onClick={() => handleRoute('/memorials')}>
+          어느날의 기록
+        </St.TextLink>
+        <St.TextLink mb="24px" onClick={handleLogout}>
+          로그아웃
+        </St.TextLink>
+      </Flex>
+    </St.MenuBoxWrapper>
+  )
+}
 const MenuWrapper = ({ themeMode, toggleTheme }) => {
   const router = useRouter()
   const dispatch = useDispatch()
@@ -84,7 +203,12 @@ const MenuWrapper = ({ themeMode, toggleTheme }) => {
   const isLogin = useIsLogin()
   const { isScrollDown, setIsScrollDown } = useScrollDown()
   const [presentLoginModal] = useModal(<LoginModal />)
-
+  const { isMenuOpen } = useNaviState()
+  const targetRef = useRef(null)
+  const onClickEvent = () => {
+    dispatch(naviActions.menuOff())
+  }
+  useOnClickOutside(targetRef, onClickEvent)
   const handleLogin = useCallback(() => {
     //todo login
     presentLoginModal()
@@ -116,15 +240,17 @@ const MenuWrapper = ({ themeMode, toggleTheme }) => {
                 <Heading style={{ fontFamily: 'Cormorant' }}>IIDT</Heading>
               </Link>
             </Flex>
-            {MenuConfig?.map((menuItem, i) => {
-              return (
-                <DropdownMenu key={`${menuItem}-${i}`} items={menuItem?.items}>
-                  <MenuItem isActive={router?.asPath?.includes(menuItem?.href)} href={menuItem.href}>
-                    {menuItem.label}
-                  </MenuItem>
-                </DropdownMenu>
-              )
-            })}
+            <St.MenuFlex>
+              {MenuConfig?.map((menuItem, i) => {
+                return (
+                  <DropdownMenu key={`${menuItem}-${i}`} items={menuItem?.items}>
+                    <MenuItem isActive={router?.asPath?.includes(menuItem?.href)} href={menuItem.href}>
+                      {menuItem.label}
+                    </MenuItem>
+                  </DropdownMenu>
+                )
+              })}
+            </St.MenuFlex>
           </Flex>
           <Flex justifyContent="center" alignItems="center">
             <Box width="40px" height="40px" borderRadius="50%"></Box>
@@ -136,9 +262,15 @@ const MenuWrapper = ({ themeMode, toggleTheme }) => {
             ) : (
               <Button onClick={handleLogin}>시작하기</Button>
             )}
+            {isMenuOpen && (
+              <Box position={'relative'} ref={targetRef}>
+                <MenuBox />
+              </Box>
+            )}
           </Flex>
         </St.StyledNav>
       </St.FixedContainer>
+      {/* <MobileMenuBox /> */}
     </St.Wrapper>
   )
 }

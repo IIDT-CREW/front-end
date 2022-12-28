@@ -160,16 +160,16 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
   const { isMenuOpen } = useNaviState()
   const scrollPos = useRef(0)
 
-  useEffect(() => {
-    if (isMenuOpen) {
-      scrollPos.current = window.scrollY
-      document.body.style.overflow = 'hidden'
-      window.requestAnimationFrame(() => window.scrollTo(0, 0))
-    } else {
-      document.body.style.overflow = 'visible'
-      window.requestAnimationFrame(() => window.scrollTo(0, scrollPos.current))
-    }
-  }, [isMenuOpen])
+  // useEffect(() => {
+  //   if (isMenuOpen) {
+  //     scrollPos.current = window.scrollY
+  //     document.body.style.overflow = 'hidden'
+  //     window.requestAnimationFrame(() => window.scrollTo(0, 0))
+  //   } else {
+  //     document.body.style.overflow = 'visible'
+  //     window.requestAnimationFrame(() => window.scrollTo(0, scrollPos.current))
+  //   }
+  // }, [isMenuOpen])
 
   useEffect(() => {
     const handleRouteChange = (url) => {
@@ -199,8 +199,8 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
         <ModalProvider>
           <Layout>
             <Menu themeMode={themeMode} toggleTheme={toggleTheme} />
-            {isMenuOpen && <MenuWrapper />}
-            <St.Wrapper style={{ visibility: isMenuOpen ? 'hidden' : 'visible' }}>
+            {/* {isMenuOpen && <MenuWrapper />} */}
+            <St.Wrapper>
               <Component {...pageProps} />
             </St.Wrapper>
           </Layout>
