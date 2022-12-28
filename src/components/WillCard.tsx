@@ -169,6 +169,7 @@ const WillCard = ({ will, handleDelete, handleShare, isPrivate = true }: WillCar
                     {QUESTION_LIST.find((item) => item.qusIdx === parseInt(answer?.question_index))?.question}
                   </Text>
                   <Text>{answer?.question_answer}</Text>
+                  <br />
                 </Box>
               )
             })}
