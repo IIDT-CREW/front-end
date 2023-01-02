@@ -1,4 +1,7 @@
+import About from '@views/About'
+
 const AboutPage = () => {
-  return <div></div>
+  return <About />
 }
+
 export default AboutPage
