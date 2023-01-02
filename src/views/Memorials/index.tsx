@@ -1,5 +1,5 @@
 import { useEffect, useContext, useMemo, useState } from 'react'
-import { Box, Flex, Text, Heading } from 'components/Common'
+import { Box, Flex, Heading } from 'components/Common'
 import styled from 'styled-components'
 import WillCard from 'components/WillCard'
 import { useMutation, useQueryClient } from 'react-query'
@@ -10,7 +10,6 @@ import useIntersect from './hooks/useIntersect'
 import useInfiniteScroll from 'hooks/useInfiniteScroll'
 import { Skeleton } from 'components/Common/Skeleton'
 import moment from 'moment'
-import { Will } from '@api/will/types'
 import isEmpty from 'lodash/isEmpty'
 
 const St = {

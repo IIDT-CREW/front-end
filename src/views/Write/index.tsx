@@ -21,7 +21,7 @@ const DEFAULT_TITLE = `${new Date().toLocaleDateString('ko-KR', {
   year: '2-digit',
   month: 'long',
   day: 'numeric',
-})}에 쓰는 하루 유서`
+})}에 쓰는 오늘 유서`
 
 const Write = () => {
   const router = useRouter()
@@ -210,10 +210,10 @@ interface TextAreaProps extends FontSizeProps, TextareaHTMLAttributes<HTMLTextAr
 }
 
 const Title = ({ ...props }: TextAreaProps) => {
-  return <St.Textarea {...props} />
+  return <St.Textarea {...props} maxLength={30} />
 }
 const Contents = ({ ...props }: TextAreaProps) => {
-  return <St.Textarea placeholder="내용을 입력하세요" {...props} />
+  return <St.Textarea placeholder="내용을 입력하세요" {...props} maxLength={1500} />
 }
 const St = {
   Editor: styled.section`

@@ -29,9 +29,10 @@ const St = {
 
 type WillCardProps = {
   will?: Will
+  isDisplayHeader?: boolean
 }
 
-const WillCard = ({ will }: WillCardProps) => {
+const WillCard = ({ will, isDisplayHeader = true }: WillCardProps) => {
   const {
     CONTENT: content,
     //EDIT_DATE: editDate,
@@ -49,11 +50,13 @@ const WillCard = ({ will }: WillCardProps) => {
   return (
     <St.CardWrapper className="box" mb="40px" padding="20px" minWidth="362px" maxWidth="582px" borderRadius="4px">
       <Box data-aos="fade" data-aos-duration="2500">
-        <St.CardHeader height="25px">
-          <Text color="#fff" fontSize="18px" textAlign="center">
-            마지막으로...
-          </Text>
-        </St.CardHeader>
+        {isDisplayHeader && (
+          <St.CardHeader height="25px">
+            <Text color="#fff" fontSize="18px" textAlign="center">
+              마지막으로...
+            </Text>
+          </St.CardHeader>
+        )}
         <Box mt="40px">
           {isDefaultType ? (
             <St.Contents>{content}</St.Contents>

@@ -1,7 +1,6 @@
 import React, { useState, useCallback } from 'react'
 import { useRouter } from 'next/router'
-import { Box, Text, Flex } from 'components/Common'
-import { getColor } from 'components/Common/Text/Text'
+import { Box, Text, Flex, useModal } from 'components/Common'
 import styled from 'styled-components'
 import { usePopper } from 'react-popper'
 import Ellipsis from 'components/Common/Svg/Icons/Ellipsis'
@@ -9,14 +8,11 @@ import Export from 'components/Common/Svg/Icons/Export'
 import Trash from 'components/Common/Svg/Icons/Trash'
 import Edit from 'components/Common/Svg/Icons/Edit'
 import Panorama from 'components/Common/Svg/Icons/Panorama'
-import { useModal } from 'components/Common'
 import moment from 'moment'
 import WriteDeleteModal from 'views/Main/components/modal/WriteDeleteModal'
 import ShareModal from 'views/Main/components/modal/ShareModal'
 import { useIsLogin } from 'store/auth/hooks'
-import { IS_DEFAULT_MODE } from 'config/constants/default'
 import { Will } from '@api/will/types'
-import { QUESTION_LIST } from '@views/Write/data'
 
 const St = {
   Container: styled(Box)`
@@ -41,9 +37,9 @@ const St = {
     ${({ isOpen }) =>
       !isOpen &&
       `
-      pointer-events: none;
-      visibility: hidden;
-    `};
+        pointer-events: none;
+        visibility: hidden;
+      `};
   `,
   CardWrapper: styled(Box)`
     box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.15), 0px 2px 6px rgba(0, 0, 0, 0.13);
@@ -76,26 +72,15 @@ const MenuItem = ({ presentDeleteModal, presentShareModal, handleEdit, handlePre
     </Box>
   )
 }
-
-type WillCardProps = {
+type HeaderProps = {
   will?: Will
   handleDelete?: () => void
   handleShare?: () => void
   isPrivate?: boolean
 }
 
-const WillCard = ({ will, handleDelete, handleShare, isPrivate = true }: WillCardProps) => {
-  const {
-    CONTENT: content,
-    EDIT_DATE: editDate,
-    MEM_NICKNAME: memNickname,
-    REG_DATE: regDate,
-    THUMBNAIL,
-    TITLE: title,
-    WILL_ID,
-    CONTENT_TYPE: contentType,
-    ANSWER_LIST: answerList,
-  } = will
+const Header = ({ will, handleDelete, handleShare, isPrivate = true }: HeaderProps) => {
+  const { CONTENT: content, REG_DATE: regDate, TITLE: title, WILL_ID } = will
   const router = useRouter()
   const isLogin = useIsLogin()
   const [presentDeleteModal] = useModal(<WriteDeleteModal handleDelete={handleDelete} />)
@@ -124,72 +109,31 @@ const WillCard = ({ will, handleDelete, handleShare, isPrivate = true }: WillCar
     router.push(`/will/${WILL_ID}`)
   }, [WILL_ID, router])
 
-  const isDefaultType = contentType === IS_DEFAULT_MODE
   return (
-    <St.CardWrapper
-      mr="24px"
-      ml="24px"
-      mb="40px"
-      padding="20px"
-      minWidth="362px"
-      maxWidth="582px"
-      borderRadius="4px"
-      maxHeight="500px"
-    >
-      <Box mb="20px">
-        <Flex justifyContent="space-between" alignItems="center">
-          <Text>{moment(regDate).format('YYYY.MM.DD')}</Text>
-          {isLogin && (
-            <Text style={{ cursor: 'pointer' }} onClick={handleIsOpen} ref={setTargetRef}>
-              {isPrivate && (
-                <>
-                  <Ellipsis />
-                  {isOpen && (
-                    <St.MenuWrapper ref={setTooltipRef} style={styles.popper} {...attributes.popper} isOpen={isOpen}>
-                      <MenuItem
-                        presentDeleteModal={presentDeleteModal}
-                        presentShareModal={presentShareModal}
-                        handleEdit={handleEdit}
-                        handlePreview={handlePreview}
-                      />
-                    </St.MenuWrapper>
-                  )}
-                </>
-              )}
-            </Text>
-          )}
-        </Flex>
-      </Box>
-
-      <Box>
-        <Text fontWeight="600" mb="16px" fontSize="23px">
-          {title ? title : `${moment(regDate).format('YYYY년 M월 D일')}에 쓰는 오늘 유서`}
-        </Text>
-
-        {isDefaultType ? (
-          <St.Contents>{content}</St.Contents>
-        ) : (
-          <St.Contents>
-            {answerList?.map((answer, index) => {
-              return (
-                <Box key={`answer_${index}`}>
-                  <Text bold>
-                    {QUESTION_LIST.find((item) => item.qusIdx === parseInt(answer?.question_index))?.question}
-                  </Text>
-                  <Text>{answer?.question_answer}</Text>
-                  <br />
-                </Box>
-              )
-            })}
-          </St.Contents>
+    <Box mb="20px">
+      <Flex justifyContent="space-between" alignItems="center">
+        <Text>{moment(regDate).format('YYYY.MM.DD')}</Text>
+        {isLogin && (
+          <Text style={{ cursor: 'pointer' }} onClick={handleIsOpen} ref={setTargetRef}>
+            {isPrivate && (
+              <>
+                <Ellipsis />
+                {isOpen && (
+                  <St.MenuWrapper ref={setTooltipRef} style={styles.popper} {...attributes.popper} isOpen={isOpen}>
+                    <MenuItem
+                      presentDeleteModal={presentDeleteModal}
+                      presentShareModal={presentShareModal}
+                      handleEdit={handleEdit}
+                      handlePreview={handlePreview}
+                    />
+                  </St.MenuWrapper>
+                )}
+              </>
+            )}
+          </Text>
         )}
-
-        <Flex mt="18px" justifyContent="end">
-          <St.Author>{memNickname ? memNickname : '익명'} 마침.</St.Author>
-        </Flex>
-      </Box>
-    </St.CardWrapper>
+      </Flex>
+    </Box>
   )
 }
-
-export default React.memo(WillCard)
+export default Header

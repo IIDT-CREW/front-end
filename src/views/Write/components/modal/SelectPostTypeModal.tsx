@@ -20,9 +20,9 @@ const SelectPostTypeModal = ({ handlePostType, onDismiss }: customModalProps) =>
         <Box mb="20px">
           <Flex justifyContent="center" flexDirection="column" style={{ textAlign: 'center', wordBreak: 'keep-all' }}>
             <Text fontSize={['13px', , '18px']}>
-              하루 유서를 처음 작성하시는 분들을 위해 두 가지의 선택방식을 두었어요.
+              오늘 유서를 처음 작성하시는 분들을 위해 두 가지의 선택방식을 두었어요.
             </Text>
-            <Text fontSize={['13px', , '18px']}>편하신 방법을 선택하여, 당신 하루 유서를 작성해주세요.</Text>
+            <Text fontSize={['13px', , '18px']}>편하신 방법을 선택하여, 당신 오늘 유서를 작성해주세요.</Text>
           </Flex>
         </Box>
 
