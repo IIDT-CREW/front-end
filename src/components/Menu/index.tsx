@@ -240,6 +240,14 @@ const MenuWrapper = ({ themeMode, toggleTheme }) => {
                 <Heading style={{ fontFamily: 'Cormorant' }}>IIDT</Heading>
               </Link>
             </Flex>
+            <Flex>
+              {/* 필수 띄우기 항목 */}
+              <DropdownMenu items={[]}>
+                <MenuItem isActive={router?.asPath?.includes('/about')} href={'/about'}>
+                  소개
+                </MenuItem>
+              </DropdownMenu>
+            </Flex>
             <St.MenuFlex>
               {MenuConfig?.map((menuItem, i) => {
                 return (

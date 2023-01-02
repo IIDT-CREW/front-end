@@ -15,7 +15,6 @@ export type ConfigMenuDropDownItemsType = DropdownMenuItems & { hideSubNav?: boo
 export type ConfigMenuItemsType = Omit<MenuItemsType, 'items'> & { hideSubNav?: boolean } & {
   items?: ConfigMenuDropDownItemsType[]
 }
-
 const config = [
   // {
   //   label: '작성하기',
@@ -30,9 +29,22 @@ const config = [
   //   //   },
   //   // ],
   // },
+  // {
+  //   label: '소개',
+  //   href: '/about',
+  //   // icon: 'SwapIcon',
+  //   // fillIcon: 'SwapFillIcon',
+  //   showItemsOnMobile: false,
+  //   items: [
+  //     // {
+  //     //   label: 'Grade',
+  //     //   href: '/grade',
+  //     // },
+  //   ],
+  // },
   {
-    label: '소개',
-    href: '/about',
+    label: '어느날의 기록',
+    href: '/memorials',
     // icon: 'SwapIcon',
     // fillIcon: 'SwapFillIcon',
     showItemsOnMobile: false,
@@ -42,19 +54,6 @@ const config = [
       //   href: '/grade',
       // },
     ],
-  },
-  {
-    label: '어느날의 기록',
-    href: '/memorials',
-    // icon: 'SwapIcon',
-    // fillIcon: 'SwapFillIcon',
-    showItemsOnMobile: false,
-    // items: [
-    //   {
-    //     label: 'Grade',
-    //     href: '/grade',
-    //   },
-    // ],
   },
   // {
   //   label: 'Test2',

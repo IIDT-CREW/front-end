@@ -4,6 +4,7 @@ export const naviSlice = createSlice({
   name: 'navi',
   initialState: {
     isMenuOpen: false,
+    isScrollDown: false,
   },
   reducers: {
     menuOnOff: (state) => {
@@ -11,6 +12,9 @@ export const naviSlice = createSlice({
     },
     menuOff: (state) => {
       state.isMenuOpen = false
+    },
+    scrollDown: (state, action) => {
+      state.isScrollDown = action.payload
     },
   },
 })

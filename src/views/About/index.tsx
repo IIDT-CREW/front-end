@@ -6,7 +6,7 @@ import TitleBanner from '@views/Will/components/TitleBanner'
 import { ABOUT_INFO } from '@views/About/data'
 import { useEffect } from 'react'
 import AOS from 'aos'
-import { useMenuOff } from '@store/navi/hooks'
+import { useIsScrollDown, useMenuOff } from '@store/navi/hooks'
 
 const St = {
   Container: styled(Box)`
@@ -56,12 +56,16 @@ const WillContent = () => {
 
 const WillPage = () => {
   const handleMenuOff = useMenuOff()
-
+  const { handleSetIsScrollDown } = useIsScrollDown()
   useEffect(() => {
     AOS.init()
     AOS.refresh()
-    handleMenuOff()
   }, [])
+
+  useEffect(() => {
+    handleMenuOff()
+    handleSetIsScrollDown(true)
+  }, [handleMenuOff, handleSetIsScrollDown])
 
   return (
     <Page title={ABOUT_INFO.TITLE} content={ABOUT_INFO.CONTENT} isFullPage>

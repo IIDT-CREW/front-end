@@ -1,3 +1,4 @@
+import { useIsScrollDown } from '@store/navi/hooks'
 import { useRef, useState, useEffect, useCallback } from 'react'
 const DELTA = 3
 const isServer = typeof window === 'undefined'
@@ -7,8 +8,7 @@ const useScrollDown = () => {
   const fixBox = useRef(null)
   const fixBoxHeight = useRef(0)
   const didScroll = useRef(false)
-
-  const [isScrollDown, setIsScrollDown] = useState(false)
+  const { isScrollDown, handleSetIsScrollDown } = useIsScrollDown()
   const hasScrolled = useCallback(() => {
     if (isServer) {
       return
@@ -17,9 +17,9 @@ const useScrollDown = () => {
 
     if (Math.abs(lastScrollTop - nowScrollTop) <= DELTA) return
     if (nowScrollTop > lastScrollTop && nowScrollTop > fixBoxHeight.current) {
-      setIsScrollDown(true)
+      handleSetIsScrollDown(true)
     } else {
-      setIsScrollDown(false)
+      handleSetIsScrollDown(false)
     }
     lastScrollTop = nowScrollTop
   }, [])
@@ -47,7 +47,7 @@ const useScrollDown = () => {
     }
   }, [hasScrolled, onScroll])
 
-  return { isScrollDown, setIsScrollDown }
+  return { isScrollDown, handleSetIsScrollDown }
 }
 
 export default useScrollDown
