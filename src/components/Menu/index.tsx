@@ -201,7 +201,7 @@ const MenuWrapper = ({ themeMode, toggleTheme }) => {
   const dispatch = useDispatch()
   const [showMenu, setShowMenu] = useState(true)
   const isLogin = useIsLogin()
-  const { isScrollDown, setIsScrollDown } = useScrollDown()
+  const { isScrollDown, handleSetIsScrollDown } = useScrollDown()
   const [presentLoginModal] = useModal(<LoginModal />)
   const { isMenuOpen } = useNaviState()
   const targetRef = useRef(null)
@@ -227,8 +227,8 @@ const MenuWrapper = ({ themeMode, toggleTheme }) => {
   }, [router])
 
   useEffect(() => {
-    if (isSharePage) setIsScrollDown(true)
-  }, [isSharePage, setIsScrollDown])
+    if (isSharePage) handleSetIsScrollDown(true)
+  }, [isSharePage, handleSetIsScrollDown])
 
   return (
     <St.Wrapper>

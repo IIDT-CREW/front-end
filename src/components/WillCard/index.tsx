@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { Box, Text } from 'components/Common'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { Box } from 'components/Common'
 import styled from 'styled-components'
 import { Will } from '@api/will/types'
 import { MoreOutlined, CaretUpOutlined } from '@ant-design/icons'
@@ -44,15 +44,16 @@ const WillCard = ({ will, handleDelete, handleShare, isPrivate = true }: WillCar
   // console.log(ref.current.clientHeight)
 
   useEffect(() => {
-    console.log('ef.current.clientHeight = ', ref.current.clientHeight)
     if (ref.current.clientHeight > MAX_CARD_HEIGHT) {
       setIsOverflow(true)
       isOverflowContent.current = true
     }
   }, [will])
-  const handleIsOpen = () => {
+
+  const handleIsOpen = useCallback(() => {
     setIsOverflow((prev) => !prev)
-  }
+  }, [])
+
   return (
     <Box position="relative">
       <St.CardWrapper
