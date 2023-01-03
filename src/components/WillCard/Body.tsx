@@ -27,6 +27,7 @@ const Body = ({ will }: BodyProps) => {
   const { CONTENT: content, REG_DATE: regDate, TITLE: title, CONTENT_TYPE: contentType, ANSWER_LIST: answerList } = will
 
   const isDefaultType = contentType === IS_DEFAULT_MODE
+
   return (
     <Box>
       <Text fontWeight="600" mb="16px" fontSize="23px">

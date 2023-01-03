@@ -1,7 +1,7 @@
 import Page from '@components/Layout/Page'
 import { Flex, Box } from '@components/Common'
 import styled from 'styled-components'
-import WillCard from '@views/Will/components/WillCard'
+import WillCard from '@views/Will/components/WillShareCard'
 import TitleBanner from '@views/Will/components/TitleBanner'
 import { ABOUT_INFO } from '@views/About/data'
 import { useEffect } from 'react'
