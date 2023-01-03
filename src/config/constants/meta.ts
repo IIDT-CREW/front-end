@@ -10,6 +10,12 @@ export const getCustomMeta = (path: string): PageMeta => {
   const basePath = path
 
   switch (basePath) {
+    case '/main':
+      return {
+        title: `IIDT`,
+        description: '오늘 당신의 유서를 작성해주세요.',
+        image: '',
+      }
     case '/will':
       return {
         title: `오늘 유서`,
@@ -25,8 +31,14 @@ export const getCustomMeta = (path: string): PageMeta => {
 
     case '/memorials':
       return {
-        title: `어떤 날의 오늘 유서들`,
+        title: `어느날의 기록`,
         description: '누군가의, 어느날의 유서. 삶을 되돌아 보세요',
+        image: '',
+      }
+    case '/write':
+      return {
+        title: `유서 작성`,
+        description: '삶을 되돌아보세요. 어땠습니까 당신의 삶은',
         image: '',
       }
     default:

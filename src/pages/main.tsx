@@ -1,3 +1,4 @@
+import Page from '@components/Layout/Page'
 import dynamic from 'next/dynamic'
 // import type { GetServerSideProps } from 'next'
 // import { dehydrate, QueryClient } from 'react-query'
@@ -6,7 +7,11 @@ import dynamic from 'next/dynamic'
 const Main = dynamic(import('views/Main'))
 
 const MainPage = () => {
-  return <Main />
+  return (
+    <Page isFullPage>
+      <Main />
+    </Page>
+  )
 }
 
 export default MainPage

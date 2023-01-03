@@ -8,7 +8,7 @@ import { MainButton } from '../Home'
 import WriteWarningInfoModal from './components/modal/WriteWarningInfoModal'
 import LoginModal from 'components/LoginModal'
 import WillCard from 'components/WillCard'
-import { useQuery, useMutation, useQueryClient } from 'react-query'
+import { useMutation, useQueryClient } from 'react-query'
 import { deleteWill, getMyWill } from 'api/will'
 import { toastContext } from 'contexts/Toast'
 import { useIsLogin, useUserInfo } from 'store/auth/hooks'
@@ -95,11 +95,9 @@ const WillContainer = () => {
     <>
       {!error &&
         willList?.map((myWill, i) => (
-          <WillCard
-            key={`${i}-${myWill.WILL_ID}`}
-            will={myWill}
-            handleDelete={() => deleteMutation.mutate({ will_id: myWill.WILL_ID as string })}
-          />
+          <Box key={`${i}-${myWill.WILL_ID}`}>
+            <WillCard will={myWill} handleDelete={() => deleteMutation.mutate({ will_id: myWill.WILL_ID as string })} />
+          </Box>
         ))}
 
       {(status === 'loading' || isFetching) && (
