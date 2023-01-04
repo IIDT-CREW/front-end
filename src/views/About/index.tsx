@@ -54,7 +54,7 @@ const WillContent = () => {
   )
 }
 
-const WillPage = () => {
+const AboutPage = () => {
   const handleMenuOff = useMenuOff()
   const { handleSetIsScrollDown } = useIsScrollDown()
   useEffect(() => {
@@ -77,4 +77,4 @@ const WillPage = () => {
   )
 }
 
-export default WillPage
+export default AboutPage

@@ -3,9 +3,9 @@ import { Box } from 'components/Common'
 import styled from 'styled-components'
 import { Will } from '@api/will/types'
 import { MoreOutlined, CaretUpOutlined } from '@ant-design/icons'
-import Header from './Header'
-import Body from './Body'
-import Footer from './Footer'
+import Header from './WillCardHeader'
+import Body from './WillCardBody'
+import Footer from './WillCardFooter'
 import { MAX_CARD_HEIGHT } from 'config/constants/default'
 
 const St = {
@@ -64,7 +64,7 @@ const WillCard = ({ will, handleDelete, handleShare, isPrivate = true }: WillCar
         minWidth="362px"
         maxWidth="582px"
         borderRadius="4px"
-        maxHeight={isOverflow ? `${MAX_CARD_HEIGHT}px` : '100vh'}
+        maxHeight={isOverflow ? `${MAX_CARD_HEIGHT}px` : `${ref?.current?.clientHeight}px`}
         overflow={isOverflow ? 'hidden' : ''}
       >
         <Box ref={ref}>
@@ -74,12 +74,11 @@ const WillCard = ({ will, handleDelete, handleShare, isPrivate = true }: WillCar
         </Box>
       </St.CardWrapper>
 
-      {isOverflowContent.current && isOverflow && (
+      {isOverflowContent.current && isOverflow ? (
         <St.MoreWrapper position="absolute" bottom="-15px" left="45%" onClick={handleIsOpen}>
           <MoreOutlined style={{ fontSize: '40px', cursor: 'pointer' }} />
         </St.MoreWrapper>
-      )}
-      {isOverflowContent.current && !isOverflow && (
+      ) : (
         <St.CloseWrapper position="absolute" bottom="-15px" left="45%" onClick={handleIsOpen}>
           <CaretUpOutlined style={{ fontSize: '30px', cursor: 'pointer' }} />
         </St.CloseWrapper>

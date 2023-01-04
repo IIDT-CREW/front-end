@@ -4,7 +4,7 @@ export const ABOUT_INFO = {
   TITLE: '안녕하세요. IIDT 입니다.',
   WILL_ID: '',
   THUMBNAIL:
-    'https://images.unsplash.com/photo-1672357867403-0b36f4334de7?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=3870&q=80',
+    'https://images.unsplash.com/photo-1672776329553-09a5e12f0846?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2338&q=80',
   CONTENT: `
   만약 내일 죽는다면 이라는 말에는 힘이 있다고 생각합니다.
   이런 가정은 오늘 하루를 치열하게 살게 만드니깐요.
