@@ -8,6 +8,7 @@ import Body from './WillCardBody'
 import Footer from './WillCardFooter'
 import { MAX_CARD_HEIGHT } from 'config/constants/default'
 
+const MARGIN_BOTTOM = 40
 const St = {
   CardWrapper: styled(Box)`
     transition: all 1s;
@@ -41,10 +42,9 @@ const WillCard = ({ will, handleDelete, handleShare, isPrivate = true }: WillCar
   const ref = useRef(null)
   const [isOverflow, setIsOverflow] = useState(false)
   const isOverflowContent = useRef(false)
-  // console.log(ref.current.clientHeight)
 
   useEffect(() => {
-    if (ref.current.clientHeight > MAX_CARD_HEIGHT) {
+    if (ref.current.clientHeight + MARGIN_BOTTOM > MAX_CARD_HEIGHT) {
       setIsOverflow(true)
       isOverflowContent.current = true
     }
@@ -54,18 +54,19 @@ const WillCard = ({ will, handleDelete, handleShare, isPrivate = true }: WillCar
     setIsOverflow((prev) => !prev)
   }, [])
 
+  console.log(will, ref?.current?.clientHeight)
   return (
     <Box position="relative">
       <St.CardWrapper
         mr="24px"
         ml="24px"
-        mb="40px"
+        mb={`${MARGIN_BOTTOM}px`}
         padding="20px"
         minWidth="362px"
         maxWidth="582px"
         borderRadius="4px"
-        maxHeight={isOverflow ? `${MAX_CARD_HEIGHT}px` : `${ref?.current?.clientHeight}px`}
-        overflow={isOverflow ? 'hidden' : ''}
+        maxHeight={isOverflow ? `${MAX_CARD_HEIGHT}px` : `${ref?.current?.clientHeight + MARGIN_BOTTOM}px`}
+        overflow={isOverflow ? 'hidden' : 'auto'}
       >
         <Box ref={ref}>
           <Header will={will} handleDelete={handleDelete} handleShare={handleShare} isPrivate={isPrivate} />
@@ -74,11 +75,12 @@ const WillCard = ({ will, handleDelete, handleShare, isPrivate = true }: WillCar
         </Box>
       </St.CardWrapper>
 
-      {isOverflowContent.current && isOverflow ? (
+      {isOverflowContent?.current && isOverflow && (
         <St.MoreWrapper position="absolute" bottom="-15px" left="45%" onClick={handleIsOpen}>
           <MoreOutlined style={{ fontSize: '40px', cursor: 'pointer' }} />
         </St.MoreWrapper>
-      ) : (
+      )}
+      {isOverflowContent?.current && !isOverflow && (
         <St.CloseWrapper position="absolute" bottom="-15px" left="45%" onClick={handleIsOpen}>
           <CaretUpOutlined style={{ fontSize: '30px', cursor: 'pointer' }} />
         </St.CloseWrapper>
