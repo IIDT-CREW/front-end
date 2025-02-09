@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { useRouter } from 'next/router'
+import { usePathname, useRouter } from 'next/navigation'
 // import { PERMISSION } from './UrlPermissionList'
 import { useAuthState } from '@/store/auth/hooks'
 import LoaderPage from '@/components/LoaderPage'
@@ -16,6 +16,7 @@ enum RET {
 
 const withAuth = (Component: any) => {
   return () => {
+    const pathname = usePathname()
     const router = useRouter()
     const [verifyState, setVerifyState] = useState({ isLoading: true })
     //   const { state: userState } = useContext(userContext)
@@ -61,7 +62,7 @@ const withAuth = (Component: any) => {
       /**
        * 3. 로그인 완료된 사용자가 로그인 페이지에 접속
        */
-      if (router.pathname === '/login' || router.asPath === '/login') return RET.ALREADY_LOGIN
+      if (pathname === '/login' || pathname === '/login') return RET.ALREADY_LOGIN
 
       /**
        * 4. 페이지 접근 권한 확인
@@ -106,7 +107,7 @@ const withAuth = (Component: any) => {
           // break
           case RET.LOGIN_NOT_YET:
             // 로그인 안된 상태
-            if (router.pathname === '/login' || router.asPath === '/login') {
+            if (pathname === '/login' || pathname === '/login') {
               setVerifyState((s) => ({ ...s, isLoading: false }))
             } else {
               router.push('/login')
@@ -129,7 +130,7 @@ const withAuth = (Component: any) => {
           default:
         }
       } catch (error) {
-        if (router.pathname === '/login' || router.asPath === '/login') {
+        if (pathname === '/login' || pathname === '/login') {
           setVerifyState((s) => ({ ...s, isLoading: false }))
         } else {
           router.push('/login')

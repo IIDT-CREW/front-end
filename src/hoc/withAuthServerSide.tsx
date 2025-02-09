@@ -2,7 +2,7 @@ import nookies from 'nookies'
 
 import axios from '@/api'
 import { useDispatch } from 'react-redux'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 import { getUserInfo } from '@/api/auth'
 import { authActions } from '@/store/auth'
 /* getUser */
@@ -17,7 +17,7 @@ async function getUser(content: any) {
   return null
 }
 
-export function withAuthServerSideProps(getServerSidePropsFunc?) {
+export function withAuthServerSideProps(getServerSidePropsFunc?: any) {
   return async (context: any) => {
     context.res.setHeader('set-cookie', '')
     const cookie = context.req ? context.req.headers.cookie : ''

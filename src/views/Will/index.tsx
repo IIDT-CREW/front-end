@@ -1,5 +1,5 @@
 import { useEffect, useCallback } from 'react'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 import AOS from 'aos'
 import styled from 'styled-components'
 import { useQuery } from '@tanstack/react-query'
@@ -12,6 +12,7 @@ import { MainButton } from '@/views/Home'
 import LoginModal from '@/components/LoginModal'
 import { useIsLogin } from '@/store/auth/hooks'
 import { GetWill } from '@/api/will/types'
+import { useWill } from '@/hooks/queries/useWill'
 
 const St = {
   Container: styled(Box)`
@@ -92,10 +93,8 @@ const WillFooter = ({ handleWrite }: WillFooterProps) => {
 const WillPage = () => {
   const isLogin = useIsLogin()
   const router = useRouter()
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ['getWill', router.query.id],
-    queryFn: () => getWill(router.query.id as string),
-  })
+  const { useWillQuery } = useWill()
+  const { data, isLoading, isError } = useWillQuery(router.query.id as string)
   const [presentLoginModal] = useModal(<LoginModal />)
 
   const handleWrite = useCallback(() => {
@@ -113,7 +112,7 @@ const WillPage = () => {
   }
 
   return (
-    <Page title={data?.result?.TITLE} content={data?.result?.CONTENT} isFullPage>
+    <Page title={data?.title} content={data?.content || ''} isFullPage>
       <St.Container>
         {/* <WillTitle data={data} />
         <WillContent data={data} isLoading={isLoading} />

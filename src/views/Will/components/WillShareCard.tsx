@@ -1,8 +1,8 @@
-import { Box, Text, Flex } from 'components/Common'
+import { Box, Text, Flex } from '@/components/Common'
 import styled from 'styled-components'
-import { Will } from '@api/will/types'
-import { QUESTION_LIST } from '@views/Write/data'
-import { IS_DEFAULT_MODE } from 'config/constants/default'
+import { Will } from '@/types/will'
+import { QUESTION_LIST } from '@/views/Write/data'
+import { IS_DEFAULT_MODE } from '@/config/constants/default'
 
 const St = {
   CardWrapper: styled(Box)`

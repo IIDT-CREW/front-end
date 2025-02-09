@@ -1,9 +1,9 @@
 import { useCallback, useState } from 'react'
-import { Box, Text, Flex } from 'components/Common'
+import { Box, Text, Flex } from '@/components/Common'
 import moment from 'moment'
 import styled from 'styled-components'
-import StyledImage from 'components/Common/Image/StyledImage'
-import Typing from 'views/Home/components/Typing'
+import StyledImage from '@/components/Common/Image/StyledImage'
+import Typing from '@/views/Home/components/Typing'
 type DateTextWrapperProps = {
   isStart: boolean
 }
@@ -18,7 +18,7 @@ const St = {
         color : #fff
     }
   `,
-  DateTextWrapper: styled(Text)`
+  DateTextWrapper: styled(Text)<DateTextWrapperProps>`
     color: #fff;
     padding: ${({ theme }) => (theme.isDark ? '0px 10px' : '')};
     opacity: 0;

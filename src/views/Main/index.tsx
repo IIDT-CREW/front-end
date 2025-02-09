@@ -1,5 +1,5 @@
 import { useEffect, useContext, useMemo } from 'react'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 import { Box, Flex, useModal } from '@/components/Common'
 import BannerCard from './components/BannerCard'
 import styled from 'styled-components'
@@ -7,14 +7,7 @@ import MainInfo from './components/MainInfo'
 import { MainButton } from '@/views/Home'
 import WriteWarningInfoModal from './components/modal/WriteWarningInfoModal'
 import LoginModal from '@/components/LoginModal'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { deleteWill, getMyWill } from '@/api/will'
-import { toastContext } from '@/contexts/Toast'
 import { useIsLogin, useUserInfo } from '@/store/auth/hooks'
-import { DEFAULT_PAGE_NO, DEFAULT_PAGE_SIZE } from '@/config/constants/default'
-import useIntersect from './hooks/useIntersect'
-import useInfiniteScroll from '@/hooks/useInfiniteScroll'
-import { Skeleton } from '@/components/Common/Skeleton'
 
 const St = {
   Container: styled(Box)`

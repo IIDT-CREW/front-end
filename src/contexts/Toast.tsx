@@ -39,7 +39,7 @@ export type ToastType = {
 
 export const toastContext = createContext<any>(undefined)
 
-export const CustomToast = (props: { message: string }) => {
+export const CustomToast = (props: { message: string | ReactNode; type: TypeOptions }) => {
   return (
     <St.ToastWrapper>
       <Flex justifyContent="space-between" alignItems="center">

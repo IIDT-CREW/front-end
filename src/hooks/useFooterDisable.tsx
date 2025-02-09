@@ -1,7 +1,7 @@
-import { useRouter } from 'next/router'
+import { usePathname } from 'next/navigation'
 const useFooterDisable = () => {
-  const router = useRouter()
-  const isWritePage = router.pathname.indexOf('/write') !== -1
+  const pathname = usePathname()
+  const isWritePage = pathname.indexOf('/write') !== -1
   return isWritePage
 }
 

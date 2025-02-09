@@ -6,7 +6,7 @@ import { Flex } from 'components/Common'
 import useToast from 'hooks/useToast'
 import { PREV, NEXT, DONE } from 'views/Write/data'
 import PrivateToggle from '@components/PrivateToggle'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 import MenuButton from '@views/Write/components/MenuBar/MenuButton'
 type Variant = 'primary' | 'secondary'
 

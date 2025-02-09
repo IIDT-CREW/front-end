@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 import { Box, Text, Flex, useModal } from 'components/Common'
 import styled from 'styled-components'
 import { usePopper } from 'react-popper'
@@ -31,7 +31,9 @@ const St = {
   MenuWrapper: styled<any>(Box)`
     width: 200px;
     background: ${({ theme }) => theme.colors.background};
-    box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.08), 0px 16px 30px 4px rgba(0, 0, 0, 0.1);
+    box-shadow:
+      0px 0px 1px rgba(0, 0, 0, 0.08),
+      0px 16px 30px 4px rgba(0, 0, 0, 0.1);
     border-radius: 4px;
     padding: 18px;
     ${({ isOpen }) =>
@@ -42,7 +44,9 @@ const St = {
       `};
   `,
   CardWrapper: styled(Box)`
-    box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.15), 0px 2px 6px rgba(0, 0, 0, 0.13);
+    box-shadow:
+      0px 0px 1px rgba(0, 0, 0, 0.15),
+      0px 2px 6px rgba(0, 0, 0, 0.13);
   `,
 
   Author: styled(Text)`

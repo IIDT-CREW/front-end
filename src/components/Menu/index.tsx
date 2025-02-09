@@ -1,4 +1,4 @@
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 import { useMemo, useState, useEffect, useRef, useCallback } from 'react'
 import { useDispatch } from 'react-redux'
 import styled, { css } from 'styled-components'

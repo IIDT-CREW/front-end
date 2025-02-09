@@ -68,6 +68,16 @@ export const useWill = () => {
     return data
   }
 
+  const getWillCount = async () => {
+    const { count, error } = await supabase
+      .from('will')
+      .select('*', { count: 'exact', head: true })
+      .eq('is_deleted', false)
+
+    if (error) throw error
+    return count
+  }
+
   const insertWill = async (will: WillInsert) => {
     const { data, error } = await supabase.from('will').insert(will).select().single()
 
@@ -82,6 +92,9 @@ export const useWill = () => {
 
   const useWillListQuery = () => {
     return useQuery({ queryKey: ['wills'], queryFn: getWillList })
+  }
+  const useWillCountQuery = () => {
+    return useQuery({ queryKey: ['willCount'], queryFn: getWillCount })
   }
 
   const useInsertWillMutation = () => {
@@ -127,5 +140,6 @@ export const useWill = () => {
     useInsertWillMutation,
     updateWillQuestion,
     updateWillEssayAnswer,
+    useWillCountQuery,
   }
 }

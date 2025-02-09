@@ -1,5 +1,5 @@
 import { Box, Text, Flex } from '@/components/Common'
-import StyledImage from '@/components/Common/Image/StyledImage'
+import Image from 'next/image'
 
 const Card = ({
   height,
@@ -22,19 +22,7 @@ const Card = ({
       mb="20px"
       background="linear-gradient(0deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4))"
     >
-      <StyledImage
-        isFill
-        src={imagePath}
-        alt={alt}
-        style={{
-          position: 'absolute',
-          width: '100%',
-          height: '100%',
-          zIndex: '-1',
-          objectFit: 'cover',
-          filter: 'blur(2px)',
-        }}
-      />
+      {/* <StyledImage src={imagePath} alt={alt} /> */}
 
       <Box width="100%" height={`${height}px`} position="relative">
         <Flex justifyContent="center" alignItems="center" height="100%" position="relative" flexDirection="column">

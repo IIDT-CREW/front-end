@@ -53,11 +53,11 @@ const NickNameModal: React.FC<NickNameModalProps> = ({ onDismiss, ...props }) =>
   const [isDuplicateNickname, setIsDuplicateNickname] = useState(false)
   const [nickName, setNickName] = useState('')
   const [isValidateNickname, setIsValidateNickname] = useState(false)
-  const handleNickName = useCallback((e) => {
+  const handleNickName = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setNickName(e.target.value)
     setIsDuplicateNickname(false)
     setIsFetched(false)
-    setIsValidateNickname(e.target.value)
+    setIsValidateNickname(e.target.value.length > 0)
   }, [])
 
   const {
@@ -65,7 +65,9 @@ const NickNameModal: React.FC<NickNameModalProps> = ({ onDismiss, ...props }) =>
     isLoading,
     isError,
     refetch,
-  } = useQuery(['checkDuplicateNickname', nickName], () => checkDuplicateNickname({ mem_nickname: nickName }), {
+  } = useQuery({
+    queryKey: ['checkDuplicateNickname', nickName],
+    queryFn: () => checkDuplicateNickname({ mem_nickname: nickName }),
     enabled: false,
   })
 

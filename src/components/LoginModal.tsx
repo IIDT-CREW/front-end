@@ -1,7 +1,12 @@
 import React, { useEffect } from 'react'
 import { Modal, ModalProps, Flex, Box, Text } from '@/components/Common'
 import styled, { css } from 'styled-components'
-import { useRouter } from 'next/router'
+import { usePathname } from 'next/navigation'
+import { useRouter } from 'next/router' // next/navigation이 아닌 next/router 사용
+
+import useToast from '@/hooks/useToast'
+import { createClient } from '@supabase/supabase-js'
+const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!)
 
 enum EType {
   NAVER,
@@ -117,47 +122,53 @@ const GOOGLE_LOGIN_URL =
   `&response_type=code` +
   `&scope=https://www.googleapis.com/auth/userinfo.email`
 
-const NAVER_LOGIN_URL =
-  'https://nid.naver.com/oauth2.0/authorize' +
-  `?client_id=${process.env.NEXT_PUBLIC_NAVER_CLIENT_ID}` +
-  `&redirect_uri=${process.env.NEXT_PUBLIC_LOGIN_CALLBACK_URL_PREFIX}/naver` +
-  '&response_type=code' +
-  '&state=RANDOM_STATE'
+// const NAVER_LOGIN_URL =
+//   'https://nid.naver.com/oauth2.0/authorize' +
+//   `?client_id=${process.env.NEXT_PUBLIC_NAVER_CLIENT_ID}` +
+//   `&redirect_uri=${process.env.NEXT_PUBLIC_LOGIN_CALLBACK_URL_PREFIX}/naver` +
+//   '&response_type=code' +
+//   '&state=RANDOM_STATE'
 
 const LoginModal: React.FC<ModalProps> = ({ onDismiss, ...props }) => {
+  const pathname = usePathname()
   const router = useRouter()
+  // const { showToast } = useToast()
 
   useEffect(() => {
-    localStorage.setItem('login_path', router.asPath)
-  }, [])
+    localStorage.setItem('login_path', pathname)
+  }, [pathname])
+
+  const handleSocialLogin = async (provider: 'kakao' | 'google') => {
+    try {
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider,
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`,
+          queryParams: {
+            access_type: 'offline',
+            prompt: 'consent',
+          },
+        },
+      })
+
+      if (error) {
+        // showToast({ message: '로그인 중 오류가 발생했습니다.', type: 'error' })
+        console.error('Social login error:', error)
+      }
+    } catch (error) {
+      // showToast({ message: '로그인 중 오류가 발생했습니다.', type: 'error' })
+      console.error('Social login error:', error)
+    }
+  }
 
   return (
     <Modal title="로그인이 필요해요" onDismiss={onDismiss} {...props} minWidth="272px">
       <Flex justifyContent="center" alignItems="center" flexDirection="column">
-        {/* <LoginButton
-        loginType={EType.NAVER}
-        onClick={() => {
-          router.push(NAVER_LOGIN_URL)
-        }}
-      >
-        <LoginIcon loginType={EType.NAVER} />
-        <span>네이버 로그인</span>
-      </LoginButton> */}
-        <LoginButton
-          loginType={EType.KAKAO}
-          onClick={() => {
-            router.push(KAKAO_LOGIN_URL)
-          }}
-        >
+        <LoginButton loginType={EType.KAKAO} onClick={() => handleSocialLogin('kakao')}>
           <LoginIcon loginType={EType.KAKAO} />
           <span>카카오 계정으로 시작하기</span>
         </LoginButton>
-        <LoginButton
-          loginType={EType.GOOGLE}
-          onClick={() => {
-            router.push(GOOGLE_LOGIN_URL)
-          }}
-        >
+        <LoginButton loginType={EType.GOOGLE} onClick={() => handleSocialLogin('google')}>
           <LoginIcon loginType={EType.GOOGLE} />
           <span>Google 계정으로 시작하기</span>
         </LoginButton>

@@ -2,7 +2,7 @@
 import { TextareaHTMLAttributes, useCallback, useEffect, useState } from 'react'
 import styled, { CSSProp } from 'styled-components'
 import { fontSize, FontSizeProps } from 'styled-system'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 import { useModal } from '@/components/Common'
 import SelectPostTypeModal from '@/views/Write/components/modal/SelectPostTypeModal'
 import { FOOTER_HEIGHT, IS_DEFAULT_MODE, MENU_HEIGHT } from '@/config/constants/default'
@@ -46,9 +46,9 @@ const Write = () => {
   )
   const [isDisableSave, setIsDisableSave] = useState(true)
 
-  const { data, isSuccess: isPostLoaded } = useGetWill(willId, {
-    enabled: router.isReady && isEditMode,
-  })
+  // const { data, isSuccess: isPostLoaded } = useGetWill(willId, {
+  //   enabled: router.isReady && isEditMode,
+  // })
 
   useWarningHistoryBack({ title, contents, goToBack, page })
 
