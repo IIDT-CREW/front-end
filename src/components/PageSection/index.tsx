@@ -1,6 +1,6 @@
 import styled from 'styled-components'
-import { BoxProps, Box, Flex, FlexProps } from 'components/Common'
-import Container from 'components/Layout/Container'
+import { BoxProps, Box, Flex, FlexProps } from '@/components/Common'
+import Container from '@/components/Layout/Container'
 
 interface PageSectionProps extends BackgroundColorProps {
   svgFill?: string
@@ -21,7 +21,7 @@ const BackgroundColor = styled(Flex)<BackgroundColorProps>`
   align-items: center;
   z-index: ${({ index }) => index - 1};
   background: ${({ background, theme }) => background || theme.colors.background};
-  padding: ${({ getPadding }) => getPadding()};
+  padding: ${({ getPadding }) => (getPadding ? getPadding() : '48px 0')};
 `
 
 const ChildrenWrapper = styled(Container)`

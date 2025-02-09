@@ -1,10 +1,10 @@
 import nookies from 'nookies'
 
-import axios from 'api'
+import axios from '@/api'
 import { useDispatch } from 'react-redux'
 import { useRouter } from 'next/router'
-import { getUserInfo } from 'api/auth'
-import { authActions } from 'store/auth'
+import { getUserInfo } from '@/api/auth'
+import { authActions } from '@/store/auth'
 /* getUser */
 async function getUser(content: any) {
   const res = await getUserInfo()

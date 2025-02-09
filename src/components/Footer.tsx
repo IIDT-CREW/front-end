@@ -1,5 +1,5 @@
-import { Box, Text, Flex } from 'components/Common'
-import { FOOTER_HEIGHT } from 'config/constants/default'
+import { Box, Text, Flex } from '@/components/Common'
+import { FOOTER_HEIGHT } from '@/config/constants/default'
 
 const Footer = () => {
   const handleNotion = () => {

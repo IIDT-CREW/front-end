@@ -3,18 +3,18 @@ import { TextareaHTMLAttributes, useCallback, useEffect, useState } from 'react'
 import styled, { CSSProp } from 'styled-components'
 import { fontSize, FontSizeProps } from 'styled-system'
 import { useRouter } from 'next/router'
-import { useModal } from 'components/Common'
-import SelectPostTypeModal from 'views/Write/components/modal/SelectPostTypeModal'
-import { FOOTER_HEIGHT, IS_DEFAULT_MODE, MENU_HEIGHT } from 'config/constants/default'
-import { useUserInfo } from 'store/auth/hooks'
+import { useModal } from '@/components/Common'
+import SelectPostTypeModal from '@/views/Write/components/modal/SelectPostTypeModal'
+import { FOOTER_HEIGHT, IS_DEFAULT_MODE, MENU_HEIGHT } from '@/config/constants/default'
+import { useUserInfo } from '@/store/auth/hooks'
 import { nanoid } from 'nanoid'
-import ProgressBar from 'components/Common/ProgressBar'
-import useMatchBreakpoints from 'hooks/useMatchBreakpoints'
-import MenuBar, { StyleMenuButton } from 'views/Write/components/MenuBar'
-import { QUESTION_LIST } from 'views/Write/data'
-import useAddPostMutation from 'hooks/queries/Write/useAddPostMutation'
-import useUpdatePostMutation from 'hooks/queries/Write/useUpdatePostMutation'
-import { useGetWill } from 'hooks/queries/Write/useGetWill'
+import ProgressBar from '@/components/Common/ProgressBar'
+import useMatchBreakpoints from '@/hooks/useMatchBreakpoints'
+import MenuBar, { StyleMenuButton } from '@/views/Write/components/MenuBar'
+import { QUESTION_LIST } from '@/views/Write/data'
+// import useAddPostMutation from '@/hooks/queries/Write/useAddPostMutation'
+// import useUpdatePostMutation from '@/hooks/queries/Write/useUpdatePostMutation'
+// import { useGetWill } from '@/hooks/queries/Write/useGetWill'
 import useWarningHistoryBack from './hooks/useWarningHistoryBack'
 
 const DEFAULT_TITLE = `${new Date().toLocaleDateString('ko-KR', {
@@ -30,8 +30,8 @@ const Write = () => {
   const goToBack = useCallback(() => {
     router.push('/main')
   }, [router])
-  const { mutate: addPostMutate } = useAddPostMutation({ goToBack })
-  const { mutate: updatePostMutate } = useUpdatePostMutation({ goToBack })
+  // const { mutate: addPostMutate } = useAddPostMutation({ goToBack })
+  // const { mutate: updatePostMutate } = useUpdatePostMutation({ goToBack })
   const isEditMode = !!router?.query?.will_id
   const willId = router?.query?.will_id as string
   const [isDefaultPostType, setIsDefaultPostType] = useState(true)
@@ -72,22 +72,22 @@ const Write = () => {
       },
     } = data
 
-    setTitle(title)
-    setPrivate(isPrivate)
-    if (contentType === IS_DEFAULT_MODE) {
-      const answer = [{ questionIndex: 1, answer: content }, ...contents.slice(1)]
-      return setContents(answer)
-    }
-    /* 질문 타입  */
-    setIsDefaultPostType(false)
-    const answer = answerList?.map((answer) => {
-      return {
-        questionEssayIndex: answer.question_essay_index,
-        questionIndex: answer.question_index,
-        answer: answer.question_answer,
-      }
-    })
-    setContents(answer)
+    // setTitle(title)
+    // setPrivate(isPrivate)
+    // if (contentType === IS_DEFAULT_MODE) {
+    //   const answer = [{ questionIndex: 1, answer: content }, ...contents.slice(1)]
+    //   return setContents(answer)
+    // }
+    // /* 질문 타입  */
+    // setIsDefaultPostType(false)
+    // const answer = answerList?.map((answer) => {
+    //   return {
+    //     questionEssayIndex: answer.question_essay_index,
+    //     questionIndex: answer.question_index,
+    //     answer: answer.question_answer,
+    //   }
+    // })
+    // setContents(answer)
   }, [contents, data])
 
   /* 모달 onOpen */
@@ -140,8 +140,8 @@ const Write = () => {
           })),
     }
     // console.log(parameter)
-    isEditMode ? updatePostMutate(parameter) : addPostMutate(parameter)
-  }, [addPostMutate, contents, isDefaultPostType, isEditMode, isPrivate, memIdx, title, updatePostMutate, willId])
+    // isEditMode ? updatePostMutate(parameter) : addPostMutate(parameter)
+  }, [contents, isDefaultPostType, isEditMode, isPrivate, memIdx, title, willId])
 
   return (
     <St.Article>
@@ -161,19 +161,21 @@ const Write = () => {
         <Title
           value={title}
           onChange={handleTitle}
-          fontSize={[, '16px', '26px']}
+          fontSize={['16px', '16px', '26px']}
           rows={1}
           wrap="off"
           placeholder={DEFAULT_TITLE}
           css={{ height: '30px', marginBottom: '24px', overflow: 'hidden' }}
         />
 
-        {isDefaultPostType || <St.Question fontSize={[, '16px', '26px']}>{QUESTION_LIST[page]?.question}</St.Question>}
+        {isDefaultPostType || (
+          <St.Question fontSize={['16px', '16px', '26px']}>{QUESTION_LIST[page]?.question}</St.Question>
+        )}
         <Contents
           isDefaultPostType={isDefaultPostType}
           value={contents[page]?.answer}
           onChange={handleContents}
-          fontSize={[, '16px', '18px']}
+          fontSize={['16px', '16px', '18px']}
           css={{ flex: 'auto' }}
         />
         {isDefaultPostType && isMobile && (

@@ -1,5 +1,5 @@
-import useClock from 'hooks/useClock'
-import { Box, Text, Flex } from 'components/Common'
+import useClock from '@/hooks/useClock'
+import { Box, Text, Flex } from '@/components/Common'
 
 const Clock = ({ height = '300px' }) => {
   const { time } = useClock()

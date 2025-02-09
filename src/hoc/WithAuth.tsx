@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/router'
 // import { PERMISSION } from './UrlPermissionList'
-import { useAuthState } from 'store/auth/hooks'
-import LoaderPage from 'components/LoaderPage'
+import { useAuthState } from '@/store/auth/hooks'
+import LoaderPage from '@/components/LoaderPage'
 enum RET {
   SUCCESS, // 정상
   USER_INFO_NOT_YET, // 사용자 정보 설정 되어야함

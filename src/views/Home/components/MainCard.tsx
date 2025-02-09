@@ -1,5 +1,5 @@
-import { Box, Text, Flex } from 'components/Common'
-import StyledImage from 'components/Common/Image/StyledImage'
+import { Box, Text, Flex } from '@/components/Common'
+import StyledImage from '@/components/Common/Image/StyledImage'
 
 const Card = ({
   height,
@@ -7,6 +7,12 @@ const Card = ({
   secondTitle,
   imagePath = '/images/home/huyen-pham--PTlx55R-KU-unsplash.jpg',
   alt = '',
+}: {
+  height: number
+  title: string
+  secondTitle: string
+  imagePath: string
+  alt: string
 }) => {
   return (
     <Box

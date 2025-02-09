@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react'
-import useClock from 'hooks/useClock'
-import { Box, Text, Flex } from 'components/Common'
+import useClock from '@/hooks/useClock'
+import { Box, Text, Flex } from '@/components/Common'
 import styled from 'styled-components'
 // import StyledImage from 'components/Common/Image/StyledImage'
-import useProgressiveImage from 'hooks/useProgressiveImage'
-import { Skeleton } from 'components/Common/Skeleton'
+import useProgressiveImage from '@/hooks/useProgressiveImage'
+import { Skeleton } from '@/components/Common/Skeleton'
 const St = {
   TextWrapper: styled(Text)`
     padding: ${({ theme }) => (theme.isDark ? '0px 10px' : '')};

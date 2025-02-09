@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { RootState } from 'store'
+import { RootState } from '@/store'
 import { naviActions } from '.'
 
 export function useNaviState(): RootState['navi'] {

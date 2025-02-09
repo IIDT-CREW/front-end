@@ -1,8 +1,8 @@
 import { useCallback, useEffect } from 'react'
 import { useRouter } from 'next/router'
-import LoaderPage from 'components/LoaderPage'
+import LoaderPage from '@/components/LoaderPage'
 
-import useLoginTransaction from 'hooks/useLoginTransaction'
+import useLoginTransaction from '@/hooks/useLoginTransaction'
 const AuthCallback = () => {
   const router = useRouter()
   const { handleLoginTransaction } = useLoginTransaction()

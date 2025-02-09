@@ -1,6 +1,6 @@
-import { Text } from 'components/Common'
-import { useWillCountData } from 'hooks/queries/useWillData'
-import { SkeletonV2 } from 'components/Common/Skeleton'
+import { Text } from '@/components/Common'
+import { useWillCountData } from '@/hooks/queries/useWillData'
+import { SkeletonV2 } from '@/components/Common/Skeleton'
 
 const MainInfo = () => {
   const { isLoading, isError, data, error } = useWillCountData({ storeCode: '', options: '' })

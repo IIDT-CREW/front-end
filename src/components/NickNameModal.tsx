@@ -1,11 +1,11 @@
 import React, { useEffect, InputHTMLAttributes, useState, useCallback } from 'react'
-import { Modal, ModalProps, Flex, Box, Text, Button } from 'components/Common'
+import { Modal, ModalProps, Flex, Box, Text, Button } from '@/components/Common'
 import styled, { CSSProp } from 'styled-components'
 import { fontSize, FontSizeProps } from 'styled-system'
-import { useQuery } from 'react-query'
-import { checkDuplicateNickname } from 'api/auth'
-import { API_CODE } from 'config/constants/api'
-import useLoginTransaction from 'hooks/useLoginTransaction'
+import { useQuery } from '@tanstack/react-query'
+import { checkDuplicateNickname } from '@/api/auth'
+import { API_CODE } from '@/config/constants/api'
+import useLoginTransaction from '@/hooks/useLoginTransaction'
 
 interface InputProps extends FontSizeProps, InputHTMLAttributes<HTMLInputElement> {
   isDefaultPostType?: boolean

@@ -64,9 +64,8 @@ const Image: React.FC<ImageProps> = ({
       }
     }
   }, [src])
-
   return (
-    <Wrapper ref={imgRef} height={height} width={width} {...props}>
+    <Wrapper ref={imgRef} height={height || 0} width={width || 0} {...props}>
       {isLoaded && (
         <>
           <StyledImage

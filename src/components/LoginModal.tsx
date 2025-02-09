@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Modal, ModalProps, Flex, Box, Text } from 'components/Common'
+import { Modal, ModalProps, Flex, Box, Text } from '@/components/Common'
 import styled, { css } from 'styled-components'
 import { useRouter } from 'next/router'
 

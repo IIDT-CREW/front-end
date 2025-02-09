@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { Box } from 'components/Common/Box'
+import { Box } from '@/components/Common/Box'
 
 const Row = styled(Box)<{
   width?: string

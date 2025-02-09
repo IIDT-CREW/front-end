@@ -1,5 +1,5 @@
-import { useInfiniteQuery } from 'react-query'
-import { DEFAULT_PAGE_SIZE } from 'config/constants/default'
+import { useInfiniteQuery } from '@tanstack/react-query'
+import { DEFAULT_PAGE_SIZE } from '@/config/constants/default'
 
 type UseInfiniteScrollProps = {
   fetch: (props: any) => any
@@ -30,7 +30,7 @@ const useInfiniteScroll = ({ fetch, params, queryKey = ['queryKey'] }: UseInfini
 
   const { data, error, fetchNextPage, hasNextPage, isFetching, isLoading, isFetchingNextPage, status } =
     useInfiniteQuery(queryKey, getFetchForInfiniteScroll, {
-      getNextPageParam: (lastPage) => {
+      getNextPageParam: (lastPage: any) => {
         if (lastPage.isLast) {
           return false
         }

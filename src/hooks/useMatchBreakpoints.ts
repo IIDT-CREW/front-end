@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { breakpointMap } from 'theme/base'
+import { breakpointMap } from '@/theme/base'
 import { useIsomorphicEffect } from './useIsomorphicEffect'
 
 type State = {

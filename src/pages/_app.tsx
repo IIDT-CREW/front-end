@@ -1,86 +1,75 @@
 import { useEffect, useRef, useState, Fragment } from 'react'
-import ResetCSS from 'style/ResetCSS'
+import ResetCSS from '@/style/ResetCSS'
 import Script from 'next/script'
 import '../style/index.css'
 import type { AppProps } from 'next/app'
 import Head from 'next/head'
-import store from 'store'
+import store from '@/store'
 import { NextPage } from 'next'
-import Router, { useRouter } from 'next/router'
-import { Hydrate, QueryClientProvider } from 'react-query'
-import { ReactQueryDevtools } from 'react-query/devtools'
-// import Providers from '../Providers'
+import { useRouter } from 'next/navigation'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import GlobalStyle from '../style/Global'
-import useBaseQueryClient from 'hooks/queries/useBaseQueryClient'
-import Menu from 'components/Menu'
-import Footer from 'components/Footer'
-import MenuWrapper from 'components/MenuWrapper'
-import { useNaviState } from 'store/navi/hooks'
-import { MENU_HEIGHT, FOOTER_HEIGHT } from 'config/constants/default'
-// import useAuthUserStorage from 'hooks/useAuthUserStorage'
-import useAuthAccessToken from 'hooks/useAuthAccessToken'
-import useFooterDisable from 'hooks/useFooterDisable'
-import * as gtag from 'utils/gtag'
-import { useDarkMode } from 'hooks/useDarkMode'
+import Menu from '@/components/Menu'
+import Footer from '@/components/Footer'
+import { MENU_HEIGHT, FOOTER_HEIGHT } from '@/config/constants/default'
+import useAuthAccessToken from '@/hooks/useAuthAccessToken'
+import useFooterDisable from '@/hooks/useFooterDisable'
+import { useDarkMode } from '@/hooks/useDarkMode'
 import styled, { ThemeProvider } from 'styled-components'
 import { ToastContainer } from 'react-toastify'
-import { light, dark } from 'theme'
-import ModalProvider from 'components/Common/Modal/ModalContext'
+import { light, dark } from '@/theme'
+import ModalProvider from '@/components/Common/Modal/ModalContext'
 import { Provider } from 'react-redux'
-import { ToastContextProvider } from 'contexts/Toast'
-import 'style/custom-react-toastify.css'
+import { ToastContextProvider } from '@/contexts/Toast'
+// import '@/style/custom-react-toastify.css'
 import 'aos/dist/aos.css'
-const scrollMemories: { [asPath: string]: number } = {}
-// if (process.env.NODE_ENV === 'development') {
-//   import('mocks')
+
+// scrollPositionRestorer()
+
+// /* 스크롤 restore  */
+// function scrollPositionRestorer() {
+//   console.log('scrollMemories= ', scrollMemories)
+//   let isPop = false
+
+//   if (process.browser) {
+//     window.history.scrollRestoration = 'manual'
+//     window.onpopstate = () => {
+//       isPop = true
+//     }
+//   }
+
+//   Router.events.on('routeChangeStart', () => {
+//     console.log('routeChangeStart')
+//     saveScroll()
+//   })
+
+//   Router.events.on('routeChangeComplete', () => {
+//     console.log('routeChangeComplete is pop', isPop)
+//     if (isPop) {
+//       restoreScroll()
+//       isPop = false
+//     } else {
+//       scrollToTop()
+//     }
+//   })
+
+//   function saveScroll() {
+//     console.log('save scroll ', Router.asPath, window.scrollY)
+//     scrollMemories[Router.asPath] = window.scrollY
+//   }
+
+//   function restoreScroll() {
+//     const prevScrollY = scrollMemories[Router.asPath]
+//     console.log('restoreScroll ', prevScrollY)
+//     if (prevScrollY !== undefined) {
+//       window.requestAnimationFrame(() => window.scrollTo(0, prevScrollY))
+//     }
+//   }
+
+//   function scrollToTop() {
+//     window.requestAnimationFrame(() => window.scrollTo(0, 0))
+//   }
 // }
-
-scrollPositionRestorer()
-
-/* 스크롤 restore  */
-function scrollPositionRestorer() {
-  console.log('scrollMemories= ', scrollMemories)
-  let isPop = false
-
-  if (process.browser) {
-    window.history.scrollRestoration = 'manual'
-    window.onpopstate = () => {
-      isPop = true
-    }
-  }
-
-  Router.events.on('routeChangeStart', () => {
-    console.log('routeChangeStart')
-    saveScroll()
-  })
-
-  Router.events.on('routeChangeComplete', () => {
-    console.log('routeChangeComplete is pop', isPop)
-    if (isPop) {
-      restoreScroll()
-      isPop = false
-    } else {
-      scrollToTop()
-    }
-  })
-
-  function saveScroll() {
-    console.log('save scroll ', Router.asPath, window.scrollY)
-    scrollMemories[Router.asPath] = window.scrollY
-  }
-
-  function restoreScroll() {
-    const prevScrollY = scrollMemories[Router.asPath]
-    console.log('restoreScroll ', prevScrollY)
-    if (prevScrollY !== undefined) {
-      window.requestAnimationFrame(() => window.scrollTo(0, prevScrollY))
-    }
-  }
-
-  function scrollToTop() {
-    window.requestAnimationFrame(() => window.scrollTo(0, 0))
-  }
-}
 
 function GlobalHooks() {
   // useAuthUserStorage()
@@ -90,7 +79,7 @@ function GlobalHooks() {
 
 function MyApp(props: AppProps) {
   const { pageProps } = props
-  const queryClient = useBaseQueryClient()
+  const queryClient = new QueryClient()
 
   return (
     <>
@@ -113,13 +102,11 @@ function MyApp(props: AppProps) {
         <title>IIDT</title>
       </Head>
       <QueryClientProvider client={queryClient}>
-        <Hydrate state={pageProps.dehydratedState}>
-          <Provider store={store}>
-            <GlobalHooks />
-            <App {...props} />
-          </Provider>
-        </Hydrate>
-        <ReactQueryDevtools initialIsOpen={false} />
+        <Provider store={store}>
+          <GlobalHooks />
+          <App {...props} />
+        </Provider>
+        {/* <ReactQueryDevtools initialIsOpen={false} /> */}
       </QueryClientProvider>
       <Script
         strategy="afterInteractive"
@@ -157,34 +144,22 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
   const router = useRouter()
   // Use the layout defined at the page level, if available
   const Layout = Component.Layout || Fragment
-  const { isMenuOpen } = useNaviState()
-  const scrollPos = useRef(0)
 
   // useEffect(() => {
-  //   if (isMenuOpen) {
-  //     scrollPos.current = window.scrollY
-  //     document.body.style.overflow = 'hidden'
-  //     window.requestAnimationFrame(() => window.scrollTo(0, 0))
-  //   } else {
-  //     document.body.style.overflow = 'visible'
-  //     window.requestAnimationFrame(() => window.scrollTo(0, scrollPos.current))
+  //   const handleRouteChange = (url: string) => {
+  //     gtag.pageview(url)
   //   }
-  // }, [isMenuOpen])
+  //   router.events.on('routeChangeComplete', handleRouteChange)
+  //   return () => {
+  //     router.events.off('routeChangeComplete', handleRouteChange)
+  //   }
+  // }, [router.events])
 
-  useEffect(() => {
-    const handleRouteChange = (url) => {
-      gtag.pageview(url)
-    }
-    router.events.on('routeChangeComplete', handleRouteChange)
-    return () => {
-      router.events.off('routeChangeComplete', handleRouteChange)
-    }
-  }, [router.events])
+  // const [mounted, setMounted] = useState(false)
 
-  const [mounted, setMounted] = useState(false)
-  useEffect(() => {
-    setMounted(true)
-  }, [])
+  // useEffect(() => {
+  //   setMounted(true)
+  // }, [])
 
   const [themeMode, toggleTheme] = useDarkMode()
   const theme = themeMode === 'light' ? light : dark
@@ -220,9 +195,9 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
     </ThemeProvider>
   )
 
-  if (!mounted) {
-    return <div style={{ visibility: 'hidden' }}>{body}</div>
-  }
+  // if (!mounted) {
+  //   return <div style={{ visibility: 'hidden' }}>{body}</div>
+  // }
   return <>{body}</>
 }
 

@@ -1,4 +1,4 @@
 {
   "typescript.tsdk": "node_modules/typescript/lib",
-  "cSpell.words": ["navi", "Signup", "Upsert"]
+  "cSpell.words": ["Iidt", "navi", "Signup", "supabase", "Upsert"]
 }

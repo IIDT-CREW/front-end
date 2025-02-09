@@ -1,8 +1,8 @@
 import styled from 'styled-components'
-import { Button, Heading, Text, LogoIcon, Box } from 'components/Common'
-import Page from 'components/Layout/Page'
+import { Button, Heading, Text, Box } from '@/components/Common'
+import Page from '@/components/Layout/Page'
 import Link from 'next/link'
-import { MainButton } from 'views/Home'
+import { MainButton } from '@/views/Home'
 
 const StyledNotFound = styled.div`
   display: flex;

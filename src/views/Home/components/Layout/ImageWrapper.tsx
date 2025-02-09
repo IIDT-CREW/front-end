@@ -43,7 +43,13 @@ type ImageWrapperProps = {
 const ImageWrapper = ({ src, alt, ...props }: ImageWrapperProps) => {
   return (
     <St.ImageWrapper {...props}>
-      <Image src={src} priority placeholder="blur" alt={alt} height={props.height} />
+      <Image
+        src={src}
+        priority
+        placeholder="blur"
+        alt={alt}
+        height={props.height ? parseInt(props.height) : undefined}
+      />
     </St.ImageWrapper>
   )
 }

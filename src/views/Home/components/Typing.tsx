@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo } from 'react'
 import classNames from 'classnames'
 import * as Hangul from 'hangul-js'
-const assemble = (slice) => {
+const assemble = (slice: string[]) => {
   return Hangul.assemble(slice)
 }
 const TIME_INTERVAL = 100

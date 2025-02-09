@@ -1,5 +1,5 @@
-import { Modal } from 'components/Common'
-import { Flex, Box, Text } from 'components/Common'
+import { Modal } from '@/components/Common'
+import { Flex, Box, Text } from '@/components/Common'
 import styled from 'styled-components'
 const St = {
   ConfirmButton: styled.div<any>`

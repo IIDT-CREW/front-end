@@ -1,10 +1,10 @@
 /* eslint-disable react/no-array-index-key */
 import React, { useEffect, useState } from 'react'
 import { usePopper } from 'react-popper'
-import useOnClickOutside from 'hooks/useOnClickOutside'
+import useOnClickOutside from '@/hooks/useOnClickOutside'
 import { Box } from '../Common/Box'
 import Text from '../Common/Text/Text'
-import { Colors } from 'theme'
+import { Colors } from '@/theme'
 import { DropdownMenuItemType, DropdownMenuProps } from './types'
 import Link from 'next/link'
 import styled from 'styled-components'

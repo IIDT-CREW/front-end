@@ -1,6 +1,6 @@
 import moment from 'moment'
 import { useState, useEffect } from 'react'
-import { Box, Text, Flex } from 'components/Common'
+import { Box, Text, Flex } from '@/components/Common'
 
 const CountDown = ({ height = '550px', isCountDown = true, text = '' }) => {
   let timer: any = null

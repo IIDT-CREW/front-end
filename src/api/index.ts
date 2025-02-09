@@ -1,17 +1,17 @@
 // lib/axios.ts
 import axios from 'axios'
 import { refresh } from './auth'
-import { decryptWithAES, encryptWithAES } from 'utils/crypto'
-import { API_CODE, API_URL } from 'config/constants/api'
-import { STORAGE_NAME } from 'config/constants/api'
+import { decryptWithAES, encryptWithAES } from '@/utils/crypto'
+import { API_CODE, API_URL } from '@/config/constants/api'
+import { STORAGE_NAME } from '@/config/constants/api'
 
 const asyncLocalStorage = {
-  setItem: function (key, value) {
+  setItem: function (key: string, value: string) {
     return Promise.resolve().then(function () {
       localStorage.setItem(key, value)
     })
   },
-  getItem: function (key) {
+  getItem: function (key: string) {
     return Promise.resolve().then(function () {
       return localStorage.getItem(key)
     })

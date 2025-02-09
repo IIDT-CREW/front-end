@@ -1,18 +1,16 @@
 import styled, { keyframes } from 'styled-components'
-import PageSection from 'components/PageSection'
-import useTheme from 'hooks/useTheme'
-import Container from 'components/Layout/Container'
-import { PageMeta } from 'components/Layout/Page'
-// import Hero from './components/Hero'
-import Heading from 'components/Common/Heading/Heading'
-import { Box } from 'components/Common/Box'
-import { Text } from 'components/Common/Text'
-import Page from 'components/Layout/Page'
+import PageSection from '@/components/PageSection'
+import useTheme from '@/hooks/useTheme'
+import Container from '@/components/Layout/Container'
+import { PageMeta } from '@/components/Layout/Page'
+import Heading from '@/components/Common/Heading/Heading'
+import { Box } from '@/components/Common/Box'
+import { Text } from '@/components/Common/Text'
+import Page from '@/components/Layout/Page'
 import LayoutContainer from './components/Layout/LayoutContainer'
 import ImageWrapper from './components/Layout/ImageWrapper'
 import LastLeaf from '../../../public/images/home/rhys-fradley.jpg'
 import road from '../../../public/images/home/casey-horner.jpg'
-// import Vibes from '../../../public/images/home/nft/Vibes@2x.png'
 import React, { useEffect } from 'react'
 import AOS from 'aos'
 import CountDown from './components/CountDown'
@@ -183,7 +181,7 @@ const MainButton = styled.button`
   border-radius: 40px;
   line-height: 1;
   font-weight: 600;
-  background: ;
+  background:;
 `
 
 const leftAosArray = ['fade-right', '200', '', '3000']

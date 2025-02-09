@@ -1,12 +1,10 @@
 import { createContext, ReactNode } from 'react'
 import { toast, ToastOptions, Slide } from 'react-toastify'
-import { Flex, Text } from 'components/Common'
+import { Flex, Text } from '@/components/Common'
 import styled from 'styled-components'
 
 const St = {
   ToastWrapper: styled.div`
-    // background: ${({ theme }) => theme.colors.background};
-    /* 🌑/Gray/300 */
     background: #191919;
   `,
 }
@@ -16,7 +14,7 @@ export const TYPE_OPTIONS = {
   WARNING: 'warning',
   ERROR: 'error',
 }
-export type TypeOptions = typeof TYPE_OPTIONS[keyof typeof TYPE_OPTIONS]
+export type TypeOptions = (typeof TYPE_OPTIONS)[keyof typeof TYPE_OPTIONS]
 
 export const TOAST_POSITION = {
   TOP_RIGHT: 'top-right',
@@ -26,7 +24,7 @@ export const TOAST_POSITION = {
   BOTTOM_CENTER: 'bottom-center',
   BOTTOM_LEFT: 'bottom-left',
 }
-export type ToastPosition = typeof TOAST_POSITION[keyof typeof TOAST_POSITION]
+export type ToastPosition = (typeof TOAST_POSITION)[keyof typeof TOAST_POSITION]
 
 type ToastContextOptions = {
   position: ToastPosition
@@ -41,7 +39,7 @@ export type ToastType = {
 
 export const toastContext = createContext<any>(undefined)
 
-export const CustomToast = (props) => {
+export const CustomToast = (props: { message: string }) => {
   return (
     <St.ToastWrapper>
       <Flex justifyContent="space-between" alignItems="center">
@@ -51,7 +49,7 @@ export const CustomToast = (props) => {
     </St.ToastWrapper>
   )
 }
-export const ToastContextProvider = ({ children }) => {
+export const ToastContextProvider = ({ children }: { children: ReactNode }) => {
   const { Provider } = toastContext
   const onToast = ({ type, isOfficialError = false, message, option }: ToastType) => {
     switch (type) {

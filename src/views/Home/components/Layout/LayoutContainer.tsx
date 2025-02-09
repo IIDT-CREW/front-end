@@ -1,5 +1,5 @@
-import { Flex } from 'components/Common'
-import useTheme from 'hooks/useTheme'
+import { Flex } from '@/components/Common'
+import useTheme from '@/hooks/useTheme'
 import styled from 'styled-components'
 import { ReactElement } from 'react'
 

@@ -1,27 +1,33 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { Box } from 'components/Common'
+import { Box } from '@/components/Common'
 import styled from 'styled-components'
-import { Will } from '@api/will/types'
+import { Will } from '@/api/will/types'
+import Header from '@/components/WillCard/WillCardHeader'
+import Body from '@/components/WillCard/WillCardBody'
+import Footer from '@/components/WillCard/WillCardFooter'
+import { MAX_CARD_HEIGHT } from '@/config/constants/default'
 import { MoreOutlined, CaretUpOutlined } from '@ant-design/icons'
-import Header from './WillCardHeader'
-import Body from './WillCardBody'
-import Footer from './WillCardFooter'
-import { MAX_CARD_HEIGHT } from 'config/constants/default'
 
 const MARGIN_BOTTOM = 40
 const St = {
   CardWrapper: styled(Box)`
     transition: all 1s;
-    box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.15), 0px 2px 6px rgba(0, 0, 0, 0.13);
+    box-shadow:
+      0px 0px 1px rgba(0, 0, 0, 0.15),
+      0px 2px 6px rgba(0, 0, 0, 0.13);
   `,
   MoreWrapper: styled(Box)`
     background: ${({ theme }) => theme.colors.background};
-    box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.15), 0px 2px 6px rgba(0, 0, 0, 0.13);
+    box-shadow:
+      0px 0px 1px rgba(0, 0, 0, 0.15),
+      0px 2px 6px rgba(0, 0, 0, 0.13);
     border-radius: 50%;
   `,
   CloseWrapper: styled(Box)`
     background: ${({ theme }) => theme.colors.background};
-    box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.15), 0px 2px 6px rgba(0, 0, 0, 0.13);
+    box-shadow:
+      0px 0px 1px rgba(0, 0, 0, 0.15),
+      0px 2px 6px rgba(0, 0, 0, 0.13);
     border-radius: 50%;
     width: 40px;
     height: 40px;
@@ -39,12 +45,11 @@ type WillCardProps = {
 }
 
 const WillCard = ({ will, handleDelete, handleShare, isPrivate = true }: WillCardProps) => {
-  const ref = useRef(null)
+  const ref = useRef<HTMLDivElement>(null)
   const [isOverflow, setIsOverflow] = useState(false)
   const isOverflowContent = useRef(false)
-
   useEffect(() => {
-    if (ref.current.clientHeight + MARGIN_BOTTOM > MAX_CARD_HEIGHT) {
+    if (ref.current?.clientHeight && ref.current.clientHeight + MARGIN_BOTTOM > MAX_CARD_HEIGHT) {
       setIsOverflow(true)
       isOverflowContent.current = true
     }
@@ -54,7 +59,6 @@ const WillCard = ({ will, handleDelete, handleShare, isPrivate = true }: WillCar
     setIsOverflow((prev) => !prev)
   }, [])
 
-  console.log(will, ref?.current?.clientHeight)
   return (
     <Box position="relative">
       <St.CardWrapper
@@ -65,7 +69,7 @@ const WillCard = ({ will, handleDelete, handleShare, isPrivate = true }: WillCar
         minWidth="362px"
         maxWidth="582px"
         borderRadius="4px"
-        maxHeight={isOverflow ? `${MAX_CARD_HEIGHT}px` : `${ref?.current?.clientHeight + MARGIN_BOTTOM}px`}
+        maxHeight={isOverflow ? `${MAX_CARD_HEIGHT}px` : `${ref?.current?.clientHeight ?? 0 + MARGIN_BOTTOM}px`}
         overflow={isOverflow ? 'hidden' : 'auto'}
       >
         <Box ref={ref}>
@@ -77,12 +81,12 @@ const WillCard = ({ will, handleDelete, handleShare, isPrivate = true }: WillCar
 
       {isOverflowContent?.current && isOverflow && (
         <St.MoreWrapper position="absolute" bottom="-15px" left="45%" onClick={handleIsOpen}>
-          <MoreOutlined style={{ fontSize: '40px', cursor: 'pointer' }} />
+          <MoreOutlined style={{ fontSize: '40px', cursor: 'pointer' }} className="anticon" />
         </St.MoreWrapper>
       )}
       {isOverflowContent?.current && !isOverflow && (
         <St.CloseWrapper position="absolute" bottom="-15px" left="45%" onClick={handleIsOpen}>
-          <CaretUpOutlined style={{ fontSize: '30px', cursor: 'pointer' }} />
+          <CaretUpOutlined style={{ fontSize: '30px', cursor: 'pointer' }} className="anticon" />
         </St.CloseWrapper>
       )}
     </Box>

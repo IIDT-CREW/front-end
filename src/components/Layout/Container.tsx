@@ -1,4 +1,4 @@
-import { Box, BoxProps } from 'components/Common/Box'
+import { Box, BoxProps } from '@/components/Common/Box'
 
 const Container: React.FC<BoxProps> = ({ children, ...props }) => (
   <Box px={['16px', '24px']} mx="auto" maxWidth="1200px" {...props}>

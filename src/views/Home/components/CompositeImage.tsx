@@ -1,5 +1,5 @@
 import styled, { keyframes } from 'styled-components'
-import { Box } from 'components/Common'
+import { Box } from '@/components/Common'
 
 const floatingAnim = (x: string, y: string) => keyframes`
   from {

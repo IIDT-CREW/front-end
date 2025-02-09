@@ -2,28 +2,27 @@ import { useRouter } from 'next/router'
 import { useMemo, useState, useEffect, useRef, useCallback } from 'react'
 import { useDispatch } from 'react-redux'
 import styled, { css } from 'styled-components'
-import useScrollDown from 'hooks/useScrollDown'
-import Flex from '../Common/Box/Flex'
-import { Box, Text, useModal } from 'components/Common'
-import { Heading } from '../Common'
+import useScrollDown from '@/hooks/useScrollDown'
+import Flex from '@/components/Common/Box/Flex'
+import { Box, Text, useModal } from '@/components/Common'
+import { Heading } from '@/components/Common'
 import Link from 'next/link'
-
-import { Button } from 'components/Common/Button'
-import MenuItem from 'components/Menu/MenuItem'
+import { Button } from '@/components/Common/Button'
+import MenuItem from '@/components/Menu/MenuItem'
 import DropdownMenu from './DropdownMenu'
 import MenuConfig from './config'
-import { naviActions } from 'store/navi'
-import { useIsLogin } from 'store/auth/hooks'
+import { naviActions } from '@/store/navi'
+import { useIsLogin } from '@/store/auth/hooks'
 import ThemeToggleButton from '../Common/Button/ThemeToggleButton'
 
-import { MENU_HEIGHT } from 'config/constants/default'
-import MenuOutline from 'components/Common/Svg/Icons/MenuOutline'
-import LoginModal from 'components/LoginModal'
-import { STORAGE_NAME } from 'config/constants/api'
-import axios from 'api'
-import { authActions } from '@store/auth'
-import { useNaviState } from '@store/navi/hooks'
-import useOnClickOutside from '@hooks/useOnClickOutside'
+import { MENU_HEIGHT } from '@/config/constants/default'
+import MenuOutline from '@/components/Common/Svg/Icons/MenuOutline'
+import LoginModal from '@/components/LoginModal'
+import { STORAGE_NAME } from '@/config/constants/api'
+import axios from '@/api'
+import { authActions } from '@/store/auth'
+import { useNaviState } from '@/store/navi/hooks'
+import useOnClickOutside from '@/hooks/useOnClickOutside'
 
 type StyledNavigationProps = {
   isSharePage: boolean
@@ -47,7 +46,9 @@ export const St = {
     z-index: 10;
   `,
   StyledNav: styled.nav<StyledNavigationProps>`
-    transition: background, border 0.5s;
+    transition:
+      background,
+      border 0.5s;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -93,7 +94,9 @@ export const St = {
     display: flex;
     align-items: center;
     transform: translateX(-190px) translateY(25px);
-    box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.08), 0px 16px 30px 4px rgba(0, 0, 0, 0.1);
+    box-shadow:
+      0px 0px 1px rgba(0, 0, 0, 0.08),
+      0px 16px 30px 4px rgba(0, 0, 0, 0.1);
   `,
   MenuBoxWrapper: styled(Box)`
     border-radius: 4px;
@@ -104,7 +107,9 @@ export const St = {
     display: flex;
     align-items: center;
     transform: translateX(-190px) translateY(25px);
-    box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.08), 0px 16px 30px 4px rgba(0, 0, 0, 0.1);
+    box-shadow:
+      0px 0px 1px rgba(0, 0, 0, 0.08),
+      0px 16px 30px 4px rgba(0, 0, 0, 0.1);
   `,
 
   MenuFlex: styled(Flex)`
@@ -196,7 +201,7 @@ const MenuBox = () => {
     </St.MenuBoxWrapper>
   )
 }
-const MenuWrapper = ({ themeMode, toggleTheme }) => {
+const MenuWrapper = ({ themeMode, toggleTheme }: { themeMode: string; toggleTheme: () => void }) => {
   const router = useRouter()
   const dispatch = useDispatch()
   const [showMenu, setShowMenu] = useState(true)
@@ -265,7 +270,7 @@ const MenuWrapper = ({ themeMode, toggleTheme }) => {
             <ThemeToggleButton selected={themeMode === 'dark'} onClick={handleDark} />
             {isLogin ? (
               <Box onClick={handleMenu} style={{ cursor: 'pointer' }}>
-                <MenuOutline stroke={isSharePage && '#fff'} themeMode={themeMode} />
+                <MenuOutline stroke={isSharePage ? '#fff' : undefined} themeMode={themeMode as 'light' | 'dark'} />
               </Box>
             ) : (
               <Button onClick={handleLogin}>시작하기</Button>

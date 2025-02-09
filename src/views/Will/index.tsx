@@ -2,16 +2,16 @@ import { useEffect, useCallback } from 'react'
 import { useRouter } from 'next/router'
 import AOS from 'aos'
 import styled from 'styled-components'
-import { useQuery } from 'react-query'
-import Page from '@components/Layout/Page'
-import { Flex, Box, Text, useModal } from '@components/Common'
-import { getWill } from '@api/will'
-import WillCard from '@views/Will/components/WillShareCard'
-import TitleBanner from '@views/Will/components/TitleBanner'
-import { MainButton } from '@views/Home'
-import LoginModal from '@components/LoginModal'
-import { useIsLogin } from '@store/auth/hooks'
-import { GetWill } from '@api/will/types'
+import { useQuery } from '@tanstack/react-query'
+import Page from '@/components/Layout/Page'
+import { Flex, Box, Text, useModal } from '@/components/Common'
+import { getWill } from '@/api/will'
+import WillCard from '@/views/Will/components/WillShareCard'
+import TitleBanner from '@/views/Will/components/TitleBanner'
+import { MainButton } from '@/views/Home'
+import LoginModal from '@/components/LoginModal'
+import { useIsLogin } from '@/store/auth/hooks'
+import { GetWill } from '@/api/will/types'
 
 const St = {
   Container: styled(Box)`
@@ -24,7 +24,9 @@ const St = {
   MenuWrapper: styled<any>(Box)`
     width: 200px;
     background: ${({ theme }) => theme.colors.background};
-    box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.08), 0px 16px 30px 4px rgba(0, 0, 0, 0.1);
+    box-shadow:
+      0px 0px 1px rgba(0, 0, 0, 0.08),
+      0px 16px 30px 4px rgba(0, 0, 0, 0.1);
     border-radius: 4px;
     padding: 18px;
     ${({ isOpen }) =>
@@ -90,7 +92,10 @@ const WillFooter = ({ handleWrite }: WillFooterProps) => {
 const WillPage = () => {
   const isLogin = useIsLogin()
   const router = useRouter()
-  const { data, isLoading, isError } = useQuery('getWill', () => getWill(router.query.id as string))
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ['getWill', router.query.id],
+    queryFn: () => getWill(router.query.id as string),
+  })
   const [presentLoginModal] = useModal(<LoginModal />)
 
   const handleWrite = useCallback(() => {
@@ -108,11 +113,11 @@ const WillPage = () => {
   }
 
   return (
-    <Page title={data?.result?.TITLE} content={data.result?.CONTENT} isFullPage>
+    <Page title={data?.result?.TITLE} content={data?.result?.CONTENT} isFullPage>
       <St.Container>
-        <WillTitle data={data} />
+        {/* <WillTitle data={data} />
         <WillContent data={data} isLoading={isLoading} />
-        <WillFooter handleWrite={handleWrite} />
+        <WillFooter handleWrite={handleWrite} /> */}
       </St.Container>
     </Page>
   )

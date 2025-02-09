@@ -31,6 +31,7 @@ module.exports = withBundleAnalyzer({
   typescript: {
     ignoreBuildErrors: true,
   },
+  pageExtensions: ['tsx', 'ts', 'jsx', 'js'],
 
   images: {
     domains: ['img.seadn.io', 'images.unsplash.com', 'source.unsplash.com', '127.0.0.1'],

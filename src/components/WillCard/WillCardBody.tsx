@@ -1,10 +1,10 @@
 import React from 'react'
-import { Box, Text } from 'components/Common'
+import { Box, Text } from '@/components/Common'
 import styled from 'styled-components'
 import moment from 'moment'
-import { IS_DEFAULT_MODE } from 'config/constants/default'
-import { Will } from '@api/will/types'
-import { QUESTION_LIST } from '@views/Write/data'
+import { IS_DEFAULT_MODE } from '@/config/constants/default'
+import { QUESTION_LIST } from '@/views/Write/data'
+import { Will } from '@/types/will'
 
 const St = {
   Contents: styled.pre`
@@ -24,8 +24,7 @@ type BodyProps = {
 }
 
 const Body = ({ will }: BodyProps) => {
-  const { CONTENT: content, REG_DATE: regDate, TITLE: title, CONTENT_TYPE: contentType, ANSWER_LIST: answerList } = will
-
+  const { content, regDate, title, contentType, answerList } = will
   const isDefaultType = contentType === IS_DEFAULT_MODE
 
   return (
@@ -38,7 +37,7 @@ const Body = ({ will }: BodyProps) => {
         <St.Contents>{content}</St.Contents>
       ) : (
         <St.Contents>
-          {answerList?.map((answer, index) => {
+          {answerList?.map((answer, index: number) => {
             return (
               <Box key={`answer_${index}`}>
                 <Text bold>

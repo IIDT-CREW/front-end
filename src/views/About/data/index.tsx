@@ -1,4 +1,4 @@
-import { IS_DEFAULT_MODE } from 'config/constants/default'
+import { IS_DEFAULT_MODE } from '@/config/constants/default'
 
 export const ABOUT_INFO = {
   TITLE: '안녕하세요. IIDT 입니다.',

@@ -1,8 +1,8 @@
 import { useEffect } from 'react'
-import { Modal } from 'components/Common'
-import { Flex, Box, Text } from 'components/Common'
-import CopyToClipboard from 'views/Will/components/CopyToClipboard'
-import { API_URL } from 'config/constants/api'
+import { Modal } from '@/components/Common'
+import { Flex, Box, Text } from '@/components/Common'
+import CopyToClipboard from '@/views/Will/components/CopyToClipboard'
+import { API_URL } from '@/config/constants/api'
 import { useRouter } from 'next/router'
 
 const ShareModal = ({ onDismiss, content, willId, title, ...props }: any) => {
@@ -75,7 +75,7 @@ const ShareModal = ({ onDismiss, content, willId, title, ...props }: any) => {
         <Box>
           <Flex justifyContent="center" alignItems="center" flexWrap="wrap" style={{ gap: '10px' }}>
             <CopyToClipboard toCopy={`${API_URL}/will/${willId}`} />
-            <div onClick={handleKakao} type="button">
+            <div onClick={handleKakao}>
               <img alt="" src="//developers.kakao.com/assets/img/about/logos/kakaolink/kakaolink_btn_small.png" />
             </div>
           </Flex>

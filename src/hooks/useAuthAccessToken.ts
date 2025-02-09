@@ -1,11 +1,11 @@
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import { decryptWithAES } from 'utils/crypto'
-import { authActions } from 'store/auth'
-import { STORAGE_NAME, API_CODE } from 'config/constants/api'
-import { getUserInfo } from 'api/auth'
-import { useIsLogin } from 'store/auth/hooks'
-import axios from 'api'
+import { decryptWithAES } from '@/utils/crypto'
+import { authActions } from '@/store/auth'
+import { STORAGE_NAME, API_CODE } from '@/config/constants/api'
+import { getUserInfo } from '@/api/auth'
+import { useIsLogin } from '@/store/auth/hooks'
+import axios from '@/api'
 
 const useAuthAccessToken = () => {
   const dispatch = useDispatch()

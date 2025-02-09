@@ -1,14 +1,14 @@
 import styled from 'styled-components'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { DEFAULT_META, getCustomMeta } from 'config/constants/meta'
-import Box from '../Common/Box/Box'
+import { DEFAULT_META, getCustomMeta } from '@/config/constants/meta'
+import Box from '@/components/Common/Box/Box'
 // import Container from './Container'
 
 type StyledPageProps = {
   isFullPage: boolean
 }
-const StyledPage = styled(Box)`
+const StyledPage = styled(Box)<StyledPageProps>`
   ${({ theme }) => theme.mediaQueries.sm} {
     padding-top: 50px;
     padding-bottom: 24px;
@@ -19,9 +19,7 @@ const StyledPage = styled(Box)`
     padding-bottom: 32px;
   }
 
-  ${({ isFullPage }: StyledPageProps) => {
-    return isFullPage ? `padding-top : 0px !important; ` : null
-  }}
+  ${({ isFullPage }) => isFullPage && 'padding-top: 0px !important;'}
 `
 
 export const PageMeta: React.FC<{ title?: string; content?: string }> = ({ title: mainTitle, content }) => {

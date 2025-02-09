@@ -1,4 +1,4 @@
-import { Flex, FlexProps } from 'components/Common/Box'
+import { Flex, FlexProps } from '@/components/Common/Box'
 import styled from 'styled-components'
 
 const FlexLayout = styled.div`

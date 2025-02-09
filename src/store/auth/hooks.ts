@@ -19,7 +19,7 @@ export function useUserInfo(): { memIdx: number; userid: string; name: string; e
 
 export function useSetAuth() {
   const dispatch = useDispatch()
-  const handleSetAuth = ({ accessToken, info }) => {
+  const handleSetAuth = ({ accessToken, info }: { accessToken: string; info: any }) => {
     return dispatch(
       authActions.setAuth({
         isAuthenticated: true,
