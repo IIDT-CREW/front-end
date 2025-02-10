@@ -1,10 +1,14 @@
 import { Text } from '@/components/Common'
 import { SkeletonV2 } from '@/components/Common/Skeleton'
 import { useWill } from '@/hooks/queries/useWill'
+import { createClient } from '@supabase/supabase-js'
 
 const MainInfo = () => {
+  // const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!)
+
   const { useWillCountQuery } = useWill()
   const { data, isLoading, isError } = useWillCountQuery()
+
   return (
     <>
       <Text fontSize={['18px']} bold mb="24px">

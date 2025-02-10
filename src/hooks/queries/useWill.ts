@@ -2,9 +2,17 @@ import { createClient } from '@supabase/supabase-js'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { WillInsert, WillWithRelations } from '@/types/will'
 import { WillEssayAnswerUpdate, WillQuestionUpdate } from '@/types/will-essay'
+import { supabase } from '@/lib/supabase'
+
+// 쿼리 옵션을 상수로 분리
+const WILL_COUNT_QUERY_OPTIONS = {
+  queryKey: ['willCount'],
+  staleTime: 1000 * 60 * 5, // 5분
+  cacheTime: 1000 * 60 * 30, // 30분
+} as const
 
 export const useWill = () => {
-  const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!)
+  // const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!)
   const queryClient = useQueryClient()
 
   // 조회수 증가 함수
@@ -94,7 +102,10 @@ export const useWill = () => {
     return useQuery({ queryKey: ['wills'], queryFn: getWillList })
   }
   const useWillCountQuery = () => {
-    return useQuery({ queryKey: ['willCount'], queryFn: getWillCount })
+    return useQuery({
+      ...WILL_COUNT_QUERY_OPTIONS,
+      queryFn: getWillCount,
+    })
   }
 
   const useInsertWillMutation = () => {

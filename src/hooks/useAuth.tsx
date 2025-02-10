@@ -1,7 +1,7 @@
 // hooks/useAuth.ts
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
-import { useEffect, useState } from 'react'
-import { useRouter } from 'next/router'
+import { useEffect, useState, useMemo } from 'react'
+import { useRouter } from 'next/navigation'
 import { User } from '@supabase/supabase-js'
 
 export const useAuth = () => {

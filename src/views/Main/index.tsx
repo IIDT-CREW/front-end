@@ -8,6 +8,7 @@ import { MainButton } from '@/views/Home'
 import WriteWarningInfoModal from './components/modal/WriteWarningInfoModal'
 import LoginModal from '@/components/LoginModal'
 import { useIsLogin, useUserInfo } from '@/store/auth/hooks'
+import { useAuth } from '@/hooks/useAuth'
 
 const St = {
   Container: styled(Box)`
@@ -107,25 +108,28 @@ const St = {
 //   )
 // }
 const Main = () => {
-  const isLogin = useIsLogin()
+  const { isAuthenticated } = useAuth()
+  console.log('isAuthenticated', isAuthenticated)
   const [presentWarningModal] = useModal(<WriteWarningInfoModal />)
   const [presentLoginModal] = useModal(<LoginModal />)
-
+  
   useEffect(() => {
     const isPrecented = localStorage.getItem('isPrecented')
     if (!isPrecented) {
       localStorage.setItem('isPrecented', 'true')
       presentWarningModal()
     }
-    if (isPrecented) return
-  }, [presentWarningModal])
+    // if (isPrecented) return
+  }, [])
 
   const router = useRouter()
 
   const handleWrite = () => {
-    if (!isLogin) presentLoginModal()
-    if (isLogin) router.push('write')
+    if (!isAuthenticated) presentLoginModal()
+    if (isAuthenticated) router.push('write')
   }
+
+  console.log('isAuthenticated', isAuthenticated)
 
   return (
     <St.Container mt="78px">

@@ -30,10 +30,11 @@ const Write = () => {
   const goToBack = useCallback(() => {
     router.push('/main')
   }, [router])
+  
   // const { mutate: addPostMutate } = useAddPostMutation({ goToBack })
   // const { mutate: updatePostMutate } = useUpdatePostMutation({ goToBack })
-  const isEditMode = !!router?.query?.will_id
-  const willId = router?.query?.will_id as string
+  // const isEditMode = !!router?.query?.will_id
+  // const willId = router?.query?.will_id as string
   const [isDefaultPostType, setIsDefaultPostType] = useState(true)
   const [page, setPage] = useState(0)
   const [title, setTitle] = useState('')
@@ -61,16 +62,16 @@ const Write = () => {
     setIsDisableSave(contents[page].answer.length ? false : true)
   }, [contents, page])
 
-  const setPostWhenEditMode = useCallback(() => {
-    const {
-      result: {
-        TITLE: title,
-        CONTENT: content,
-        CONTENT_TYPE: contentType,
-        ANSWER_LIST: answerList,
-        IS_PRIVATE: isPrivate,
-      },
-    } = data
+  // const setPostWhenEditMode = useCallback(() => {
+  //   const {
+  //     result: {
+  //       TITLE: title,
+  //       CONTENT: content,
+  //       CONTENT_TYPE: contentType,
+  //       ANSWER_LIST: answerList,
+  //       IS_PRIVATE: isPrivate,
+  //     },
+  //   } = data
 
     // setTitle(title)
     // setPrivate(isPrivate)
@@ -88,19 +89,19 @@ const Write = () => {
     //   }
     // })
     // setContents(answer)
-  }, [contents, data])
+  //}, [contents, data])
 
   /* 모달 onOpen */
-  useEffect(
-    function initialScreenByEditMode() {
-      if (router.isReady) {
-        if (isEditMode && isPostLoaded) setPostWhenEditMode()
-        if (!isEditMode) modal()
-      }
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [router.isReady, isPostLoaded, isEditMode],
-  )
+  // useEffect(
+  //   function initialScreenByEditMode() {
+  //     if (router.isReady) {
+  //       if (isEditMode && isPostLoaded) setPostWhenEditMode()
+  //       if (!isEditMode) modal()
+  //     }
+  //   },
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  //   [router.isReady, isPostLoaded, isEditMode],
+  // )
 
   const handlePostType = useCallback(() => {
     setIsDefaultPostType(false)
@@ -122,26 +123,30 @@ const Write = () => {
     setPage(page)
   }, [])
 
-  const handleUpsert = useCallback(() => {
-    const parameter = {
-      title: title.length ? title : DEFAULT_TITLE,
-      thumbnail: 'title',
-      mem_idx: memIdx,
-      content: isDefaultPostType ? contents[0].answer : '',
-      will_id: isEditMode ? willId : nanoid(),
-      is_private: isPrivate,
-      content_type: isDefaultPostType ? 0 : 1,
-      answer_list: isDefaultPostType
-        ? null
-        : contents?.map((content) => ({
-            qs_essay_idx: content.questionEssayIndex,
-            qs_idx: content.questionIndex.toString(),
-            qs_essay_answer: content.answer,
-          })),
-    }
+  // const handleUpsert = useCallback(() => {
+  //   const parameter = {
+  //     title: title.length ? title : DEFAULT_TITLE,
+  //     thumbnail: 'title',
+  //     mem_idx: memIdx,
+  //     content: isDefaultPostType ? contents[0].answer : '',
+  //     will_id: isEditMode ? willId : nanoid(),
+  //     is_private: isPrivate,
+  //     content_type: isDefaultPostType ? 0 : 1,
+  //     answer_list: isDefaultPostType
+  //       ? null
+  //       : contents?.map((content) => ({
+  //           qs_essay_idx: content.questionEssayIndex,
+  //           qs_idx: content.questionIndex.toString(),
+  //           qs_essay_answer: content.answer,
+  //         })),
+  //   }
     // console.log(parameter)
     // isEditMode ? updatePostMutate(parameter) : addPostMutate(parameter)
-  }, [contents, isDefaultPostType, isEditMode, isPrivate, memIdx, title, willId])
+  //}, [contents, isDefaultPostType, isEditMode, isPrivate, memIdx, title, willId])
+
+  const handleUpsert = () => {
+    console.log('handleUpsert')
+  }
 
   return (
     <St.Article>
