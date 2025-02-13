@@ -1,18 +1,18 @@
 import React, { useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
-import { Box, Text, Flex, useModal } from 'components/Common'
+import { Box, Text, Flex, useModal } from '@/components/Common'
 import styled from 'styled-components'
 import { usePopper } from 'react-popper'
-import Ellipsis from 'components/Common/Svg/Icons/Ellipsis'
-import Export from 'components/Common/Svg/Icons/Export'
-import Trash from 'components/Common/Svg/Icons/Trash'
-import Edit from 'components/Common/Svg/Icons/Edit'
-import Panorama from 'components/Common/Svg/Icons/Panorama'
+import Ellipsis from '@/components/Common/Svg/Icons/Ellipsis'
+import Export from '@/components/Common/Svg/Icons/Export'
+import Trash from '@/components/Common/Svg/Icons/Trash'
+import Edit from '@/components/Common/Svg/Icons/Edit'
+import Panorama from '@/components/Common/Svg/Icons/Panorama'
 import moment from 'moment'
-import WriteDeleteModal from 'views/Main/components/modal/WriteDeleteModal'
-import ShareModal from 'views/Main/components/modal/ShareModal'
-import { useIsLogin } from 'store/auth/hooks'
-import { Will } from '@api/will/types'
+import WriteDeleteModal from '@/views/Main/components/modal/WriteDeleteModal'
+import ShareModal from '@/views/Main/components/modal/ShareModal'
+import { useIsLogin } from '@/store/auth/hooks'
+import { Will } from '@/api/will/types'
 
 const St = {
   Container: styled(Box)`
@@ -125,7 +125,7 @@ const Header = ({ will, handleDelete, handleShare, isPrivate = true }: HeaderPro
                 {isOpen && (
                   <St.MenuWrapper ref={setTooltipRef} style={styles.popper} {...attributes.popper} isOpen={isOpen}>
                     <MenuItem
-                      presentDeleteModal={presentDeleteModal}
+                      presentDelete1Modal={presentDeleteModal}
                       presentShareModal={presentShareModal}
                       handleEdit={handleEdit}
                       handlePreview={handlePreview}

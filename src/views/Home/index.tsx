@@ -8,6 +8,7 @@ import Link from 'next/link'
 import { useIsLogin } from '@/store/auth/hooks'
 import MainCard from './components/MainCard'
 import Clock from './components/Clock'
+import { useAuth } from '@/hooks/useAuth'
 
 export const MainButton = styled.button`
   display: flex;
@@ -47,7 +48,8 @@ const Home: React.FC = () => {
     AOS.init()
     AOS.refresh()
   }, [])
-  const isLogin = useIsLogin()
+  const { isAuthenticated } = useAuth()
+  // const isLogin = useIsLogin()
   // const { theme } = useTheme()
   // const { accessToken } = useSelector<AppState, AppState['auth']>((state) => state.auth)
 
@@ -93,7 +95,6 @@ const Home: React.FC = () => {
           imagePath="/images/home/huyen-pham--PTlx55R-KU-unsplash.jpg"
           alt=""
         />
-
         <Box mb="50px" style={{ textAlign: 'center' }} height="100vh">
           <Flex justifyContent="center" alignItems="center" height="100%" position="relative" flexDirection="column">
             <Text fontSize={['16px', '16px', '36px', '36px']} data-aos="fade-up" data-aos-duration="1000">
@@ -116,7 +117,7 @@ const Home: React.FC = () => {
             <Text fontSize={['16px', '16px', '36px', '48px']} mb="24px">
               다시 한 번 삶을 되돌아보는 시간
             </Text>
-            <Link href={isLogin ? '/write' : '/main'}>
+            <Link href={isAuthenticated ? '/write' : '/main'}>
               <MainButton>일기 작성하러가기</MainButton>
             </Link>
           </Flex>

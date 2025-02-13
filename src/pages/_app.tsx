@@ -23,6 +23,8 @@ import { Provider } from 'react-redux'
 import { ToastContextProvider } from '@/contexts/Toast'
 // import '@/style/custom-react-toastify.css'
 import 'aos/dist/aos.css'
+import { AuthProvider } from '@/components/AuthProvider'
+import { theme } from '@/styles/theme'
 
 // scrollPositionRestorer()
 
@@ -103,8 +105,10 @@ function MyApp(props: AppProps) {
       </Head>
       <QueryClientProvider client={queryClient}>
         <Provider store={store}>
-          <GlobalHooks />
-          <App {...props} />
+          <AuthProvider>
+            <GlobalHooks />
+            <App {...props} />
+          </AuthProvider>
         </Provider>
         {/* <ReactQueryDevtools initialIsOpen={false} /> */}
       </QueryClientProvider>
@@ -168,30 +172,32 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
 
   const body = (
     <ThemeProvider theme={theme}>
-      <ResetCSS />
-      <GlobalStyle />
-      <ToastContextProvider>
-        <ModalProvider>
-          <Layout>
-            <Menu themeMode={themeMode} toggleTheme={toggleTheme} />
-            {/* {isMenuOpen && <MenuWrapper />} */}
-            <St.Wrapper>
-              <Component {...pageProps} />
-            </St.Wrapper>
-          </Layout>
-          {!isFooterDisable && <Footer />}
+      <AuthProvider>
+        <ResetCSS />
+        <GlobalStyle />
+        <ToastContextProvider>
+          <ModalProvider>
+            <Layout>
+              <Menu themeMode={themeMode} toggleTheme={toggleTheme} />
+              {/* {isMenuOpen && <MenuWrapper />} */}
+              <St.Wrapper>
+                <Component {...pageProps} />
+              </St.Wrapper>
+            </Layout>
+            {!isFooterDisable && <Footer />}
 
-          <ToastContainer
-            position="bottom-right"
-            autoClose={3000}
-            closeOnClick
-            draggable={false}
-            pauseOnHover={false}
-            pauseOnFocusLoss={false}
-            hideProgressBar={true}
-          />
-        </ModalProvider>
-      </ToastContextProvider>
+            <ToastContainer
+              position="bottom-right"
+              autoClose={3000}
+              closeOnClick
+              draggable={false}
+              pauseOnHover={false}
+              pauseOnFocusLoss={false}
+              hideProgressBar={true}
+            />
+          </ModalProvider>
+        </ToastContextProvider>
+      </AuthProvider>
     </ThemeProvider>
   )
 

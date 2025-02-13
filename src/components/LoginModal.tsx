@@ -109,18 +109,18 @@ const LoginIcon = styled.i<LoginProps>`
     }
   }}
 `
-const KAKAO_LOGIN_URL =
-  `https://kauth.kakao.com/oauth/authorize` +
-  `?client_id=${process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID}` +
-  `&redirect_uri=${process.env.NEXT_PUBLIC_LOGIN_CALLBACK_URL_PREFIX}/kakao` +
-  `&response_type=code`
+// const KAKAO_LOGIN_URL =
+//   `https://kauth.kakao.com/oauth/authorize` +
+//   `?client_id=${process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID}` +
+//   `&redirect_uri=${process.env.NEXT_PUBLIC_LOGIN_CALLBACK_URL_PREFIX}/kakao` +
+//   `&response_type=code`
 
-const GOOGLE_LOGIN_URL =
-  `https://accounts.google.com/o/oauth2/v2/auth` +
-  `?client_id=${process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}` +
-  `&redirect_uri=${process.env.NEXT_PUBLIC_LOGIN_CALLBACK_URL_PREFIX}/google` +
-  `&response_type=code` +
-  `&scope=https://www.googleapis.com/auth/userinfo.email`
+// const GOOGLE_LOGIN_URL =
+//   `https://accounts.google.com/o/oauth2/v2/auth` +
+//   `?client_id=${process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}` +
+//   `&redirect_uri=${process.env.NEXT_PUBLIC_LOGIN_CALLBACK_URL_PREFIX}/google` +
+//   `&response_type=code` +
+//   `&scope=https://www.googleapis.com/auth/userinfo.email`
 
 // const NAVER_LOGIN_URL =
 //   'https://nid.naver.com/oauth2.0/authorize' +
