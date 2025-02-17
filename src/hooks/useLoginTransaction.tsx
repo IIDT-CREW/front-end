@@ -1,14 +1,14 @@
 import { useCallback, useState } from 'react'
 import { useRouter } from 'next/router'
-import { getUserInfo } from 'api/auth'
-import { API_CODE, STORAGE_NAME } from 'config/constants/api'
+import { getUserInfo } from '@/api/auth'
+import { API_CODE, STORAGE_NAME } from '@/config/constants/api'
 import axios from 'axios'
-import { signup, socialLogin } from 'api/auth'
-import { encryptWithAES } from 'utils/crypto'
-import { useSetAuth } from 'store/auth/hooks'
-import { ModalProps } from 'components/Common'
-import { useModal } from 'components/Common'
-import NickNameModal from 'components/NickNameModal'
+import { signup, socialLogin } from '@/api/auth'
+import { encryptWithAES } from '@/utils/crypto'
+import { useSetAuth } from '@/store/auth/hooks'
+import { ModalProps } from '@/components/Common'
+import { useModal } from '@/components/Common'
+import NickNameModal from '@/components/NickNameModal'
 
 const getUser = async () => {
   try {
@@ -50,7 +50,7 @@ const useLoginTransaction = () => {
   const handleLoginTransaction = useCallback(
     async ({ accessToken, isLogin, nickName, onDismiss }: HandleLoginTransactionProps) => {
       if (!code && !authParams) return
-      const cooperation = authParams[0]
+      const cooperation = authParams?.[0]
       try {
         const res = isLogin
           ? await socialLogin({ cooperation, code })
@@ -88,7 +88,7 @@ const useLoginTransaction = () => {
           }),
         )
         localStorage.setItem(STORAGE_NAME.USER, encDataString) //예시로 로컬에 저장함
-        const path = localStorage.getItem('login_path')
+        const path = localStorage.getItem('login_path') || '/'
 
         if (path === '/') router.push('/main')
         if (path !== '/') router.replace(path)

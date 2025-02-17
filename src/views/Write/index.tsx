@@ -16,6 +16,9 @@ import { QUESTION_LIST } from '@/views/Write/data'
 // import useUpdatePostMutation from '@/hooks/queries/Write/useUpdatePostMutation'
 // import { useGetWill } from '@/hooks/queries/Write/useGetWill'
 import useWarningHistoryBack from './hooks/useWarningHistoryBack'
+import { useWill } from '@/hooks/queries/useWill'
+import { nanoid } from '@reduxjs/toolkit'
+import { WillInsert } from '@/types/will'
 
 const DEFAULT_TITLE = `${new Date().toLocaleDateString('ko-KR', {
   year: '2-digit',
@@ -30,6 +33,8 @@ const Write = () => {
   const goToBack = useCallback(() => {
     router.push('/main')
   }, [router])
+  const { useInsertWillMutation } = useWill()
+  const mutation = useInsertWillMutation()
 
   // const { mutate: addPostMutate } = useAddPostMutation({ goToBack })
   // const { mutate: updatePostMutate } = useUpdatePostMutation({ goToBack })
@@ -144,8 +149,35 @@ const Write = () => {
   // isEditMode ? updatePostMutate(parameter) : addPostMutate(parameter)
   //}, [contents, isDefaultPostType, isEditMode, isPrivate, memIdx, title, willId])
 
-  const handleUpsert = () => {
+  const handleUpsert = async () => {
     console.log('handleUpsert')
+    const newWill: WillInsert = {
+      title: title.length ? title : DEFAULT_TITLE,
+      thumbnail: 'title',
+      mem_idx: memIdx,
+      content: isDefaultPostType ? contents[0].answer : '',
+      is_private: isPrivate,
+      content_type: isDefaultPostType ? 0 : 1,
+      tags: [],
+      is_deleted: false,
+
+      // answer_list: isDefaultPostType
+      //   ? null
+      //   : contents?.map((content) => ({
+      //       qs_essay_idx: content.questionEssayIndex,
+      //       qs_idx: content.questionIndex.toString(),
+      //       qs_essay_answer: content.answer,
+      //     })),
+    }
+    try {
+      // mutation.mutate로 데이터 저장
+      await mutation.mutateAsync(newWill)
+      // 성공 시 처리
+      console.log('유서가 성공적으로 저장되었습니다')
+    } catch (error) {
+      // 에러 처리
+      console.error('유서 저장 중 오류 발생:', error)
+    }
   }
 
   return (

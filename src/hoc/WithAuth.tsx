@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
-import { useAuth } from '@/hooks/useAuth'
+import { useAuth } from '@/components/AuthProvider'
 
 // HOC for protected pages
 export function withAuth<P extends object>(WrappedComponent: React.ComponentType<P>) {

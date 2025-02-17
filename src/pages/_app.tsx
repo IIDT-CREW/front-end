@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, Fragment } from 'react'
+import { Fragment } from 'react'
 import ResetCSS from '@/style/ResetCSS'
 import Script from 'next/script'
 import '../style/index.css'
