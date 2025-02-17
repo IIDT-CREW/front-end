@@ -1,8 +1,18 @@
-import { useModal } from 'components/Common'
+import { useModal } from '@/components/Common'
 import { useCallback, useEffect, useRef } from 'react'
 import WarningHistoryBackModal from '../components/modal/WarningHistoryBackModal'
 
-const useWarningHistoryBack = ({ title, contents, goToBack, page }) => {
+const useWarningHistoryBack = ({
+  title,
+  contents,
+  goToBack,
+  page,
+}: {
+  title: string
+  contents: string[]
+  goToBack: () => void
+  page: number
+}) => {
   const isWriteDown = () => !contents.every((value) => value.length === 0)
   const [presentWarningHistoryBackModal] = useModal(<WarningHistoryBackModal goToBack={goToBack} />)
   const isWriteDownTitleAndContent = title !== '' || contents[page] !== '' || isWriteDown()

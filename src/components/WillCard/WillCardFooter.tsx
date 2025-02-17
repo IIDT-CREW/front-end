@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Will } from '@api/will/types'
-import { Text, Flex } from 'components/Common'
+import { Will } from '@/api/will/types'
+import { Text, Flex } from '@/components/Common'
 
 const St = {
   Author: styled(Text)`

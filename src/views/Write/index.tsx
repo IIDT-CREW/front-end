@@ -30,7 +30,7 @@ const Write = () => {
   const goToBack = useCallback(() => {
     router.push('/main')
   }, [router])
-  
+
   // const { mutate: addPostMutate } = useAddPostMutation({ goToBack })
   // const { mutate: updatePostMutate } = useUpdatePostMutation({ goToBack })
   // const isEditMode = !!router?.query?.will_id
@@ -73,22 +73,22 @@ const Write = () => {
   //     },
   //   } = data
 
-    // setTitle(title)
-    // setPrivate(isPrivate)
-    // if (contentType === IS_DEFAULT_MODE) {
-    //   const answer = [{ questionIndex: 1, answer: content }, ...contents.slice(1)]
-    //   return setContents(answer)
-    // }
-    // /* 질문 타입  */
-    // setIsDefaultPostType(false)
-    // const answer = answerList?.map((answer) => {
-    //   return {
-    //     questionEssayIndex: answer.question_essay_index,
-    //     questionIndex: answer.question_index,
-    //     answer: answer.question_answer,
-    //   }
-    // })
-    // setContents(answer)
+  // setTitle(title)
+  // setPrivate(isPrivate)
+  // if (contentType === IS_DEFAULT_MODE) {
+  //   const answer = [{ questionIndex: 1, answer: content }, ...contents.slice(1)]
+  //   return setContents(answer)
+  // }
+  // /* 질문 타입  */
+  // setIsDefaultPostType(false)
+  // const answer = answerList?.map((answer) => {
+  //   return {
+  //     questionEssayIndex: answer.question_essay_index,
+  //     questionIndex: answer.question_index,
+  //     answer: answer.question_answer,
+  //   }
+  // })
+  // setContents(answer)
   //}, [contents, data])
 
   /* 모달 onOpen */
@@ -140,8 +140,8 @@ const Write = () => {
   //           qs_essay_answer: content.answer,
   //         })),
   //   }
-    // console.log(parameter)
-    // isEditMode ? updatePostMutate(parameter) : addPostMutate(parameter)
+  // console.log(parameter)
+  // isEditMode ? updatePostMutate(parameter) : addPostMutate(parameter)
   //}, [contents, isDefaultPostType, isEditMode, isPrivate, memIdx, title, willId])
 
   const handleUpsert = () => {

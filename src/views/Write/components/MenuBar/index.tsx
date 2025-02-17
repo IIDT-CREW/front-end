@@ -1,13 +1,13 @@
-import { ArrowLeft, ArrowRight } from 'components/Common/Svg'
+import { ArrowLeft, ArrowRight } from '@/components/Common/Svg'
 import styled, { CSSProp, useTheme } from 'styled-components'
-import { FOOTER_HEIGHT, IS_DEFAULT_MODE, MENU_HEIGHT } from 'config/constants/default'
+import { FOOTER_HEIGHT, IS_DEFAULT_MODE, MENU_HEIGHT } from '@/config/constants/default'
 import React, { useCallback } from 'react'
-import { Flex } from 'components/Common'
-import useToast from 'hooks/useToast'
-import { PREV, NEXT, DONE } from 'views/Write/data'
-import PrivateToggle from '@components/PrivateToggle'
+import { Flex } from '@/components/Common'
+import useToast from '@/hooks/useToast'
+import { PREV, NEXT, DONE } from '@/views/Write/data'
+import PrivateToggle from '@/components/PrivateToggle'
 import { useRouter } from 'next/navigation'
-import MenuButton from '@views/Write/components/MenuBar/MenuButton'
+import MenuButton from '@/views/Write/components/MenuBar/MenuButton'
 type Variant = 'primary' | 'secondary'
 
 export const StyleMenuButton = styled.button<{ variant?: Variant; isFull?: boolean; css?: CSSProp }>`
@@ -144,7 +144,7 @@ type MenuBarProps = {
   isMobile: boolean
   text: string
   isDisabled: boolean
-  handlePage: () => void
+  handlePage: (number: number) => void
   handleUpsert: () => void
   handleMenuButton: (e: any) => void
   variant?: Variant
@@ -152,6 +152,8 @@ type MenuBarProps = {
   isDefaultPostType: boolean
   isPrivate: boolean
   handleSetIsPrivate: () => void
+  page: number
+  isLastPage: boolean
 }
 const MenuBar = ({
   isMobile,
@@ -163,7 +165,7 @@ const MenuBar = ({
   isDefaultPostType,
   isPrivate,
   handleSetIsPrivate,
-}) => {
+}: MenuBarProps) => {
   const router = useRouter()
   const goToMain = useCallback(() => {
     router.push('/main')

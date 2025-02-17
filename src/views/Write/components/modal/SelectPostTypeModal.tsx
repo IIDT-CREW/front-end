@@ -1,6 +1,6 @@
 /* eslint-disable no-sparse-arrays */
-import { Modal } from 'components/Common'
-import { Flex, Box, Text } from 'components/Common'
+import { Modal } from '@/components/Common'
+import { Flex, Box, Text } from '@/components/Common'
 import styled from 'styled-components'
 import { ButtonHTMLAttributes } from 'react'
 
@@ -12,17 +12,17 @@ interface customModalProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 const SelectPostTypeModal = ({ handlePostType, onDismiss }: customModalProps) => {
   const handleButton = () => {
     handlePostType()
-    onDismiss()
+    onDismiss?.()
   }
   return (
     <Modal title="일기 작성 방식을 선택할 수 있어요" onDismiss={onDismiss}>
       <Flex flexDirection="column" justifyContent="center" alignItems="center">
         <Box mb="20px">
           <Flex justifyContent="center" flexDirection="column" style={{ textAlign: 'center', wordBreak: 'keep-all' }}>
-            <Text fontSize={['13px', , '18px']}>
+            <Text fontSize={['13px', '13px', '18px']}>
               오늘 유서를 처음 작성하시는 분들을 위해 두 가지의 선택방식을 두었어요.
             </Text>
-            <Text fontSize={['13px', , '18px']}>편하신 방법을 선택하여, 당신 오늘 유서를 작성해주세요.</Text>
+            <Text fontSize={['13px', '13px', '18px']}>편하신 방법을 선택하여, 당신 오늘 유서를 작성해주세요.</Text>
           </Flex>
         </Box>
 

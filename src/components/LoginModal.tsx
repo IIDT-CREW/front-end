@@ -3,10 +3,7 @@ import { Modal, ModalProps, Flex, Box, Text } from '@/components/Common'
 import styled, { css } from 'styled-components'
 import { usePathname } from 'next/navigation'
 import { useRouter } from 'next/router' // next/navigation이 아닌 next/router 사용
-
-import useToast from '@/hooks/useToast'
-import { createClient } from '@supabase/supabase-js'
-const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!)
+import { supabase } from '@/lib/supabase'
 
 enum EType {
   NAVER,

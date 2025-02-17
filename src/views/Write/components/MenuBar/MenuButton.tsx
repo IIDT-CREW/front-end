@@ -1,8 +1,8 @@
 import React from 'react'
-import { ArrowLeft, ArrowRight } from 'components/Common/Svg'
+import { ArrowLeft, ArrowRight } from '@/components/Common/Svg'
 import styled from 'styled-components'
-import { PREV } from 'views/Write/data'
-import { StyleMenuButton } from '@views/Write/components/MenuBar'
+import { PREV } from '@/views/Write/data'
+import { StyleMenuButton } from '@/views/Write/components/MenuBar'
 type Variant = 'primary' | 'secondary'
 
 const St = {

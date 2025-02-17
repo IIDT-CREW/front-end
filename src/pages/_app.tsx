@@ -24,7 +24,6 @@ import { ToastContextProvider } from '@/contexts/Toast'
 // import '@/style/custom-react-toastify.css'
 import 'aos/dist/aos.css'
 import { AuthProvider } from '@/components/AuthProvider'
-import { theme } from '@/styles/theme'
 
 // scrollPositionRestorer()
 

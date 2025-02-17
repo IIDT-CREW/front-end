@@ -1,4 +1,4 @@
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next/router'
 import { useMemo, useState, useEffect, useRef, useCallback } from 'react'
 import { useDispatch } from 'react-redux'
 import styled, { css } from 'styled-components'
@@ -23,7 +23,7 @@ import axios from '@/api'
 import { authActions } from '@/store/auth'
 import { useNaviState } from '@/store/navi/hooks'
 import useOnClickOutside from '@/hooks/useOnClickOutside'
-
+import { useAuth } from '@/hooks/useAuth'
 type StyledNavigationProps = {
   isSharePage: boolean
 }
@@ -206,6 +206,8 @@ const MenuWrapper = ({ themeMode, toggleTheme }: { themeMode: string; toggleThem
   const dispatch = useDispatch()
   const [showMenu, setShowMenu] = useState(true)
   const isLogin = useIsLogin()
+  const { isAuthenticated } = useAuth()
+
   const { isScrollDown, handleSetIsScrollDown } = useScrollDown()
   const [presentLoginModal] = useModal(<LoginModal />)
   const { isMenuOpen } = useNaviState()
@@ -268,7 +270,7 @@ const MenuWrapper = ({ themeMode, toggleTheme }: { themeMode: string; toggleThem
           <Flex justifyContent="center" alignItems="center">
             <Box width="40px" height="40px" borderRadius="50%"></Box>
             <ThemeToggleButton selected={themeMode === 'dark'} onClick={handleDark} />
-            {isLogin ? (
+            {isAuthenticated ? (
               <Box onClick={handleMenu} style={{ cursor: 'pointer' }}>
                 <MenuOutline stroke={isSharePage ? '#fff' : undefined} themeMode={themeMode as 'light' | 'dark'} />
               </Box>

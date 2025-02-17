@@ -112,7 +112,7 @@ const Main = () => {
   console.log('isAuthenticated', isAuthenticated)
   const [presentWarningModal] = useModal(<WriteWarningInfoModal />)
   const [presentLoginModal] = useModal(<LoginModal />)
-  
+
   useEffect(() => {
     const isPrecented = localStorage.getItem('isPrecented')
     if (!isPrecented) {

@@ -54,7 +54,17 @@ const St = {
   `,
 }
 
-const MenuItem = ({ presentDeleteModal, presentShareModal, handleEdit, handlePreview }) => {
+const MenuItem = ({
+  presentDeleteModal,
+  presentShareModal,
+  handleEdit,
+  handlePreview,
+}: {
+  presentDeleteModal: () => void
+  presentShareModal: () => void
+  handleEdit: () => void
+  handlePreview: () => void
+}) => {
   return (
     <Box>
       <Flex padding="8px" style={{ gap: '8px' }} onClick={handleEdit}>
@@ -125,7 +135,7 @@ const Header = ({ will, handleDelete, handleShare, isPrivate = true }: HeaderPro
                 {isOpen && (
                   <St.MenuWrapper ref={setTooltipRef} style={styles.popper} {...attributes.popper} isOpen={isOpen}>
                     <MenuItem
-                      presentDelete1Modal={presentDeleteModal}
+                      presentDeleteModal={presentDeleteModal}
                       presentShareModal={presentShareModal}
                       handleEdit={handleEdit}
                       handlePreview={handlePreview}
