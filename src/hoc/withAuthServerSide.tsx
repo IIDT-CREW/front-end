@@ -2,7 +2,7 @@ import nookies from 'nookies'
 
 import axios from '@/api'
 import { useDispatch } from 'react-redux'
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next/router'
 import { getUserInfo } from '@/api/auth'
 import { authActions } from '@/store/auth'
 /* getUser */

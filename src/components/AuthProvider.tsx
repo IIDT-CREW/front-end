@@ -1,61 +1,52 @@
 import { createContext, useContext, useEffect, useState } from 'react'
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { createClient } from '@supabase/supabase-js'
 import { User } from '@supabase/supabase-js'
-import { useRouter } from 'next/router' // next/router 사용
+import { useRouter } from 'next/router'
+import { supabase } from '@/lib/supabase'
 
-const AuthContext = createContext<{
+type AuthContextType = {
   user: User | null
   loading: boolean
   signOut: () => Promise<{ error: Error | null }>
   isAuthenticated: boolean
   signInWithGoogle: () => Promise<{ error: Error | null }>
-}>({
+}
+
+const AuthContext = createContext<AuthContextType>({
   user: null,
   loading: true,
   signOut: async () => ({ error: null }),
   isAuthenticated: false,
   signInWithGoogle: async () => ({ error: null }),
 })
+
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
-  const supabase = createClientComponentClient()
   const router = useRouter()
 
   useEffect(() => {
-    // 1. 먼저 localStorage에서 상태 복구 시도
-    const restoreAuthState = () => {
-      const savedAuth = localStorage.getItem('authState')
-      if (savedAuth) {
-        const { isAuthenticated: saved, user: savedUser } = JSON.parse(savedAuth)
-        setIsAuthenticated(saved)
-        setUser(savedUser)
-      }
-    }
-
-    // 2. 초기 세션 체크
     const initializeAuth = async () => {
       try {
-        restoreAuthState() // localStorage 복구 먼저 시도
-
         const {
           data: { session },
+          error,
         } = await supabase.auth.getSession()
+        console.log('session', session)
+        if (error) throw error
 
         if (session) {
           setIsAuthenticated(true)
           setUser(session.user)
-          localStorage.setItem(
-            'authState',
-            JSON.stringify({
-              isAuthenticated: true,
-              user: session.user,
-            }),
-          )
+        } else {
+          setIsAuthenticated(false)
+          setUser(null)
         }
       } catch (error) {
         console.error('Session check error:', error)
+        setIsAuthenticated(false)
+        setUser(null)
       } finally {
         setLoading(false)
       }
@@ -63,26 +54,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     initializeAuth()
 
-    // 3. 인증 상태 변경 리스너
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (event, session) => {
-      console.log('Auth state changed:', event, session)
+      console.log('Auth state changed:', event)
 
       if (session) {
         setIsAuthenticated(true)
         setUser(session.user)
-        localStorage.setItem(
-          'authState',
-          JSON.stringify({
-            isAuthenticated: true,
-            user: session.user,
-          }),
-        )
       } else {
         setIsAuthenticated(false)
         setUser(null)
-        localStorage.removeItem('authState')
       }
       setLoading(false)
     })
@@ -90,7 +72,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return () => {
       subscription.unsubscribe()
     }
-  }, [supabase])
+  }, [])
 
   const signInWithGoogle = async () => {
     try {
@@ -103,6 +85,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (error) throw error
       return { error: null }
     } catch (error) {
+      console.error('Google sign in error:', error)
       return { error: error as Error }
     }
   }
@@ -111,11 +94,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const { error } = await supabase.auth.signOut()
       if (error) throw error
-      setIsAuthenticated(false)
-      setUser(null)
-      localStorage.removeItem('authState')
       return { error: null }
     } catch (error) {
+      console.error('Sign out error:', error)
       return { error: error as Error }
     }
   }
@@ -134,9 +115,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     </AuthContext.Provider>
   )
 }
+
 export const useAuth = () => {
   const context = useContext(AuthContext)
-  if (context === undefined) {
+  if (!context) {
     throw new Error('useAuth must be used within an AuthProvider')
   }
   return context

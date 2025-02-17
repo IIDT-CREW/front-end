@@ -1,5 +1,5 @@
 import { useEffect, useContext, useMemo } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next/router'
 import { Box, Flex, useModal } from '@/components/Common'
 import BannerCard from './components/BannerCard'
 import styled from 'styled-components'
@@ -7,8 +7,7 @@ import MainInfo from './components/MainInfo'
 import { MainButton } from '@/views/Home'
 import WriteWarningInfoModal from './components/modal/WriteWarningInfoModal'
 import LoginModal from '@/components/LoginModal'
-import { useIsLogin, useUserInfo } from '@/store/auth/hooks'
-import { useAuth } from '@/hooks/useAuth'
+import { useAuth } from '@/components/AuthProvider'
 
 const St = {
   Container: styled(Box)`
@@ -109,7 +108,6 @@ const St = {
 // }
 const Main = () => {
   const { isAuthenticated } = useAuth()
-  console.log('isAuthenticated', isAuthenticated)
   const [presentWarningModal] = useModal(<WriteWarningInfoModal />)
   const [presentLoginModal] = useModal(<LoginModal />)
 
@@ -128,8 +126,6 @@ const Main = () => {
     if (!isAuthenticated) presentLoginModal()
     if (isAuthenticated) router.push('write')
   }
-
-  console.log('isAuthenticated', isAuthenticated)
 
   return (
     <St.Container mt="78px">

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { Modal, ModalProps, Flex, Box, Text } from '@/components/Common'
 import styled, { css } from 'styled-components'
-import { usePathname } from 'next/navigation'
+
 import { useRouter } from 'next/router' // next/navigation이 아닌 next/router 사용
 import { supabase } from '@/lib/supabase'
 
@@ -127,9 +127,10 @@ const LoginIcon = styled.i<LoginProps>`
 //   '&state=RANDOM_STATE'
 
 const LoginModal: React.FC<ModalProps> = ({ onDismiss, ...props }) => {
-  const pathname = usePathname()
   const router = useRouter()
   // const { showToast } = useToast()
+
+  const pathname = router.pathname
 
   useEffect(() => {
     localStorage.setItem('login_path', pathname)

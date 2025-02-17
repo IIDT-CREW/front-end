@@ -23,7 +23,8 @@ import axios from '@/api'
 import { authActions } from '@/store/auth'
 import { useNaviState } from '@/store/navi/hooks'
 import useOnClickOutside from '@/hooks/useOnClickOutside'
-import { useAuth } from '@/hooks/useAuth'
+import { useAuth } from '../AuthProvider'
+
 type StyledNavigationProps = {
   isSharePage: boolean
 }

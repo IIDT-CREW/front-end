@@ -3,7 +3,7 @@ import { Modal } from '@/components/Common'
 import { Flex, Box, Text } from '@/components/Common'
 import CopyToClipboard from '@/views/Will/components/CopyToClipboard'
 import { API_URL } from '@/config/constants/api'
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next/router'
 
 const ShareModal = ({ onDismiss, content, willId, title, ...props }: any) => {
   const router = useRouter()

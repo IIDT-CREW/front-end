@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import Head from 'next/head'
-import { usePathname, useRouter } from 'next/navigation'
+import { useRouter } from 'next/router'
 import { DEFAULT_META, getCustomMeta } from '@/config/constants/meta'
 import Box from '@/components/Common/Box/Box'
 // import Container from './Container'
@@ -23,7 +23,8 @@ const StyledPage = styled(Box)<StyledPageProps>`
 `
 
 export const PageMeta: React.FC<{ title?: string; content?: string }> = ({ title: mainTitle, content }) => {
-  const pathname = usePathname()
+  const router = useRouter()
+  const pathname = router.pathname
 
   const pageMeta = getCustomMeta(pathname) || {}
   const { title, description, image } = { ...DEFAULT_META, ...pageMeta }

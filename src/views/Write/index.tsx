@@ -2,12 +2,12 @@
 import { TextareaHTMLAttributes, useCallback, useEffect, useState } from 'react'
 import styled, { CSSProp } from 'styled-components'
 import { fontSize, FontSizeProps } from 'styled-system'
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next/router'
 import { useModal } from '@/components/Common'
 import SelectPostTypeModal from '@/views/Write/components/modal/SelectPostTypeModal'
 import { FOOTER_HEIGHT, IS_DEFAULT_MODE, MENU_HEIGHT } from '@/config/constants/default'
 import { useUserInfo } from '@/store/auth/hooks'
-import { nanoid } from 'nanoid'
+
 import ProgressBar from '@/components/Common/ProgressBar'
 import useMatchBreakpoints from '@/hooks/useMatchBreakpoints'
 import MenuBar, { StyleMenuButton } from '@/views/Write/components/MenuBar'
@@ -51,7 +51,7 @@ const Write = () => {
   //   enabled: router.isReady && isEditMode,
   // })
 
-  useWarningHistoryBack({ title, contents, goToBack, page })
+  useWarningHistoryBack({ title, contents: contents.map((c) => c.answer), goToBack, page })
 
   const [isPrivate, setPrivate] = useState(false)
   const handleSetIsPrivate = useCallback(() => {
@@ -160,6 +160,11 @@ const Write = () => {
         isDefaultPostType={isDefaultPostType}
         isPrivate={isPrivate}
         handleSetIsPrivate={handleSetIsPrivate}
+        text={''}
+        handleMenuButton={function (e: any): void {
+          throw new Error('Function not implemented.')
+        }}
+        buttonType={'next'}
       />
 
       <St.Editor>

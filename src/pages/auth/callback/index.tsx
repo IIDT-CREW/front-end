@@ -71,7 +71,7 @@ export default function AuthCallback() {
           }
 
           console.log('User data updated successfully')
-          router.push('/')
+          //router.push('/')
         } catch (error) {
           console.error('DB Error:', error)
           // 더 구체적인 에러 처리

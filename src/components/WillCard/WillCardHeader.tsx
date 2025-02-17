@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next/router'
 import { Box, Text, Flex, useModal } from '@/components/Common'
 import styled from 'styled-components'
 import { usePopper } from 'react-popper'

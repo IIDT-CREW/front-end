@@ -1,6 +1,6 @@
 import { Box, Text } from '@/components/Common'
 import { MENU_HEIGHT } from '@/config/constants/default'
-import { usePathname, useRouter } from 'next/navigation'
+import { useRouter } from 'next/router'
 import { useDispatch } from 'react-redux'
 import { naviActions } from '@/store/navi'
 import { authActions } from '@/store/auth'
@@ -17,7 +17,7 @@ const St = {
 const MenuWrapper = () => {
   const router = useRouter()
   const dispatch = useDispatch()
-  const pathname = usePathname()
+  const pathname = router.pathname
 
   const returnMarginTop = () => {
     if (pathname.includes('/main')) return 0

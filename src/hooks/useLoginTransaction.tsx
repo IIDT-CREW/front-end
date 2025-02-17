@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next/router'
 import { getUserInfo } from 'api/auth'
 import { API_CODE, STORAGE_NAME } from 'config/constants/api'
 import axios from 'axios'
